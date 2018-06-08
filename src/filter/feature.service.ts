@@ -16,7 +16,6 @@ export class FeatureService {
   }): Promise<Feature> {
     const feature = new Feature();
     feature.name = createFeatureData.name;
-    feature.pos = createFeatureData.pos;
     return this.featureRepository.save(feature);
   }
 }
