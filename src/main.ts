@@ -10,8 +10,8 @@ async function bootstrap() {
     key: fs.readFileSync(path.join(__dirname, './secrets/key.key')),
     cert: fs.readFileSync(path.join(__dirname, './secrets/crt.crt')),
   };
-  // const app = await NestFactory.create(AppModule, { httpsOptions });
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { httpsOptions });
+  // const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(__dirname + '/public');
