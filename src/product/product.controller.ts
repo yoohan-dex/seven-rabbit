@@ -41,7 +41,7 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
-  @Patch(':id')
+  @Post(':id')
   async updateProduct(
     @Param('id') productId: number,
     @Body() data: CreateProductDto,
