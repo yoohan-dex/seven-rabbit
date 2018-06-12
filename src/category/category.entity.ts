@@ -8,9 +8,9 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Filter } from 'filter/filter.entity';
-import { Image } from 'common/common.entity';
-import { Product } from 'product/product.entity';
+import { Filter } from '../filter/filter.entity';
+import { Image } from '../common/common.entity';
+import { Product } from '../product/product.entity';
 
 @Entity()
 export class Category {

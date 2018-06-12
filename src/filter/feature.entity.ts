@@ -6,7 +6,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Filter } from './filter.entity';
-import { Product } from 'product/product.entity';
+import { Product } from '../product/product.entity';
 
 @Entity()
 export class Feature {

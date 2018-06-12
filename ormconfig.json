@@ -4,7 +4,7 @@
   "port": 3306,
   "username": "root",
   "password": "yoohoo888",
-  "database": "testtt",
+  "database": "test",
   "entities": ["src/**/**.entity{.ts,.js}"],
   "synchronize": true
 }
