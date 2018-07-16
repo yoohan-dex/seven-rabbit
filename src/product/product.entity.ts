@@ -9,9 +9,9 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { Image } from '../common/common.entity';
-import { Feature } from '../filter/feature.entity';
-import { Category } from '../category/category.entity';
+import { Image } from 'common/common.entity';
+import { Feature } from 'filter/feature.entity';
+import { Category } from 'category/category.entity';
 
 @Entity()
 export class Product {

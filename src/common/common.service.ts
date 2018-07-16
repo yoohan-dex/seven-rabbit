@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './common.entity';
-import config from '../../config';
 import { ImageFile } from './common.type';
 
 @Injectable()
@@ -15,12 +14,11 @@ export class CommonService {
     private readonly ImageRepository: Repository<Image>,
   ) {
     this.cos = new CosSdk({
-      AppId: config.qcloudAppId,
-      SecretId: config.qcloudSecretId,
-      SecretKey: config.qcloudSecretKey,
-      Domain: `http://${config.cos.fileBucket}-${config.qcloudAppId}.${
-        config.cos.region
-      }.myqcloud.com/`,
+      SecretId: process.env.QCLOUD_SECRET_ID,
+      SecretKey: process.env.QCLOUD_SECRET_KEY,
+      Domain: `http://${process.env.COS_FILE_BUCKET}-${
+        process.env.QClOUD_APP_ID
+      }.${process.env.COS_REGION}.myqcloud.com/`,
     });
   }
   save(fileObject: ImageFile): Promise<Image> {
@@ -36,12 +34,12 @@ export class CommonService {
     const imgKey = `${Date.now()}-${shortid.generate()}.${
       file.mimetype.split('/')[1]
     }`;
-    const uploadFolder = config.cos.uploadFolder
-      ? config.cos.uploadFolder + '/'
+    const uploadFolder = process.env.COS_UPLOAD_FOLDER
+      ? process.env.COS_UPLOAD_FOLDER + '/'
       : '';
     const params = {
-      Bucket: config.cos.fileBucket,
-      Region: config.cos.region,
+      Bucket: `${process.env.COS_FILE_BUCKET}-${process.env.QClOUD_APP_ID}`,
+      Region: process.env.COS_REGION,
       Key: `${uploadFolder}${imgKey}`,
       FilePath: file.path,
       ContentLength: file.size,

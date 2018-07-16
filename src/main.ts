@@ -1,17 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { AppModule } from 'app.module';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ValidationPipe } from './pipe/validation.pipe';
+import * as dotenv from 'dotenv';
+import { ValidationPipe } from 'pipe/validation.pipe';
 
+dotenv.config();
+const IS_DEV = process.env.DEPLOY_MODE === 'dev';
 async function bootstrap() {
-  const httpsOptions = {
-    key: fs.readFileSync(path.join(__dirname, './secrets/key.key')),
-    cert: fs.readFileSync(path.join(__dirname, './secrets/crt.crt')),
-  };
-  const app = await NestFactory.create(AppModule, { httpsOptions });
-  // const app = await NestFactory.create(AppModule);
+  const httpsOptions = IS_DEV
+    ? ''
+    : {
+        key: fs.readFileSync(path.join(process.cwd(), './key.key')),
+        cert: fs.readFileSync(path.join(process.cwd(), './crt.crt')),
+      };
+  const app = IS_DEV
+    ? await NestFactory.create(AppModule)
+    : await NestFactory.create(AppModule, { httpsOptions });
 
   app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(__dirname + '/public');
@@ -28,6 +34,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/api', app, document);
 
-  await app.listen(443);
+  await app.listen(3000);
 }
 bootstrap();

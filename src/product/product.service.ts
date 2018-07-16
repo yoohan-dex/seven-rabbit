@@ -14,10 +14,10 @@ import {
   In,
 } from 'typeorm';
 
-import { UpdateCategoryDto } from '../category/category.dto';
-import { Image } from '../common/common.entity';
-import { Feature } from '../filter/feature.entity';
-import { Category } from '../category/category.entity';
+import { UpdateCategoryDto } from 'category/category.dto';
+import { Image } from 'common/common.entity';
+import { Feature } from 'filter/feature.entity';
+import { Category } from 'category/category.entity';
 
 @Injectable()
 export class ProductService {
@@ -33,6 +33,9 @@ export class ProductService {
   ) {}
   async getOne(id) {
     return await this.productRepository.findOne(id);
+  }
+  async getListByIds(ids: number[]) {
+    return await this.productRepository.findByIds(ids);
   }
   async getAll(getParams: GetProductDto = {}) {
     const options = {

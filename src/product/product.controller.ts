@@ -26,7 +26,12 @@ export class ProductController {
     @Query('features') features: number[],
     @Query('page') page: number,
     @Query('size') size: number,
+    @Query('ids') ids: number[],
   ) {
+    if (ids && ids.length > 0) {
+      return await this.productService.getListByIds(ids);
+    }
+
     const params = {
       category,
       features,
