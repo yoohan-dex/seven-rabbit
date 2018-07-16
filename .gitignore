@@ -6,7 +6,8 @@ yarn-error.log*
 /uploads
 /dist
 .env
-
+*.crt
+*.key
 # Editor directories and files
 .idea
 *.suo
