@@ -9,9 +9,9 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { Image } from 'common/common.entity';
-import { Feature } from 'filter/feature.entity';
-import { Category } from 'category/category.entity';
+import { Image } from '../common/common.entity';
+import { Feature } from '../filter/feature.entity';
+import { Category } from '../category/category.entity';
 
 @Entity()
 export class Product {
@@ -33,4 +33,10 @@ export class Product {
 
   @ManyToOne(type => Category, category => category.products, { eager: true })
   category: Category;
+
+  @Column('int', { default: 0 })
+  visitTimes: number;
+
+  @Column('int', { default: 0 })
+  favorTimes: number;
 }

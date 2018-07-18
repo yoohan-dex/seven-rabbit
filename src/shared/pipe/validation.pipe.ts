@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { Signale } from 'signale';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
@@ -36,6 +36,7 @@ export class ValidationPipe implements PipeTransform<any> {
         '',
       );
 
+      // custom.error(chalk.hex('#F16B6F')(msg));
       custom.error(chalk.hex('#F16B6F')(msg));
       throw new BadRequestException('传入数据有误', msg);
     }

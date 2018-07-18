@@ -14,10 +14,10 @@ import {
   In,
 } from 'typeorm';
 
-import { UpdateCategoryDto } from 'category/category.dto';
-import { Image } from 'common/common.entity';
-import { Feature } from 'filter/feature.entity';
-import { Category } from 'category/category.entity';
+import { UpdateCategoryDto } from '../category/category.dto';
+import { Image } from '../common/common.entity';
+import { Feature } from '../filter/feature.entity';
+import { Category } from '../category/category.entity';
 
 @Injectable()
 export class ProductService {

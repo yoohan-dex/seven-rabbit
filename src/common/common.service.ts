@@ -18,7 +18,7 @@ export class CommonService {
       SecretKey: process.env.QCLOUD_SECRET_KEY,
       Domain: `http://${process.env.COS_FILE_BUCKET}-${
         process.env.QClOUD_APP_ID
-      }.${process.env.COS_REGION}.myqcloud.com/`,
+      }.cos.${process.env.COS_REGION}.myqcloud.com/`,
     });
   }
   save(fileObject: ImageFile): Promise<Image> {
@@ -30,7 +30,6 @@ export class CommonService {
     return this.ImageRepository.save(image);
   }
   saveInCloud(file): Promise<ImageFile> {
-    console.log(file);
     const imgKey = `${Date.now()}-${shortid.generate()}.${
       file.mimetype.split('/')[1]
     }`;
@@ -48,6 +47,7 @@ export class CommonService {
     return new Promise((resolve, reject) => {
       this.cos.sliceUploadFile(params, (err, data) => {
         if (err) {
+          console.log('err', err)
           reject(err);
         } else {
           resolve({

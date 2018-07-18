@@ -7,7 +7,6 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
-import { Image } from './common.entity';
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}

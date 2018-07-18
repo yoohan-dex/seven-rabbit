@@ -7,9 +7,9 @@
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
-    "start:dev": "nodemon",
-    "prestart:prod": "rm -rf dist && tsc && cp -rf src/secrets/ dist/src/secrets",
-    "start:prod": "node dist/src/main.js",
+    "start:dev": "DEPLOY_MODE=dev nodemon",
+    "prestart:prod": "rm -rf dist && tsc",
+    "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test": "jest",
     "test:cov": "jest --coverage",
