@@ -14,7 +14,9 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "webpack": "webpack --config webpack.config.js"
+    "webpack": "webpack --config webpack.config.js",
+    "typeorm": "ts-node ./node_modules/.bin/typeorm",
+    "typeorm:sync": "ts-node ./node_modules/.bin/typeorm schema:sync"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0",
