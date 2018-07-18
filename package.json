@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "DEPLOY_MODE=dev nodemon",
-    "prestart:prod": "rm -rf dist && tsc",
+    "prestart:prod": "rm -rf dist && tsc && cp -rf src/public dist/public",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test": "jest",
