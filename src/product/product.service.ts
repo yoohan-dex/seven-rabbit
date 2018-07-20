@@ -38,6 +38,7 @@ export class ProductService {
     return await this.productRepository.findByIds(ids);
   }
   async getAll(getParams: GetProductDto = {}) {
+    console.log('getParams', getParams)
     const options = {
       take: getParams.size || 20,
       skip: getParams.page ? (getParams.page - 1) * 10 : 0,
@@ -73,10 +74,12 @@ export class ProductService {
           total: 0,
         };
       }
+      console.log('productIds', productIds)
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
         where: { id: In(productIds), category: getParams.category },
       });
+      console.log('products', products)
       return {
         list: products,
         total,
