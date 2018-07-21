@@ -105,7 +105,7 @@ export class ProductService {
         if (i === 0) {
           return entryArray;
         }
-        return R.difference(accept)(entryArray);
+        return R.intersection(accept)(entryArray);
       }, []);
       if (finalIds.length < 1) {
         return {
