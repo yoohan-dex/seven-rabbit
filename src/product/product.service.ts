@@ -13,6 +13,7 @@ import {
   SelectQueryBuilder,
   In,
 } from 'typeorm';
+import * as R from 'ramda';
 
 import { UpdateCategoryDto } from '../category/category.dto';
 import { Image } from '../common/common.entity';
@@ -38,7 +39,6 @@ export class ProductService {
     return await this.productRepository.findByIds(ids);
   }
   async getAll(getParams: GetProductDto = {}) {
-    console.log('getParams', getParams)
     const options = {
       take: getParams.size || 20,
       skip: getParams.page ? (getParams.page - 1) * 10 : 0,
@@ -57,29 +57,88 @@ export class ProductService {
       };
     }
     if (getParams.features && getParams.features.length > 0) {
-      const raw = await createQueryBuilder()
-        .select('productId')
-        .addSelect('count(*)', 'countNum')
+      // init a object for features will be grouped
+      const groupedFeatures = {};
+      // init a array for ids[] will be grouped
+      const groupedIds = [] as Set<number>[];
+      const features = await this.featureRepository.findByIds(
+        getParams.features,
+        { relations: ['filter'] },
+      );
+
+      for (const feature of features) {
+        if (groupedFeatures[feature.filter.id]) {
+          groupedFeatures[feature.filter.id].push(feature.id);
+        } else {
+          groupedFeatures[feature.filter.id] = [feature.id];
+        }
+      }
+
+      // [In(f1, f2...fn)]
+      const matchProduct = (await createQueryBuilder()
+        .select()
         .from('product_features_feature', 'features')
         .where({
           featureId: In(getParams.features),
         })
-        .groupBy('productId')
-        .having(`countNum = ${getParams.features.length}`)
-        .getRawMany();
-      const productIds: number[] = raw.map(obj => obj.productId);
-      if (productIds.length < 1) {
+        .getRawMany()) as {
+        productId: number;
+        featureId: number;
+      }[];
+      Object.keys(groupedFeatures).forEach((key, i) => {
+        const featureIds = groupedFeatures[key] as number[];
+        const product = matchProduct.find(p =>
+          featureIds.some(featureId => p.featureId === featureId),
+        );
+        if (product) {
+          if (groupedIds[i]) {
+            groupedIds[i].add(product.productId);
+          } else {
+            const idsSet = new Set();
+            idsSet.add(product.productId);
+            groupedIds[i] = idsSet;
+          }
+        }
+      });
+      const finalIds = groupedIds.reduce((accept, entry, i) => {
+        const entryArray = Array.from(entry);
+        if (i === 0) {
+          return entryArray;
+        }
+        return R.difference(accept)(entryArray);
+      }, []);
+      if (finalIds.length < 1) {
         return {
           list: [],
           total: 0,
         };
       }
-      console.log('productIds', productIds)
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
-        where: { id: In(productIds), category: getParams.category },
+        where: { id: In(finalIds), category: getParams.category },
       });
-      console.log('products', products)
+
+      // const raw = await createQueryBuilder()
+      //   .select('productId')
+      //   .addSelect('count(*)', 'countNum')
+      //   .from('product_features_feature', 'features')
+      //   .where({
+      //     featureId: In(getParams.features),
+      //   })
+      //   .groupBy('productId')
+      //   .having(`countNum = ${getParams.features.length}`)
+      //   .getRawMany();
+      // const productIds: number[] = raw.map(obj => obj.productId);
+      // if (productIds.length < 1) {
+      //   return {
+      //     list: [],
+      //     total: 0,
+      //   };
+      // }
+      // const [products, total] = await this.productRepository.findAndCount({
+      //   ...options,
+      //   where: { id: In(productIds), category: getParams.category },
+      // });
       return {
         list: products,
         total,

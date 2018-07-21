@@ -130,6 +130,10 @@
   version "9.6.20"
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-9.6.20.tgz#b59a1bd357ae2df7d44d5ac98e9b64eb96ea1fef"
 
+"@types/ramda@^0.25.35":
+  version "0.25.35"
+  resolved "http://registry.npm.taobao.org/@types/ramda/download/@types/ramda-0.25.35.tgz#94500755a8dd7365f80e9e99e31331add41e9880"
+
 "@types/serve-static@*":
   version "1.13.2"
   resolved "http://registry.npm.taobao.org/@types/serve-static/download/@types/serve-static-1.13.2.tgz#f5ac4d7a6420a99a6a45af4719f4dcd8cd907a48"
@@ -5454,6 +5458,10 @@ querystring-es3@^0.2.0:
 querystring@0.2.0:
   version "0.2.0"
   resolved "http://registry.npm.taobao.org/querystring/download/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "http://registry.npm.taobao.org/ramda/download/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 randomatic@^3.0.0:
   version "3.0.0"
