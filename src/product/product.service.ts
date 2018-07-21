@@ -85,21 +85,21 @@ export class ProductService {
         productId: number;
         featureId: number;
       }[];
+
       Object.keys(groupedFeatures).forEach((key, i) => {
         const featureIds = groupedFeatures[key] as number[];
-        const product = matchProduct.find(p =>
+        const products = matchProduct.filter(p =>
           featureIds.some(featureId => p.featureId === featureId),
         );
-        if (product) {
-          if (groupedIds[i]) {
-            groupedIds[i].add(product.productId);
-          } else {
-            const idsSet = new Set();
+        if (products.length > 0) {
+          const idsSet = new Set();
+          for (const product of products) {
             idsSet.add(product.productId);
-            groupedIds[i] = idsSet;
           }
+          groupedIds[i] = idsSet;
         }
       });
+
       const finalIds = groupedIds.reduce((accept, entry, i) => {
         const entryArray = Array.from(entry);
         if (i === 0) {
@@ -113,6 +113,7 @@ export class ProductService {
           total: 0,
         };
       }
+
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
         where: { id: In(finalIds), category: getParams.category },
