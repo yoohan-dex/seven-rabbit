@@ -91,13 +91,11 @@ export class ProductService {
         const products = matchProduct.filter(p =>
           featureIds.some(featureId => p.featureId === featureId),
         );
-        if (products.length > 0) {
-          const idsSet = new Set();
-          for (const product of products) {
-            idsSet.add(product.productId);
-          }
-          groupedIds[i] = idsSet;
+        const idsSet = new Set();
+        for (const product of products) {
+          idsSet.add(product.productId);
         }
+        groupedIds[i] = idsSet;
       });
 
       const finalIds = groupedIds.reduce((accept, entry, i) => {
