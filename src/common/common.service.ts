@@ -54,15 +54,8 @@ export class CommonService {
   }
 
   async updateUrl(image: Image, newUrl) {
-    if (!image.originUrl) {
-      image.originUrl = image.url;
-      image.url = newUrl;
-      return await this.ImageRepository.save(image);
-    } else if (image.url.indexOf('picgz.myqcloud.com') !== -1) {
-      image.url = newUrl;
-      return await this.ImageRepository.save(image);
-    }
-    return image;
+    image.url = newUrl;
+    return await this.ImageRepository.save(image);
   }
 
   saveInCloud(file): Promise<ImageFile> {
