@@ -6,7 +6,7 @@ export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get('overview')
-  async getOverview(@Query('from') from: number, @Query('to') to: number) {
+  async getOverview(@Query('from') from: string, @Query('to') to: string) {
     console.log('from', from);
     return await this.statisticsService.getClickTimesByTime(from, to);
   }
