@@ -10,12 +10,16 @@ export class FeatureService {
     private readonly featureRepository: Repository<Feature>,
   ) {}
 
-  createFeature(createFeatureData: {
+  async createFeature(createFeatureData: {
     name: string;
     pos: number;
   }): Promise<Feature> {
     const feature = new Feature();
     feature.name = createFeatureData.name;
-    return this.featureRepository.save(feature);
+    return await this.featureRepository.save(feature);
+  }
+
+  async selectByIds(ids: number[]) {
+    await this.featureRepository.findByIds(ids);
   }
 }

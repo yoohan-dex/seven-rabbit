@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
-import { Product } from '../product/product.entity';
+import { Product } from 'product/product.entity';
 
 @Entity()
 export class Image {
@@ -10,6 +10,9 @@ export class Image {
 
   @Column({ length: 500 })
   url: string;
+
+  @Column({ length: 500 })
+  originUrl: string;
 
   @Column('text') meta: string;
 

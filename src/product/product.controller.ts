@@ -10,13 +10,22 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './product.dto';
 import { ProductService } from './product.service';
+import { StatisticsService } from 'statistics/statistics.service';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly statisticsService: StatisticsService,
+  ) {}
 
   @Get(':id')
   async getOne(@Param('id') productId: number) {
+    this.statisticsService.recordItems({
+      productIds: [productId],
+      type: 1,
+      user: 'test',
+    });
     return this.productService.getOne(productId);
   }
 

@@ -10,7 +10,7 @@ import getSessionKey from './helper/getSessionKey';
 import sha1 from './helper/sha1';
 import aesDecrypt from './helper/aesDecrypt';
 import { AuthService } from './auth.service';
-import { User } from '../shared/decorators/user';
+import { User } from 'shared/decorators/user';
 import { WxUserDto } from './auth.dto';
 
 @Controller('auth')

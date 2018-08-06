@@ -1,5 +1,7 @@
 import * as CosSdk from 'cos-nodejs-sdk-v5';
 import * as shortid from 'shortid';
+import http from 'axios';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -21,14 +23,45 @@ export class CommonService {
       }.cos.${process.env.COS_REGION}.myqcloud.com/`,
     });
   }
-  save(fileObject: ImageFile): Promise<Image> {
+  async save(file: ImageFile): Promise<Image> {
     const image = new Image();
-    image.name = fileObject.name;
-    image.url = fileObject.imgUrl;
-    image.meta = fileObject.mimeType;
+    image.name = file.name;
+    image.url =
+      file.imgUrl.indexOf(`cos.${process.env.COS_REGION}`) !== -1
+        ? file.imgUrl.replace(`cos.${process.env.COS_REGION}`, 'image')
+        : file.imgUrl;
+    image.originUrl = file.imgUrl;
+    image.meta = file.mimeType;
 
-    return this.ImageRepository.save(image);
+    return await this.ImageRepository.save(image);
   }
+
+  async findAll() {
+    return await this.ImageRepository.find();
+  }
+
+  async zip(cosUrl: string): Promise<string> {
+    const url =
+      cosUrl.indexOf(`cos.${process.env.COS_REGION}`) !== -1
+        ? cosUrl.replace(`cos.${process.env.COS_REGION}`, 'picgz')
+        : cosUrl;
+    console.log('url', url);
+    await http({
+      url,
+      method: 'get',
+    });
+    return url;
+  }
+
+  async updateUrl(image: Image, newUrl) {
+    if (!image.originUrl) {
+      image.originUrl = image.url;
+      image.url = newUrl;
+      return await this.ImageRepository.save(image);
+    }
+    return image;
+  }
+
   saveInCloud(file): Promise<ImageFile> {
     const imgKey = `${Date.now()}-${shortid.generate()}.${
       file.mimetype.split('/')[1]
@@ -36,10 +69,11 @@ export class CommonService {
     const uploadFolder = process.env.COS_UPLOAD_FOLDER
       ? process.env.COS_UPLOAD_FOLDER + '/'
       : '';
+    const key = `${uploadFolder}${imgKey}`;
     const params = {
       Bucket: `${process.env.COS_FILE_BUCKET}-${process.env.QClOUD_APP_ID}`,
       Region: process.env.COS_REGION,
-      Key: `${uploadFolder}${imgKey}`,
+      Key: key,
       FilePath: file.path,
       ContentLength: file.size,
     };
@@ -47,7 +81,6 @@ export class CommonService {
     return new Promise((resolve, reject) => {
       this.cos.sliceUploadFile(params, (err, data) => {
         if (err) {
-          console.log('err', err)
           reject(err);
         } else {
           resolve({

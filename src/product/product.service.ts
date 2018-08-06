@@ -15,10 +15,10 @@ import {
 } from 'typeorm';
 import * as R from 'ramda';
 
-import { UpdateCategoryDto } from '../category/category.dto';
-import { Image } from '../common/common.entity';
-import { Feature } from '../filter/feature.entity';
-import { Category } from '../category/category.entity';
+import { UpdateCategoryDto } from 'category/category.dto';
+import { Image } from 'common/common.entity';
+import { Feature } from 'filter/feature.entity';
+import { Category } from 'category/category.entity';
 
 @Injectable()
 export class ProductService {
@@ -127,17 +127,7 @@ export class ProductService {
       //   .groupBy('productId')
       //   .having(`countNum = ${getParams.features.length}`)
       //   .getRawMany();
-      // const productIds: number[] = raw.map(obj => obj.productId);
-      // if (productIds.length < 1) {
-      //   return {
-      //     list: [],
-      //     total: 0,
-      //   };
-      // }
-      // const [products, total] = await this.productRepository.findAndCount({
-      //   ...options,
-      //   where: { id: In(productIds), category: getParams.category },
-      // });
+
       return {
         list: products,
         total,
