@@ -32,12 +32,14 @@ export class CommonController {
     const images = await this.commonService.findAll();
     const ops = images.map(image => {
       return async () => {
-        console.log('start?');
         const afterZipUrl = await this.commonService.zip(image.url);
-        return await this.commonService.updateUrl(image, afterZipUrl);
+        const newUrl = afterZipUrl.replace(
+          'picgz.myqcloud.com',
+          'image.myqcloud.com',
+        );
+        return await this.commonService.updateUrl(image, newUrl);
       };
     });
-    console.log('ops', ops.length);
     return await Promise.all(ops.map(op => op()));
   }
 }
