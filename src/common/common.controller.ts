@@ -48,10 +48,7 @@ export class CommonController {
     const images = await this.commonService.findAll();
     const ops = images.map(image => {
       return async () => {
-        const newUrl = image.url.replace(
-          'picgz.myqcloud.com',
-          'image.myqcloud.com',
-        );
+        const newUrl = `${image.url}!zip`;
         return await this.commonService.updateUrl(image, newUrl);
       };
     });
