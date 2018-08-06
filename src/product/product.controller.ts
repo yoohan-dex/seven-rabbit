@@ -11,7 +11,7 @@ import {
 import { CreateProductDto } from './product.dto';
 import { ProductService } from './product.service';
 import { StatisticsService } from '../statistics/statistics.service';
-import { CommonService } from 'common/common.service';
+import { CommonService } from '../common/common.service';
 
 @Controller('product')
 export class ProductController {
