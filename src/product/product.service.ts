@@ -6,19 +6,12 @@ import {
 } from './product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import {
-  Repository,
-  createQueryBuilder,
-  QueryBuilder,
-  SelectQueryBuilder,
-  In,
-} from 'typeorm';
+import { Repository, createQueryBuilder, In } from 'typeorm';
 import * as R from 'ramda';
 
-import { UpdateCategoryDto } from 'category/category.dto';
-import { Image } from 'common/common.entity';
-import { Feature } from 'filter/feature.entity';
-import { Category } from 'category/category.entity';
+import { Image } from '../common/common.entity';
+import { Feature } from '../filter/feature.entity';
+import { Category } from '../category/category.entity';
 
 @Injectable()
 export class ProductService {

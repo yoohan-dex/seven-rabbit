@@ -4,7 +4,7 @@ import { Statistics } from './statistics.entity';
 import { Repository, createQueryBuilder, Between } from 'typeorm';
 import { StatisticsDto } from './statistics.dto';
 import { format } from '../shared/utils/formatTime';
-import { mapObj } from 'shared/utils/mapObj';
+import { mapObj } from '../shared/utils/mapObj';
 
 @Injectable()
 export class StatisticsService {

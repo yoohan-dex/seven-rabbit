@@ -7,8 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Feature } from './feature.entity';
-import { CreateFilterDto } from './filter.dto';
-import { Category } from 'category/category.entity';
+import { Category } from '../category/category.entity';
 
 @Entity()
 export class Filter {

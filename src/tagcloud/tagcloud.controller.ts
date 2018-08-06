@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { TagcloudService } from './tagcloud.service';
-import { FeatureService } from 'filter/feature.service';
+import { FeatureService } from '../filter/feature.service';
 
 @Controller('tagcloud')
 export class TagcloudController {
@@ -15,7 +15,5 @@ export class TagcloudController {
 
     const featureIds = items.map(item => item.featureId);
     const features = await this.featureService.selectByIds(featureIds);
-
-    
   }
 }
