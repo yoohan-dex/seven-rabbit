@@ -11,12 +11,14 @@ import {
 import { CreateProductDto } from './product.dto';
 import { ProductService } from './product.service';
 import { StatisticsService } from '../statistics/statistics.service';
+import { CommonService } from 'common/common.service';
 
 @Controller('product')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
     private readonly statisticsService: StatisticsService,
+    private readonly commonService: CommonService,
   ) {}
 
   @Get(':id')
@@ -65,6 +67,25 @@ export class ProductController {
 
   @Delete(':id')
   async deleteProduct(@Param('id') productId: number) {
-    return this.productService.remove(productId);
+    const product = await this.productService.getOne(productId);
+    console.log('product', product);
+    let willRemoveImages = [];
+    willRemoveImages.push(product.cover.originUrl);
+    willRemoveImages = willRemoveImages.concat(
+      product.detail.map(v => v.originUrl),
+    );
+    console.log('will, ', willRemoveImages);
+    const willDo = [];
+    for (const imageUrl of willRemoveImages) {
+      console.log('what', imageUrl);
+      willDo.push(this.commonService.deleteOne(imageUrl));
+    }
+    console.log('??');
+    try {
+      await Promise.all(willDo);
+    } catch (e) {
+      console.log('err:', e);
+    }
+    return await this.productService.remove(productId);
   }
 }

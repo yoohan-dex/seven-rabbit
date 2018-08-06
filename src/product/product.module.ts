@@ -8,12 +8,13 @@ import { Feature } from '../filter/feature.entity';
 import { Category } from '../category/category.entity';
 import { Statistics } from '../statistics/statistics.entity';
 import { StatisticsService } from '../statistics/statistics.service';
+import { CommonService } from '../common/common.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product, Image, Feature, Category, Statistics]),
   ],
-  providers: [ProductService, StatisticsService],
+  providers: [ProductService, StatisticsService, CommonService],
   controllers: [ProductController],
 })
 export class ProductModule {}

@@ -10,17 +10,20 @@ import { ImageFile } from './common.type';
 
 @Injectable()
 export class CommonService {
+  private domain: string;
   private cos: any;
   constructor(
     @InjectRepository(Image)
     private readonly ImageRepository: Repository<Image>,
   ) {
+    this.domain = `http://${process.env.COS_FILE_BUCKET}-${
+      process.env.QClOUD_APP_ID
+    }.cos.${process.env.COS_REGION}.myqcloud.com/`;
+
     this.cos = new CosSdk({
       SecretId: process.env.QCLOUD_SECRET_ID,
       SecretKey: process.env.QCLOUD_SECRET_KEY,
-      Domain: `http://${process.env.COS_FILE_BUCKET}-${
-        process.env.QClOUD_APP_ID
-      }.cos.${process.env.COS_REGION}.myqcloud.com/`,
+      Domain: this.domain,
     });
   }
   async save(file: ImageFile): Promise<Image> {
@@ -40,12 +43,29 @@ export class CommonService {
     return await this.ImageRepository.find();
   }
 
+  async deleteOne(originUrl: string) {
+    const key = originUrl.replace(this.domain, '');
+    const params = {
+      Bucket: process.env.COS_FILE_BUCKET,
+      Region: process.env.COS_REGION,
+      Key: key,
+    };
+    return new Promise((resolve, reject) => {
+      this.cos.deleteObject(params, (error, data) => {
+        if (!error) {
+          resolve(data);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  }
+
   async zip(cosUrl: string): Promise<string> {
     const url =
       cosUrl.indexOf(`cos.${process.env.COS_REGION}`) !== -1
         ? cosUrl.replace(`cos.${process.env.COS_REGION}`, 'picgz')
         : cosUrl;
-    console.log('url', url);
     await http({
       url,
       method: 'get',

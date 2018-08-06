@@ -13,8 +13,8 @@ export class Statistics {
 
   @Column() productId: number;
 
-  @ManyToOne(type => Product)
-  product: Product;
+  // @ManyToOne(type => Product)
+  // product: Product;
 
   @CreateDateColumn() actionTime: Date;
 
