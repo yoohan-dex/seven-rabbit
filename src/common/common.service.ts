@@ -46,7 +46,7 @@ export class CommonService {
   async deleteOne(originUrl: string) {
     const key = originUrl.replace(this.domain, '');
     const params = {
-      Bucket: process.env.COS_FILE_BUCKET,
+      Bucket: `${process.env.COS_FILE_BUCKET}-${process.env.QClOUD_APP_ID}`,
       Region: process.env.COS_REGION,
       Key: key,
     };
