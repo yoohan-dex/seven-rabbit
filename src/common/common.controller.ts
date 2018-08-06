@@ -42,4 +42,19 @@ export class CommonController {
     });
     return await Promise.all(ops.map(op => op()));
   }
+
+  @Get('forFixedUrl')
+  async fixedUrl() {
+    const images = await this.commonService.findAll();
+    const ops = images.map(image => {
+      return async () => {
+        const newUrl = image.url.replace(
+          'picgz.myqcloud.com',
+          'image.myqcloud.com',
+        );
+        return await this.commonService.updateUrl(image, newUrl);
+      };
+    });
+    return await Promise.all(ops.map(op => op()));
+  }
 }
