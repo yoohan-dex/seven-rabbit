@@ -28,7 +28,7 @@ export class CommonService {
     image.name = file.name;
     image.url =
       file.imgUrl.indexOf(`cos.${process.env.COS_REGION}`) !== -1
-        ? file.imgUrl.replace(`cos.${process.env.COS_REGION}`, 'image')
+        ? `${file.imgUrl.replace(`cos.${process.env.COS_REGION}`, 'image')}!zip`
         : file.imgUrl;
     image.originUrl = file.imgUrl;
     image.meta = file.mimeType;
