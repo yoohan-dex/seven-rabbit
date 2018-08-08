@@ -20,7 +20,7 @@ export class WxUser {
   @Column({ length: 100 })
   sessionkey: string;
 
-  @Column({ type: 'simple-json' })
+  @Column({ type: 'simple-json', nullable: true })
   userInfo: UserInfo;
 
   @CreateDateColumn() createTime: Date;

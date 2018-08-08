@@ -2,6 +2,7 @@ import http from 'axios';
 import * as signale from 'signale';
 import { BadRequestException } from '@nestjs/common';
 import ERRORS from '../constants';
+import { qcloudProxyLogin } from './qcloudProxyLogin';
 
 export default async function getSessionKey(code: string) {
   const useQcloudLogin = process.env.USE_QCLOUD_LOGIN;
@@ -10,21 +11,30 @@ export default async function getSessionKey(code: string) {
   if (useQcloudLogin) {
     const qcloudSecretId = process.env.QCLOUD_SECRET_ID;
     const qcloudSecretKey = process.env.QCLOUD_SECRET_KEY;
-    // return qcloudProxyLogin(qcloudSecretId, qcloudSecretKey, code).then(res => {
-    //     res = res.data
-    //     console.log(res)
-    //     if (res.code !== 0 || !res.data.openid || !res.data.session_key) {
-    //         debug('%s: %O', ERRORS.ERR_GET_SESSION_KEY, res)
-    //         throw new Error(`${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(res)}`)
-    //     } else {
-    //         debug('openid: %s, session_key: %s', res.data.openid, res.data.session_key)
-    //         return res.data;
-    //     }
-    // });
+    return qcloudProxyLogin(qcloudSecretId, qcloudSecretKey, code).then(res => {
+      const response = res.data;
+      if (
+        response.code !== 0 ||
+        !response.data.openid ||
+        !response.data.session_key
+      ) {
+        signale.debug(ERRORS.ERR_GET_SESSION_KEY, res);
+        throw new Error(
+          `${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(res)}`,
+        );
+      } else {
+        signale.debug(
+          'openid: ',
+          response.data.openid,
+          'session_key: %s',
+          response.data.session_key,
+        );
+        return response.data;
+      }
+    });
   } else {
     const appid = process.env.WX_APPID;
     const appsecret = process.env.WX_APPSECRET;
-    console.log('appsecret', appsecret);
     const { data } = (await http({
       url: 'https://api.weixin.qq.com/sns/jscode2session',
       method: 'GET',
@@ -43,7 +53,7 @@ export default async function getSessionKey(code: string) {
       };
     };
     if (data.errcode || !data.openid || !data.session_key) {
-      signale.debug('%s: %O', ERRORS.ERR_GET_SESSION_KEY, data.errmsg);
+      signale.debug(ERRORS.ERR_GET_SESSION_KEY, data.errmsg);
       throw new BadRequestException(
         `${ERRORS.ERR_GET_SESSION_KEY}\n${JSON.stringify(data)}`,
       );

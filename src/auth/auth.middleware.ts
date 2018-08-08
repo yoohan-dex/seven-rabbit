@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
   resolve(...args: any[]): MiddlewareFunction {
-    return async (req, res, next) => {
+    return async (req, __, next) => {
       const { 'x-wx-skey': skey } = req.headers;
       if (!skey) throw new UnauthorizedException(ERRORS.ERR_SKEY_INVALID);
 
@@ -23,7 +23,7 @@ export class AuthMiddleware implements NestMiddleware {
       if (user) {
         req.user = user;
       } else {
-        // throw new NotFoundException(ERRORS.ERR_SKEY_INVALID);
+        throw new UnauthorizedException(ERRORS.ERR_SKEY_INVALID);
       }
       next();
     };

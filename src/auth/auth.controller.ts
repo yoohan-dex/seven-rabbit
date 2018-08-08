@@ -24,8 +24,25 @@ export class AuthController {
     @Headers('x-wx-iv') iv: string,
   ) {
     if ([code, encryptedData, iv].some(v => !v)) {
-      signale.debug(ERRORS.ERR_HEADER_MISSED);
-      throw new UnauthorizedException(ERRORS.ERR_HEADER_MISSED);
+      signale.debug('只有code 也就是没有用户授权');
+      // throw new UnauthorizedException(ERRORS.ERR_HEADER_MISSED);
+    }
+
+    if (code && !encryptedData && !iv) {
+      const { session_key, openid } = await getSessionKey(code);
+
+      const skey = sha1(session_key);
+
+      const { uuid: id, openId } = await this.authService.saveUserByOpenId(
+        openid,
+        skey,
+        session_key,
+      );
+      return {
+        id,
+        openId,
+        skey,
+      };
     }
 
     signale.debug(
@@ -49,8 +66,8 @@ export class AuthController {
     // save
     const { userInfo, uuid: id, openId } = await this.authService.saveUserInfo(
       skey,
-      decryptedData,
       session_key,
+      decryptedData,
     );
     return {
       skey,

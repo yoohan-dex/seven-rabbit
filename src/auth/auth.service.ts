@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as signale from 'signale';
 import { WxUser } from './auth.entity';
 import { Repository } from 'typeorm';
 import { UserInfo } from './interface';
@@ -14,11 +15,22 @@ export class AuthService {
   async getUserInfoBySKey(skey: string) {
     return await this.authRepository.findOne({ skey });
   }
+  async saveUserByOpenId(openId: string, skey: string, sessionKey: string) {
+    let user = await this.authRepository.findOne({ openId });
+    if (!user) {
+      user = new WxUser();
+    }
+    user.skey = skey;
+    user.sessionkey = sessionKey;
+    user.openId = openId;
+    signale.debug('newUser', user);
+    return await this.authRepository.save(user);
+  }
 
   async saveUserInfo(
     skey: string,
-    userInfo: UserInfo,
     sessionKey: string,
+    userInfo: UserInfo,
   ): Promise<WxUser> {
     const user = await this.authRepository.findOne({ openId: userInfo.openId });
     if (user) {
