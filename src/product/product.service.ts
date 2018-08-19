@@ -34,7 +34,7 @@ export class ProductService {
   async getAll(getParams: GetProductDto = {}) {
     const options = {
       take: getParams.size || 20,
-      skip: getParams.page ? (getParams.page - 1) * 10 : 0,
+      skip: getParams.page ? (getParams.page - 1) * 20 : 0,
     };
     if (!getParams.features && getParams.category) {
       const category = await this.categoryRepository.findOne(
