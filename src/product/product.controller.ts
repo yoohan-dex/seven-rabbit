@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Patch,
   Param,
   Get,
   Delete,
@@ -42,7 +41,11 @@ export class ProductController {
     if (ids && ids.length > 0) {
       return await this.productService.getListByIds(ids);
     }
-
+    this.statisticsService.recordItems({
+      productIds: ids,
+      type: 1,
+      user: 'test',
+    });
     const params = {
       category,
       features,
