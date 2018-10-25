@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as qrcode from 'qrcode';
 import { OrderService } from './order.service';
 import { CommonService } from '../common/common.service';
 import {
