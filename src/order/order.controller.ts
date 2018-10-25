@@ -85,6 +85,7 @@ export class OrderController {
 
   @Get('/one-by-id')
   async getOneById(@Query('id') id: number) {
+    console.log('id', id);
     const order = await this.orderService.findOneById(id);
     // const matchPhone = user.phone && user.phone.includes(order.clientPhone);
     // const matchRole = user.roles.includes('admin');
