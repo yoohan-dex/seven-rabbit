@@ -84,7 +84,7 @@ export class OrderController {
   }
 
   @Get('/one-by-id')
-  async getOneById(@Query('id') id: number, @User() user: WxUserDto) {
+  async getOneById(@Query('id') id: number) {
     const order = await this.orderService.findOneById(id);
     // const matchPhone = user.phone && user.phone.includes(order.clientPhone);
     // const matchRole = user.roles.includes('admin');
