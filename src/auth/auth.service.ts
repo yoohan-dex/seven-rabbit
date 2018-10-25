@@ -68,7 +68,7 @@ export class AuthService {
   }
 
   async bindphone(user: WxUser, phone: string) {
-    if (user.phone.length > 3) {
+    if (user.phone && user.phone.length > 3) {
       throw new BadRequestException('超过了绑定次数不能再绑定');
     }
     if (!user.phone) {
