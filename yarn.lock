@@ -174,12 +174,6 @@
   version "0.0.30"
   resolved "http://registry.npm.taobao.org/@types/strip-json-comments/download/@types/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
 
-"@types/superagent@*":
-  version "3.8.0"
-  resolved "http://registry.npm.taobao.org/@types/superagent/download/@types/superagent-3.8.0.tgz#e7f81d93a54eaad60a64f9b3c4911990721ca536"
-  dependencies:
-    "@types/node" "*"
-
 "@types/supertest@^2.0.4":
   version "2.0.4"
   resolved "http://registry.npm.taobao.org/@types/supertest/download/@types/supertest-2.0.4.tgz#28770e13293365e240a842d7d5c5a1b3d2dee593"

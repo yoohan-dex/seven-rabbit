@@ -41,23 +41,6 @@ export class OrderController {
     const order = await this.orderService.createOne(createOrder, image);
     return order;
   }
-  @Get('test')
-  async createImage() {
-    await qrcode.toFile(
-      path.resolve(__dirname, '../../tmp/qrcode.png'),
-      'hello',
-    );
-    console.log('ok?');
-    fs.readFile(
-      path.resolve(__dirname, '../../tmp/qrcode.png'),
-      (err, data) => {
-        if (err) {
-          return err;
-        }
-        return data;
-      },
-    );
-  }
 
   @Get()
   @Roles('admin')
