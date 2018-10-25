@@ -3,6 +3,8 @@ import {
   Get,
   Headers,
   UnauthorizedException,
+  Post,
+  Body,
 } from '@nestjs/common';
 import * as signale from 'signale';
 import ERRORS from './constants';
@@ -12,6 +14,8 @@ import aesDecrypt from './helper/aesDecrypt';
 import { AuthService } from './auth.service';
 import { User } from '../shared/decorators/user';
 import { WxUserDto } from './auth.dto';
+import { WxUser } from './auth.entity';
+import { UserInfo } from './interface';
 
 @Controller('auth')
 export class AuthController {
@@ -33,15 +37,16 @@ export class AuthController {
 
       const skey = sha1(session_key);
 
-      const { uuid: id, openId } = await this.authService.saveUserByOpenId(
-        openid,
-        skey,
-        session_key,
-      );
+      const {
+        uuid: id,
+        openId,
+        roles,
+      } = await this.authService.saveUserByOpenId(openid, skey, session_key);
       return {
         id,
         openId,
         skey,
+        roles,
       };
     }
 
@@ -64,17 +69,24 @@ export class AuthController {
     }
 
     // save
-    const { userInfo, uuid: id, openId } = await this.authService.saveUserInfo(
-      skey,
-      session_key,
-      decryptedData,
-    );
+    const {
+      userInfo,
+      uuid: id,
+      openId,
+      roles,
+    } = await this.authService.saveUserInfo(skey, session_key, decryptedData);
     return {
       skey,
       userInfo,
       id,
       openId,
+      roles,
     };
+  }
+
+  @Post('weapp/userInfo')
+  async saveUserInfo(@User() user: any, @Body() info: any) {
+    return await this.authService.saveInfo(user, info);
   }
 
   @Get('weapp/user')
@@ -82,6 +94,26 @@ export class AuthController {
     return {
       id: user.uuid,
       userInfo: user.userInfo,
+      roles: user.roles,
     };
+  }
+
+  @Post('weapp/bindphone')
+  async weappBindphone(@User() user: any, @Body() data) {
+    return await this.authService.bindphone(user as WxUser, data.phone);
+  }
+
+  @Post('weapp/decryptPhone')
+  async decryptPhone(
+    @User() user: WxUserDto,
+    @Body() data: { iv: string; encryptedData: string },
+  ) {
+    const decryptedData = aesDecrypt(
+      user.sessionkey,
+      data.iv,
+      data.encryptedData,
+    );
+    const { phoneNumber } = JSON.parse(decryptedData);
+    return phoneNumber;
   }
 }

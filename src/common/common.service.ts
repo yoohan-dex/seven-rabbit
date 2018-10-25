@@ -43,6 +43,10 @@ export class CommonService {
     return await this.ImageRepository.find();
   }
 
+  async findOne(id: number) {
+    return await this.ImageRepository.findOne(id);
+  }
+
   async deleteOne(originUrl: string) {
     const key = originUrl.replace(this.domain, '');
     const params = {
@@ -103,7 +107,7 @@ export class CommonService {
             imgUrl: `http://${data.Location}`,
             size: file.size,
             mimeType: file.mimetype,
-            name: file.originalname,
+            name: file.filename,
           });
         }
       });

@@ -7,7 +7,6 @@ export class StatisticsController {
 
   @Get('overview')
   async getOverview(@Query('from') from: string, @Query('to') to: string) {
-    console.log('from', from);
     return await this.statisticsService.getClickTimesByTime(from, to);
   }
 }

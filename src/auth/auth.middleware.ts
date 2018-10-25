@@ -15,7 +15,6 @@ export class AuthMiddleware implements NestMiddleware {
     return async (req, __, next) => {
       const { 'x-wx-skey': skey } = req.headers;
       if (!skey) throw new UnauthorizedException(ERRORS.ERR_SKEY_INVALID);
-
       signale.debug('Valid: skey:', skey);
       const user = await this.authService.getUserInfoBySKey(skey);
 

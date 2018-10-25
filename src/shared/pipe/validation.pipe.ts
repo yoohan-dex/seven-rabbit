@@ -19,8 +19,12 @@ const custom = new Signale(options);
 export class ValidationPipe implements PipeTransform<any> {
   async transform(value, metadata: ArgumentMetadata) {
     const { metatype } = metadata;
+    console.log('value', value);
     if (!metatype || !this.toValidate(metatype)) {
       return value;
+    }
+    if (!value) {
+      throw new Error('传了个空值');
     }
     const object = plainToClass(metatype, value);
     const errors = await validate(object, { whitelist: true });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as signale from 'signale';
 import { WxUser } from './auth.entity';
@@ -23,6 +23,9 @@ export class AuthService {
     user.skey = skey;
     user.sessionkey = sessionKey;
     user.openId = openId;
+    if (!user.roles) {
+      user.roles = ['client'];
+    }
     signale.debug('newUser', user);
     return await this.authRepository.save(user);
   }
@@ -38,6 +41,10 @@ export class AuthService {
       user.skey = skey;
       user.userInfo = userInfo;
       user.openId = userInfo.openId;
+      console.log('user', user.roles);
+      if (!user.roles) {
+        user.roles = ['client'];
+      }
       return await this.authRepository.save(user);
     } else {
       const newUser = new WxUser();
@@ -45,6 +52,7 @@ export class AuthService {
       newUser.skey = skey;
       newUser.userInfo = userInfo;
       newUser.openId = userInfo.openId;
+      newUser.roles = ['client'];
       return await this.authRepository.save(newUser);
     }
   }
@@ -52,5 +60,22 @@ export class AuthService {
   async getOneUser() {
     const users = await this.authRepository.find();
     return users[0];
+  }
+
+  async saveInfo(user: WxUser, userInfo: any) {
+    user.userInfo = userInfo;
+    return await this.authRepository.save(user);
+  }
+
+  async bindphone(user: WxUser, phone: string) {
+    if (user.phone.length > 3) {
+      throw new BadRequestException('超过了绑定次数不能再绑定');
+    }
+    if (!user.phone) {
+      user.phone = [phone];
+    } else {
+      user.phone = [phone, ...user.phone];
+    }
+    return await this.authRepository.save(user);
   }
 }

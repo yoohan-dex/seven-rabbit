@@ -9,6 +9,7 @@ import { ProductModule } from './product/product.module';
 import { AuthModule } from './auth/auth.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { TagcloudModule } from './tagcloud/tagcloud.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TagcloudModule } from './tagcloud/tagcloud.module';
     AuthModule,
     StatisticsModule,
     TagcloudModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

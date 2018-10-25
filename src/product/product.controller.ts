@@ -39,13 +39,13 @@ export class ProductController {
     @Query('ids') ids: number[],
   ) {
     if (ids && ids.length > 0) {
+      this.statisticsService.recordItems({
+        productIds: ids,
+        type: 1,
+        user: 'test',
+      });
       return await this.productService.getListByIds(ids);
     }
-    this.statisticsService.recordItems({
-      productIds: ids,
-      type: 1,
-      user: 'test',
-    });
     const params = {
       category,
       features,
@@ -71,24 +71,18 @@ export class ProductController {
   @Delete(':id')
   async deleteProduct(@Param('id') productId: number) {
     const product = await this.productService.getOne(productId);
-    console.log('product', product);
     let willRemoveImages = [];
     willRemoveImages.push(product.cover.originUrl);
     willRemoveImages = willRemoveImages.concat(
       product.detail.map(v => v.originUrl),
     );
-    console.log('will, ', willRemoveImages);
     const willDo = [];
     for (const imageUrl of willRemoveImages) {
-      console.log('what', imageUrl);
       willDo.push(this.commonService.deleteOne(imageUrl));
     }
-    console.log('??');
     try {
       await Promise.all(willDo);
-    } catch (e) {
-      console.log('err:', e);
-    }
+    } catch (e) {}
     return await this.productService.remove(productId);
   }
 }

@@ -12,6 +12,15 @@ import { AuthMiddleware } from './auth.middleware';
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('auth/weapp/user');
+    consumer.apply(AuthMiddleware).forRoutes(
+      'auth/weapp/user',
+      'auth/weapp/bindphone',
+      'auth/weapp/userInfo',
+      'auth/weapp/decryptPhone',
+      // 'order/',
+      'order/all-by-phone',
+      'order/one-by-id',
+      'order/search',
+    );
   }
 }

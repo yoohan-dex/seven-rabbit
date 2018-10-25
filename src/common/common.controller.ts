@@ -24,6 +24,7 @@ export class CommonController {
       this.commonService.zip(savedFile.imgUrl),
       this.commonService.save(savedFile),
     ]);
+    console.log('res', res);
     return res;
   }
 

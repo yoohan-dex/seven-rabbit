@@ -1,14 +1,16 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import { ValidationPipe } from './pipe/validation.pipe';
+import { ValidationPipe } from './shared/pipe/validation.pipe';
+import { RolesGuard } from 'shared/guard/user.guard';
 
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalGuards(new RolesGuard());
   app.useStaticAssets(__dirname + '/public');
   app.setBaseViewsDir(__dirname + '/public');
   app.setViewEngine('html');

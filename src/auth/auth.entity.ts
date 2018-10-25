@@ -23,6 +23,12 @@ export class WxUser {
   @Column({ type: 'simple-json', nullable: true })
   userInfo: UserInfo;
 
+  @Column({ type: 'simple-array', nullable: true })
+  phone: string[];
+
+  @Column({ type: 'simple-array' })
+  roles: string[];
+
   @CreateDateColumn() createTime: Date;
   @UpdateDateColumn() lastVisitTime: Date;
 }
