@@ -3,13 +3,9 @@ import {
   Post,
   Body,
   Get,
-  Param,
-  UseGuards,
   Query,
   HttpException,
 } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
 import { OrderService } from './order.service';
 import { CommonService } from '../common/common.service';
 import {
@@ -18,11 +14,9 @@ import {
   SearchQuery,
   TimeQuery,
 } from './order.dto';
-import { RolesGuard } from '../shared/guard/user.guard';
-import { WxUser } from 'auth/auth.entity';
 import { User } from '../shared/decorators/user';
-import { Roles } from 'shared/decorators/roles';
-import { WxUserDto } from 'auth/auth.dto';
+import { Roles } from '../shared/decorators/roles';
+import { WxUserDto } from '../auth/auth.dto';
 
 @Controller('order')
 export class OrderController {

@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Content } from './content.entity';
 import { Order } from './order.entity';
 import { Image } from '../common/common.entity';
-import { CommonService } from 'common/common.service';
+import { CommonService } from '../common/common.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Content, Order, Image])],
