@@ -86,10 +86,10 @@ export class OrderController {
   @Get('/one-by-id')
   async getOneById(@Query('id') id: number, @User() user: WxUserDto) {
     const order = await this.orderService.findOneById(id);
-    const matchPhone = user.phone && user.phone.includes(order.clientPhone);
-    const matchRole = user.roles.includes('admin');
-    if (matchPhone || matchRole) {
-      return order;
-    }
+    // const matchPhone = user.phone && user.phone.includes(order.clientPhone);
+    // const matchRole = user.roles.includes('admin');
+    // if (matchRole) {
+    return order;
+    // }
   }
 }
