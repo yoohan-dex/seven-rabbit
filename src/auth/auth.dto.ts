@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsArray,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
 import { UserInfo } from './interface';
 
@@ -32,4 +33,10 @@ export class WxUserDto {
   @IsOptional()
   @IsArray()
   readonly roles: string[];
+}
+
+export class BindPhoneData {
+  @IsString() readonly phone: string;
+  @IsString() readonly code: string;
+  @IsBoolean() readonly isWechat: boolean;
 }

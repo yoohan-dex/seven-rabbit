@@ -9,13 +9,19 @@ import {
   OneToOne,
   ManyToMany,
   JoinColumn,
+  JoinTable,
 } from 'typeorm';
 import { Image } from '../common/common.entity';
 import { Content } from './content.entity';
+import { IssueReason } from './issueReson.entity';
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn() id: number;
+
+  @Column() orderNum: string;
+
+  @Column() orderNumYear: string;
 
   @Column() clientName: string;
 
@@ -29,11 +35,11 @@ export class Order {
 
   @UpdateDateColumn() updateTime: Date;
 
-  @Column() imageId: number;
+  @Column('simple-array') imageIds: number[];
 
-  @OneToOne(type => Image, { eager: true })
-  @JoinColumn({ name: 'order_image' })
-  image: Image;
+  @ManyToMany(type => Image, { eager: true })
+  @JoinTable()
+  images: Image[];
 
   @Column() material: string;
 
@@ -63,6 +69,9 @@ export class Order {
   @Column({ nullable: true })
   expressNum: string;
 
+  @Column({ nullable: true })
+  expressType: '顺丰' | '德邦' | '韵达';
+
   @Column() sendTime: Date;
 
   @Column({ nullable: true })
@@ -73,26 +82,50 @@ export class Order {
 
   @Column({ nullable: true })
   issueCosting: number;
-  @Column({ nullable: true })
-  issueReason: string;
+  @ManyToMany(type => IssueReason, {
+    eager: true,
+  })
+  @JoinTable()
+  issueReason: IssueReason[];
 
   @Column({ nullable: true })
   cost: number;
 
+  @Column({ default: 0 })
+  adultNum: number;
+
+  @Column({ default: 0 })
+  adultCost: number;
+
+  @Column({ default: 0 })
+  childNum: number;
+
+  @Column({ default: 0 })
+  childCost: number;
+
   @Column({ nullable: true })
   profit: number;
+
+  /**
+   * 0 未付款
+   * 1 付半款
+   * 2 付全款
+   */
+  @Column({ default: 0 })
+  paymentStatus: 0 | 1 | 2;
 
   @Column({ nullable: true })
   issueStatus: string;
   /**
    * 0 已确认订单
    * 1 生产中
-   * 2 已结单
-   * 3 出现售后问题
-   * 4 售后后结单
+   * 2 已发货
+   * 3 已结单
+   * 4 出现售后问题
+   * 5 售后后结单
    */
   @Column({ default: 0 })
-  status: 0 | 1 | 2 | 3 | 4;
+  status: 0 | 1 | 2 | 3 | 4 | 5;
 
   /**
    * 0 准备开工

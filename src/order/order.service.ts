@@ -2,9 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './order.entity';
 import { Repository, Like, IsNull } from 'typeorm';
-import { CreateOrderDto, SearchQuery, TimeQuery } from './order.dto';
+import {
+  CreateOrderDto,
+  SearchQuery,
+  TimeQuery,
+  ChangeCostDto,
+} from './order.dto';
 import { Image } from '../common/common.entity';
 import { Content } from './content.entity';
+import { log } from 'console';
+import { queryOrder } from './lib/express';
+import { IssueReason } from './issueReson.entity';
 
 @Injectable()
 export class OrderService {
@@ -15,6 +23,8 @@ export class OrderService {
     private readonly contentRepository: Repository<Content>,
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
+    @InjectRepository(IssueReason)
+    private readonly issueReasonRepository: Repository<IssueReason>,
   ) {}
 
   async findAll() {
@@ -47,6 +57,9 @@ export class OrderService {
     if (order.progress < 10) {
       order.progress += 1;
     }
+    if (order.progress === 10) {
+      order.status = 2;
+    }
     return await this.orderRepository.save(order);
   }
 
@@ -58,9 +71,13 @@ export class OrderService {
     return await this.orderRepository.save(order);
   }
 
-  async changeCost(id: number, num: number) {
-    const order = await this.orderRepository.findOne(id);
-    order.cost = num;
+  async changeCost(dto: ChangeCostDto) {
+    const order = await this.orderRepository.findOne(dto.id);
+    order.adultNum = dto.adultNum;
+    order.adultCost = dto.adultCost;
+    order.childNum = dto.childNum;
+    order.childCost = dto.childCost;
+    log('test', order);
     return await this.orderRepository.save(order);
   }
 
@@ -74,7 +91,16 @@ export class OrderService {
       status,
       time,
       noCost,
+      seller,
+      orderNum,
+      paymentStatus,
     } = query;
+    if (seller) {
+      where = { ...where, seller };
+    }
+    if (orderNum) {
+      where = { ...where, orderNum };
+    }
     if (clientName) {
       where = { ...where, clientName };
     }
@@ -90,6 +116,9 @@ export class OrderService {
     if (noCost) {
       where = { ...where, cost: IsNull() };
     }
+    if (paymentStatus) {
+      where = { ...where, paymentStatus };
+    }
     if (!time) {
       return await this.orderRepository.find({ where });
     }
@@ -103,7 +132,12 @@ export class OrderService {
         .getManyAndCount();
     }
   }
-
+  async checkExpress(id: number) {
+    const order = await this.orderRepository.findOne(id);
+    const { expressNum, expressType } = order;
+    if (!expressNum || !expressType) return;
+    return await queryOrder(expressNum, expressType);
+  }
   async findByTime(query: TimeQuery) {
     let where = '';
     if (query.time === 'seven') {
@@ -112,7 +146,53 @@ export class OrderService {
     return this.orderRepository.find({ where });
   }
 
-  async createOne(dto: CreateOrderDto, image: Image) {
+  async setPaymentStatus(orderId: number, status: 0 | 1 | 2) {
+    const order = await this.orderRepository.findOne(orderId);
+    order.paymentStatus = status;
+    return await this.orderRepository.save(order);
+  }
+
+  async getIssueReason() {
+    return await this.issueReasonRepository.find();
+  }
+
+  async setIssueReason(orderId: number, reason: string, reasonId?: number) {
+    const order = await this.orderRepository.findOne(orderId);
+    let issueReason;
+    if (reasonId !== undefined) {
+      issueReason = await this.issueReasonRepository.findOne(reasonId);
+    } else {
+      issueReason = new IssueReason();
+      issueReason.content = reason;
+      issueReason = await this.issueReasonRepository.save(issueReason);
+    }
+    order.issueReason = [issueReason];
+    order.status = 4;
+    return await this.orderRepository.save(order);
+  }
+
+  async finishOrder(id: number) {
+    const order = await this.orderRepository.findOne(id);
+    if (order.status === 2) {
+      order.status = 3;
+    } else if (order.status === 4) {
+      order.status = 5;
+    }
+    return await this.orderRepository.save(order);
+  }
+
+  async setExpress(
+    id: number,
+    expressType: '韵达' | '顺丰' | '德邦',
+    expressNum: string,
+  ) {
+    const order = await this.orderRepository.findOne(id);
+    order.expressType = expressType;
+    order.expressNum = expressNum;
+    return await this.orderRepository.save(order);
+  }
+
+  async createOne(dto: CreateOrderDto, images: Image[]) {
     const content = await this.saveContent(dto.sizeAndNum);
 
     const order = new Order();
@@ -121,8 +201,8 @@ export class OrderService {
     order.clientAddress = dto.clientAddress;
     order.clientPhone = dto.clientPhone;
     order.content = content;
-    order.image = image;
-    order.imageId = dto.imageId;
+    order.images = images;
+    order.imageIds = dto.imageIds;
     order.material = dto.material;
     order.pattern = dto.pattern;
     order.printing = dto.printing;
@@ -134,6 +214,8 @@ export class OrderService {
     order.seller = dto.seller;
     order.express = dto.express;
     order.sendTime = new Date(dto.sendTime);
+    order.orderNum = dto.orderNum;
+    order.orderNumYear = dto.orderNumYear;
 
     return await this.orderRepository.save(order);
   }

@@ -5,7 +5,9 @@ export class CreateOrderDto {
   @IsString() readonly clientCompany: string;
   @IsString() readonly clientAddress: string;
   @IsString() readonly clientPhone: string;
-  @IsNumber() readonly imageId: number;
+  @IsString() readonly orderNum: string;
+  @IsString() readonly orderNumYear: string;
+  @IsArray() readonly imageIds: number[];
   @IsString() readonly material: string;
   @IsString() readonly pattern: string;
   @IsString() readonly printing: string;
@@ -20,9 +22,23 @@ export class CreateOrderDto {
   @IsNumber() readonly sendTime: number;
 }
 
+export class SetReasonDto {
+  @IsNumber() readonly id: number;
+
+  @IsOptional()
+  @IsString()
+  readonly reason: string;
+
+  @IsOptional()
+  @IsNumber()
+  readonly reasonId: number;
+}
 export class ChangeCostDto {
   @IsNumber() readonly id: number;
-  @IsNumber() readonly num: number;
+  @IsNumber() readonly adultNum: number;
+  @IsNumber() readonly adultCost: number;
+  @IsNumber() readonly childNum: number;
+  @IsNumber() readonly childCost: number;
 }
 
 export class SearchQuery {
@@ -41,6 +57,16 @@ export class SearchQuery {
   @IsOptional()
   @IsString()
   readonly time?: 'seven';
+
+  @IsOptional() readonly paymentStatus: 0 | 1 | 2;
+
+  @IsOptional()
+  @IsString()
+  readonly seller: string;
+
+  @IsOptional()
+  @IsString()
+  readonly orderNum: string;
 }
 
 export class TimeQuery {

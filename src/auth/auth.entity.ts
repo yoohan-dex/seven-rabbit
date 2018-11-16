@@ -29,6 +29,12 @@ export class WxUser {
   @Column({ type: 'simple-array' })
   roles: string[];
 
+  @Column({ nullable: true })
+  smsCode: string;
+
+  @Column({ nullable: true })
+  smsSendTime: Date;
+
   @CreateDateColumn() createTime: Date;
   @UpdateDateColumn() lastVisitTime: Date;
 }

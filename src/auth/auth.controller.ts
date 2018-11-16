@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
   Post,
   Body,
+  Query,
 } from '@nestjs/common';
 import * as signale from 'signale';
 import ERRORS from './constants';
@@ -13,7 +14,7 @@ import sha1 from './helper/sha1';
 import aesDecrypt from './helper/aesDecrypt';
 import { AuthService } from './auth.service';
 import { User } from '../shared/decorators/user';
-import { WxUserDto } from './auth.dto';
+import { WxUserDto, BindPhoneData } from './auth.dto';
 import { WxUser } from './auth.entity';
 import { UserInfo } from './interface';
 
@@ -99,8 +100,13 @@ export class AuthController {
   }
 
   @Post('weapp/bindphone')
-  async weappBindphone(@User() user: any, @Body() data) {
-    return await this.authService.bindphone(user as WxUser, data.phone);
+  async weappBindphone(@User() user: any, @Body() data: BindPhoneData) {
+    return await this.authService.bindphone(
+      user,
+      data.phone,
+      data.isWechat,
+      data.code,
+    );
   }
 
   @Post('weapp/decryptPhone')
@@ -115,5 +121,10 @@ export class AuthController {
     );
     const { phoneNumber } = JSON.parse(decryptedData);
     return phoneNumber;
+  }
+
+  @Get('weapp/bindPhoneCode')
+  async sendBindPhoneCode(@User() user: any, @Query('phone') phone: string) {
+    return this.authService.sendSmsCode(user, phone);
   }
 }

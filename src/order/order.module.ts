@@ -6,9 +6,10 @@ import { Content } from './content.entity';
 import { Order } from './order.entity';
 import { Image } from '../common/common.entity';
 import { CommonService } from '../common/common.service';
+import { IssueReason } from './issueReson.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Content, Order, Image])],
+  imports: [TypeOrmModule.forFeature([Content, Order, Image, IssueReason])],
   controllers: [OrderController],
   providers: [OrderService, CommonService],
 })

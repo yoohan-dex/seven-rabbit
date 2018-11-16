@@ -17,6 +17,7 @@ export class AuthModule implements NestModule {
       'auth/weapp/bindphone',
       'auth/weapp/userInfo',
       'auth/weapp/decryptPhone',
+      'auth/weapp/bindPhoneCode',
       // 'order/',
       'order/all-by-phone',
       'order/one-by-id',

@@ -43,6 +43,10 @@ export class CommonService {
     return await this.ImageRepository.find();
   }
 
+  async findByIds(ids: number[]) {
+    return await this.ImageRepository.findByIds(ids);
+  }
+
   async findOne(id: number) {
     return await this.ImageRepository.findOne(id);
   }

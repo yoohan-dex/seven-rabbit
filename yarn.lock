@@ -108,6 +108,10 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cookiejar@*":
+  version "2.1.0"
+  resolved "http://registry.npm.taobao.org/@types/cookiejar/download/@types/cookiejar-2.1.0.tgz#4b7daf2c51696cfc70b942c11690528229d1a1ce"
+
 "@types/dotenv@^4.0.3":
   version "4.0.3"
   resolved "http://registry.npm.taobao.org/@types/dotenv/download/@types/dotenv-4.0.3.tgz#ebcfc40da7bc0728b705945b7db48485ec5b4b67"
@@ -173,6 +177,13 @@
 "@types/strip-json-comments@0.0.30":
   version "0.0.30"
   resolved "http://registry.npm.taobao.org/@types/strip-json-comments/download/@types/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
+
+"@types/superagent@*":
+  version "3.8.4"
+  resolved "http://registry.npm.taobao.org/@types/superagent/download/@types/superagent-3.8.4.tgz#24a5973c7d1a9c024b4bbda742a79267c33fb86a"
+  dependencies:
+    "@types/cookiejar" "*"
+    "@types/node" "*"
 
 "@types/supertest@^2.0.4":
   version "2.0.4"
@@ -1572,6 +1583,10 @@ capture-exit@^1.2.0:
 capture-stack-trace@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/capture-stack-trace/download/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
+
+case@^1.5.5:
+  version "1.5.5"
+  resolved "http://registry.npm.taobao.org/case/download/case-1.5.5.tgz#8e832ef0329609a4f3198dee37c029645dc27c72"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -5555,6 +5570,10 @@ punycode@^1.2.4, punycode@^1.4.1:
 punycode@^2.1.0:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/punycode/download/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
+
+qcloudsms_js@^0.1.1:
+  version "0.1.1"
+  resolved "http://registry.npm.taobao.org/qcloudsms_js/download/qcloudsms_js-0.1.1.tgz#e042b683ba1312a20d7dd0322446f20fd3dc644a"
 
 qrcode@^1.3.0:
   version "1.3.0"

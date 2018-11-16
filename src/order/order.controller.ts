@@ -13,6 +13,7 @@ import {
   ChangeCostDto,
   SearchQuery,
   TimeQuery,
+  SetReasonDto,
 } from './order.dto';
 import { User } from '../shared/decorators/user';
 import { Roles } from '../shared/decorators/roles';
@@ -27,12 +28,12 @@ export class OrderController {
 
   @Post('create')
   async createOne(@Body() createOrder: CreateOrderDto) {
-    const image = await this.commonService.findOne(createOrder.imageId);
-    if (!image) {
+    const images = await this.commonService.findByIds(createOrder.imageIds);
+    if (!images || images.length !== createOrder.imageIds.length) {
       return new Error('图片有错');
     }
 
-    const order = await this.orderService.createOne(createOrder, image);
+    const order = await this.orderService.createOne(createOrder, images);
     return order;
   }
 
@@ -54,7 +55,43 @@ export class OrderController {
     return order;
   }
 
-  @Get('/all-by-phone')
+  @Post('express/commit')
+  async commitExpress(
+    @Body('id') orderId: number,
+    @Body('expressType') expressType: '顺丰' | '韵达' | '德邦',
+    @Body('expressNum') expressNum: string,
+  ) {
+    return await this.orderService.setExpress(orderId, expressType, expressNum);
+  }
+
+  @Post('payment/status')
+  async setPaymentStatus(
+    @Body('orderId') orderId: number,
+    @Body('status') status: 0 | 1 | 2,
+  ) {
+    return await this.orderService.setPaymentStatus(orderId, status);
+  }
+
+  @Get('issue-reason')
+  async getIssueReason() {
+    return await this.orderService.getIssueReason();
+  }
+
+  @Post('issue-controll')
+  async setIssueReason(@Body() setReasonDto: SetReasonDto) {
+    return await this.orderService.setIssueReason(
+      setReasonDto.id,
+      setReasonDto.reason,
+      setReasonDto.reasonId,
+    );
+  }
+
+  @Get('finish')
+  async finishOrder(@Query('id') id: number) {
+    return await this.orderService.finishOrder(id);
+  }
+
+  @Get('all-by-phone')
   async getAllByUser(@User() user: WxUserDto) {
     if (!user.phone || user.phone.length === 0) {
       throw new HttpException('还没绑定手机呢', 420);
@@ -69,7 +106,12 @@ export class OrderController {
 
   @Post('/cost')
   async changeCost(@Body() obj: ChangeCostDto) {
-    return await this.orderService.changeCost(obj.id, obj.num);
+    return await this.orderService.changeCost(obj);
+  }
+
+  @Get('/express/check')
+  async checkExpress(@Query('id') id: number) {
+    return await this.orderService.checkExpress(id);
   }
 
   @Get('/search')
@@ -85,7 +127,6 @@ export class OrderController {
 
   @Get('/one-by-id')
   async getOneById(@Query('id') id: number) {
-    console.log('id', id);
     const order = await this.orderService.findOneById(id);
     // const matchPhone = user.phone && user.phone.includes(order.clientPhone);
     // const matchRole = user.roles.includes('admin');
