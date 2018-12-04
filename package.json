@@ -9,6 +9,7 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "DEPLOY_MODE=dev nodemon",
     "prestart:prod": "rm -rf dist && tsc && cp -rf src/public dist/public",
+    "prerestart:prod": "rm -rf dist && tsc && cp -rf src/public dist/public",
     "restart:prod": "pm2 restart all && pm2 monit",
     "start:prod": "pm2 start dist/main.js -i 2 && pm2 monit",
     "start:hmr": "node dist/server",
