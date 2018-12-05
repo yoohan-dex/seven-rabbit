@@ -1,12 +1,15 @@
 import * as CosSdk from 'cos-nodejs-sdk-v5';
 import * as shortid from 'shortid';
 import http from 'axios';
-
+import * as Util from 'util';
+import * as imageSize from 'image-size';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './common.entity';
 import { ImageFile } from './common.type';
+
+const sizeOf = Util.promisify(imageSize);
 
 @Injectable()
 export class CommonService {
@@ -35,7 +38,8 @@ export class CommonService {
         : file.imgUrl;
     image.originUrl = file.imgUrl;
     image.meta = file.mimeType;
-
+    image.width = file.width;
+    image.height = file.height;
     return await this.ImageRepository.save(image);
   }
 
@@ -86,7 +90,10 @@ export class CommonService {
     return await this.ImageRepository.save(image);
   }
 
-  saveInCloud(file): Promise<ImageFile> {
+  async saveInCloud(file) {
+    const dimentions: { width: number; height: number } = (await sizeOf(
+      file.path,
+    )) as any;
     const imgKey = `${Date.now()}-${shortid.generate()}.${
       file.mimetype.split('/')[1]
     }`;
@@ -112,6 +119,8 @@ export class CommonService {
             size: file.size,
             mimeType: file.mimetype,
             name: file.filename,
+            width: dimentions.width,
+            height: dimentions.height,
           });
         }
       });

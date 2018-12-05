@@ -31,6 +31,13 @@ export class ProductService {
   async getListByIds(ids: number[]) {
     return await this.productRepository.findByIds(ids);
   }
+
+  async getNewEight() {
+    return await this.productRepository.find({
+      take: 8,
+      order: { id: 'DESC' },
+    });
+  }
   async getAll(getParams: GetProductDto = {}) {
     const options = {
       take: getParams.size || 20,

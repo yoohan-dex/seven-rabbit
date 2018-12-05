@@ -20,6 +20,11 @@ export class ProductController {
     private readonly commonService: CommonService,
   ) {}
 
+  @Get('new/8')
+  async getNewEight() {
+    return this.productService.getNewEight();
+  }
+
   @Get(':id')
   async getOne(@Param('id') productId: number) {
     this.statisticsService.recordItems({

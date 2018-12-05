@@ -3,4 +3,6 @@ export interface ImageFile {
   size: string;
   mimeType: string;
   name: string;
+  width: number;
+  height: number;
 }

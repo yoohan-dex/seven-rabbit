@@ -23,6 +23,10 @@ export class Image {
 
   @Column('text') meta: string;
 
+  @Column() width: number;
+
+  @Column() height: number;
+
   @ManyToMany(type => Product, product => product.detail)
   product: Product[];
 }

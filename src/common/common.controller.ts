@@ -8,6 +8,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
+import { ImageFile } from './common.type';
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
@@ -19,7 +20,7 @@ export class CommonController {
     }),
   )
   async uploadFile(@UploadedFile() file) {
-    const savedFile = await this.commonService.saveInCloud(file);
+    const savedFile = (await this.commonService.saveInCloud(file)) as ImageFile;
     const [_, res] = await Promise.all([
       this.commonService.zip(savedFile.imgUrl),
       this.commonService.save(savedFile),
