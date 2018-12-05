@@ -35,7 +35,7 @@ export class ProductService {
   async getNewEight() {
     return await this.productRepository.find({
       take: 8,
-      order: { id: 'DESC' },
+      order: { id: 'ASC' },
     });
   }
   async getAll(getParams: GetProductDto = {}) {
