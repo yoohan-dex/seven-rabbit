@@ -91,9 +91,11 @@ export class CommonService {
   }
 
   async saveInCloud(file) {
+    console.log('file');
     const dimentions: { width: number; height: number } = (await sizeOf(
       file.path,
     )) as any;
+    console.log('dimentions', dimentions);
     const imgKey = `${Date.now()}-${shortid.generate()}.${
       file.mimetype.split('/')[1]
     }`;
@@ -109,21 +111,15 @@ export class CommonService {
       ContentLength: file.size,
     };
 
-    return new Promise((resolve, reject) => {
-      this.cos.sliceUploadFile(params, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({
-            imgUrl: `http://${data.Location}`,
-            size: file.size,
-            mimeType: file.mimetype,
-            name: file.filename,
-            width: dimentions.width,
-            height: dimentions.height,
-          });
-        }
-      });
-    });
+    const upload = Util.promisify(this.cos.sliceUploadFile).bind(this.cos);
+    const data = await upload(params);
+    return {
+      imgUrl: `http://${data.Location}`,
+      size: file.size,
+      mimeType: file.mimetype,
+      name: file.filename,
+      width: dimentions.width,
+      height: dimentions.height,
+    };
   }
 }

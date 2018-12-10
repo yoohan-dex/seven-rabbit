@@ -20,6 +20,7 @@ export class CommonController {
     }),
   )
   async uploadFile(@UploadedFile() file) {
+    if (!file) return null;
     const savedFile = (await this.commonService.saveInCloud(file)) as ImageFile;
     const [_, res] = await Promise.all([
       this.commonService.zip(savedFile.imgUrl),

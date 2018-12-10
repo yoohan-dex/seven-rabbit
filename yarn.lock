@@ -2029,9 +2029,17 @@ cors@2.8.4:
     object-assign "^4"
     vary "^1"
 
-cos-nodejs-sdk-v5@^2.0.6, cos-nodejs-sdk-v5@^2.4.3:
+cos-nodejs-sdk-v5@^2.0.6:
   version "2.4.3"
   resolved "http://registry.npm.taobao.org/cos-nodejs-sdk-v5/download/cos-nodejs-sdk-v5-2.4.3.tgz#acb7d282dc01d3fe45f7bd4855db2925e1d92245"
+  dependencies:
+    configstore "^3.1.2"
+    request "^2.81.0"
+    xml2js "^0.4.19"
+
+cos-nodejs-sdk-v5@^2.5.1:
+  version "2.5.1"
+  resolved "http://registry.npm.taobao.org/cos-nodejs-sdk-v5/download/cos-nodejs-sdk-v5-2.5.1.tgz#816bb3baaf12e8c35b71477cd11732ef0f1ab47b"
   dependencies:
     configstore "^3.1.2"
     request "^2.81.0"

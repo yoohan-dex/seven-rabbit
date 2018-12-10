@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { TagcloudModule } from './tagcloud/tagcloud.module';
 import { OrderModule } from './order/order.module';
+import { BuyerShowModule } from './buyer-show/buyer-show.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrderModule } from './order/order.module';
     StatisticsModule,
     TagcloudModule,
     OrderModule,
+    BuyerShowModule,
   ],
   controllers: [AppController],
   providers: [AppService],

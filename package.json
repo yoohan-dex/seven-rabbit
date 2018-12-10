@@ -34,7 +34,7 @@
     "case": "^1.5.5",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.5",
-    "cos-nodejs-sdk-v5": "^2.4.3",
+    "cos-nodejs-sdk-v5": "^2.5.1",
     "dotenv": "^6.0.0",
     "fastify-formbody": "^2.0.0",
     "file-type": "^8.0.0",
