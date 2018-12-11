@@ -9,9 +9,9 @@ export class CreateBuyerShowDto {
 }
 export class QueryBuyerShowDto {
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   page?: number;
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   size?: number;
 }
