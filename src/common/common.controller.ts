@@ -6,12 +6,19 @@ import {
   FileInterceptor,
   UploadedFile,
   Get,
+  Render,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
+
+  @Get('admin')
+  @Render('index')
+  root(): string {
+    return '';
+  }
 
   @Post('upload')
   @UseInterceptors(
