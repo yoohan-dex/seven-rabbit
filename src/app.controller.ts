@@ -7,7 +7,5 @@ export class AppController {
 
   @Get('admin')
   @Render('bundle')
-  root(): string {
-    return this.appService.root();
-  }
+  root() {}
 }
