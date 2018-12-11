@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Get('system-manager-486')
   @Render('index')
   root(): string {
     return this.appService.root();
