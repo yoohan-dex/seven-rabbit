@@ -14,12 +14,6 @@ import { ImageFile } from './common.type';
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
 
-  @Get('admin')
-  @Render('index')
-  root(): string {
-    return '';
-  }
-
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
