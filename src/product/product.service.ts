@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { Repository, createQueryBuilder, In } from 'typeorm';
+import { Signale } from 'signale';
 import * as R from 'ramda';
 
 import { Image } from '../common/common.entity';
@@ -38,6 +39,13 @@ export class ProductService {
       order: { id: 'DESC' },
     });
   }
+
+  async getHotList() {
+    return await this.productRepository.find({
+      hot: true,
+    });
+  }
+
   async getAll(getParams: GetProductDto = {}) {
     const options = {
       take: getParams.size || 20,
@@ -156,6 +164,7 @@ export class ProductService {
     const product = new Product();
 
     product.name = productData.name;
+    product.hot = productData.hot;
     product.category = category;
     product.cover = cover;
     product.detail = detail;
@@ -180,8 +189,8 @@ export class ProductService {
       getFeatures,
       getCategory,
     ]);
-
     product.name = productData.name;
+    product.hot = productData.hot;
     product.category = category;
     product.cover = cover;
     product.detail = detail;

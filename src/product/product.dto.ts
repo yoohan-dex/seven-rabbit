@@ -1,7 +1,9 @@
-import { IsInt, IsString, IsArray } from 'class-validator';
+import { IsInt, IsString, IsArray, IsBoolean } from 'class-validator';
 
 export class CreateProductDto {
   @IsString() readonly name: string;
+
+  @IsBoolean() readonly hot: boolean;
 
   @IsInt() readonly cover: number;
 

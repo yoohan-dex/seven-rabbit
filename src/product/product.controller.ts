@@ -25,6 +25,11 @@ export class ProductController {
     return this.productService.getNewEight();
   }
 
+  @Get('hot')
+  async getHostList() {
+    return this.productService.getHotList();
+  }
+
   @Get(':id')
   async getOne(@Param('id') productId: number) {
     this.statisticsService.recordItems({

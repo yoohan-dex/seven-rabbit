@@ -34,6 +34,9 @@ export class Product {
   @ManyToOne(type => Category, category => category.products, { eager: true })
   category: Category;
 
+  @Column({ default: false })
+  hot: boolean;
+
   @Column('int', { default: 0 })
   visitTimes: number;
 
