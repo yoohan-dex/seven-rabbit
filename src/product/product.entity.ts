@@ -51,7 +51,9 @@ export class Product {
   @Column('int', { default: 0 })
   favorTimes: number;
 
-  @CreateDateColumn() createTime: Date;
+  @CreateDateColumn({ nullable: true })
+  createTime: Date;
 
-  @UpdateDateColumn() updateTime: Date;
+  @UpdateDateColumn({ nullable: true })
+  updateTime: Date;
 }
