@@ -5,7 +5,7 @@ import {
   GetProductDto,
 } from './product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './product.entity';
+import { Product, HotSort } from './product.entity';
 import { Repository, createQueryBuilder, In } from 'typeorm';
 import { Signale } from 'signale';
 import * as R from 'ramda';
@@ -25,6 +25,8 @@ export class ProductService {
     private readonly featureRepository: Repository<Feature>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(HotSort)
+    private readonly hotSortRepository: Repository<HotSort>,
   ) {}
   async getOne(id) {
     return await this.productRepository.findOne(id);
@@ -41,9 +43,45 @@ export class ProductService {
   }
 
   async getHotList() {
-    return await this.productRepository.find({
+    const sort = await this.hotSortRepository.findOne();
+    const hotList = await this.productRepository.find({ hot: true });
+
+    const realHotList = [];
+    sort.productIds.forEach((sid: any) => {
+      const id = parseInt(sid, 10);
+      const item = hotList.find(v => v.id === id);
+      if (item) {
+        realHotList.push(item);
+      }
+    });
+    return realHotList;
+  }
+
+  async getSort() {
+    const sort = await this.hotSortRepository.findOne();
+    return sort.productIds;
+  }
+
+  async updateSort(ids: number[]) {
+    const sort = await this.hotSortRepository.findOne();
+    sort.productIds = ids;
+    return await this.hotSortRepository.save(sort);
+  }
+
+  async initSort() {
+    const hotProducts = await this.productRepository.find({
       hot: true,
     });
+    const hotIds = hotProducts.map(p => p.id);
+    const sort = await this.hotSortRepository.findOne();
+    if (!sort) {
+      const newSort = new HotSort();
+      newSort.productIds = hotIds;
+      return await this.hotSortRepository.save(newSort);
+    }
+
+    sort.productIds = hotIds;
+    return await this.hotSortRepository.save(sort);
   }
 
   async getAll(getParams: GetProductDto = {}) {
@@ -170,7 +208,13 @@ export class ProductService {
     product.detail = detail;
     product.features = features;
     try {
-      return await this.productRepository.save(product);
+      const savedProduct = await this.productRepository.save(product);
+      if (savedProduct.hot) {
+        const sort = await this.hotSortRepository.findOne();
+        sort.productIds.push(savedProduct.id);
+        await this.hotSortRepository.save(sort);
+      }
+      return savedProduct;
     } catch (err) {
       throw new HttpException('图片重复了', HttpStatus.CONFLICT);
     }
@@ -195,10 +239,25 @@ export class ProductService {
     product.cover = cover;
     product.detail = detail;
     product.features = features;
-    return await this.productRepository.save(product);
+    const savedProduct = await this.productRepository.save(product);
+    if (savedProduct.hot) {
+      const sort = await this.hotSortRepository.findOne();
+      sort.productIds.push(savedProduct.id);
+      await this.hotSortRepository.save(sort);
+    }
+    return savedProduct;
   }
 
   async remove(id) {
+    const oldProduct = await this.productRepository.findOne(id);
+    if (oldProduct.hot) {
+      const sort = await this.hotSortRepository.findOne();
+      const idx = sort.productIds.findIndex(v => v === id);
+      if (idx) {
+        sort.productIds.splice(idx, 1);
+        await this.hotSortRepository.save(sort);
+      }
+    }
     return await this.productRepository.delete(id);
   }
 }

@@ -30,6 +30,22 @@ export class ProductController {
     return this.productService.getHotList();
   }
 
+  @Get('hot-sort')
+  async getSort() {
+    return await this.productService.getSort();
+  }
+
+  @Post('hot-sort')
+  async updateSort(@Body() ids: number[]) {
+    console.log('ids', ids);
+    return await this.productService.updateSort(ids);
+  }
+
+  @Get('initial-sort')
+  async initSort() {
+    return await this.productService.initSort();
+  }
+
   @Get(':id')
   async getOne(@Param('id') productId: number) {
     this.statisticsService.recordItems({
@@ -67,7 +83,7 @@ export class ProductController {
 
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+    return await this.productService.create(createProductDto);
   }
 
   @Post(':id')
