@@ -19,6 +19,10 @@ export class BuyerShowService {
     const buyerShow = new BuyerShow();
     buyerShow.name = data.name;
     buyerShow.detail = images;
+    buyerShow.type = data.type;
+    if (buyerShow.type === 'video') {
+      buyerShow.videoUrl = data.videoUrl;
+    }
     return await this.buyerShowRepository.save(buyerShow);
   }
 
@@ -29,6 +33,7 @@ export class BuyerShowService {
     },
   ) {
     const [list, total] = await this.buyerShowRepository.findAndCount({
+      where: { type: query.type || 'image' },
       skip: (query.page - 1) * query.size,
       take: query.size,
     });
@@ -39,6 +44,7 @@ export class BuyerShowService {
   }
   async getNew8() {
     return await this.buyerShowRepository.find({
+      where: { type: 'image' },
       order: { id: 'DESC' },
       take: 8,
     });

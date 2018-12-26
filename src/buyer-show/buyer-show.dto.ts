@@ -6,6 +6,14 @@ export class CreateBuyerShowDto {
   readonly name?: string;
 
   @IsArray() readonly detail: number[];
+
+  @IsString()
+  @IsOptional()
+  readonly type: 'image' | 'video';
+
+  @IsString()
+  @IsOptional()
+  readonly videoUrl: string;
 }
 export class QueryBuyerShowDto {
   @IsOptional()
@@ -14,4 +22,6 @@ export class QueryBuyerShowDto {
   @IsOptional()
   // @IsNumber()
   size?: number;
+
+  @IsOptional() type?: 'image' | 'video';
 }

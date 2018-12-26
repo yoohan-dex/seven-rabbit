@@ -17,4 +17,9 @@ export class BuyerShow {
   @ManyToMany(type => Image, { eager: true })
   @JoinTable()
   detail: Image[];
+
+  @Column({ default: 'image' })
+  type: 'image' | 'video';
+
+  @Column() videoUrl: string;
 }
