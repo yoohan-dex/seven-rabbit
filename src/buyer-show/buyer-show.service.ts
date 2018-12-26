@@ -17,6 +17,9 @@ export class BuyerShowService {
   async saveOne(data: CreateBuyerShowDto) {
     const images = await this.imageRepository.findByIds(data.detail);
     const buyerShow = new BuyerShow();
+    if (data.id) {
+      buyerShow.id = data.id;
+    }
     buyerShow.name = data.name;
     buyerShow.detail = images;
     buyerShow.type = data.type;

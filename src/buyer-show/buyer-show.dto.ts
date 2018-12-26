@@ -1,6 +1,9 @@
 import { IsString, IsOptional, IsArray, IsNumber } from 'class-validator';
 
 export class CreateBuyerShowDto {
+  @IsNumber()
+  @IsOptional()
+  id?: number;
   @IsString()
   @IsOptional()
   readonly name?: string;
