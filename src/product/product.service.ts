@@ -55,7 +55,6 @@ export class ProductService {
         realHotList.push(item);
       }
     });
-    sortObj.productIds = sort;
     return realHotList;
   }
 
