@@ -44,9 +44,7 @@ export class ProductService {
 
   async getHotList(count?: number) {
     const sortObj = await this.hotSortRepository.findOne();
-    const sort = sortObj.productIds
-      .map((v: any) => parseInt(v, 10))
-      .filter(v => v !== 145);
+    const sort = sortObj.productIds;
     const hotList = await this.productRepository.find({ hot: true });
     const sortIds = count !== undefined ? sort.slice(0, count) : sort;
     const realHotList = [];
