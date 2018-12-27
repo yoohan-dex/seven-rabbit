@@ -30,6 +30,11 @@ export class ProductController {
     return this.productService.getHotList();
   }
 
+  @Get('hot/8')
+  async getHostList8() {
+    return this.productService.getHotList(8);
+  }
+
   @Get('hot-sort')
   async getSort() {
     return await this.productService.getSort();

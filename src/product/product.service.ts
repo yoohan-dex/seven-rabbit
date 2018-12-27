@@ -42,12 +42,13 @@ export class ProductService {
     });
   }
 
-  async getHotList() {
+  async getHotList(count?: number) {
     const sort = await this.hotSortRepository.findOne();
     const hotList = await this.productRepository.find({ hot: true });
-
+    const sortIds =
+      count !== undefined ? sort.productIds.slice(0, count) : sort.productIds;
     const realHotList = [];
-    sort.productIds.forEach((sid: any) => {
+    sortIds.forEach((sid: any) => {
       const id = parseInt(sid, 10);
       const item = hotList.find(v => v.id === id);
       if (item) {
