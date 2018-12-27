@@ -56,7 +56,6 @@ export class ProductService {
       }
     });
     sortObj.productIds = sort;
-    await this.hotSortRepository.save(sortObj);
     return realHotList;
   }
 
