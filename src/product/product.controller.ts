@@ -51,9 +51,12 @@ export class ProductController {
     return await this.productService.initSort();
   }
   @Get('crop')
-  async cropAllProductsCover() {
+  async cropAllProductsCover(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ) {
     console.log('working on select all product');
-    const products = await this.productService.getAllProduct();
+    const { list: products } = await this.productService.getAll({ page, size });
     console.log('finished select all product');
 
     const cropQs = products.map(product => {
