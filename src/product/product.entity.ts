@@ -31,6 +31,10 @@ export class Product {
   @JoinColumn()
   cover: Image;
 
+  @OneToOne(type => Image, { eager: true })
+  @JoinColumn()
+  squreCover: Image;
+
   @ManyToMany(type => Image, { eager: true })
   @JoinTable()
   detail: Image[];

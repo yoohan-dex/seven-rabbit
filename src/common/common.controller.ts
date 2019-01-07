@@ -1,12 +1,10 @@
 import {
   Controller,
   Post,
-  Options,
   UseInterceptors,
   FileInterceptor,
   UploadedFile,
   Get,
-  Render,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
@@ -27,7 +25,6 @@ export class CommonController {
       this.commonService.zip(savedFile.imgUrl),
       this.commonService.save(savedFile),
     ]);
-    console.log('res', res);
     return res;
   }
 

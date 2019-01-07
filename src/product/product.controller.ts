@@ -50,7 +50,15 @@ export class ProductController {
   async initSort() {
     return await this.productService.initSort();
   }
+  @Get('crop')
+  async cropProductCover(@Query('id') id: number) {
+    const product = await this.productService.getOne(id);
+    const image = await this.commonService.saveWithCrop(
+      product.cover.originUrl,
+    );
 
+    return await this.productService.saveCrop(id, image);
+  }
   @Get(':id')
   async getOne(@Param('id') productId: number) {
     this.statisticsService.recordItems({

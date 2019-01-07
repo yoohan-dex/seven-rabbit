@@ -35,6 +35,12 @@ export class ProductService {
     return await this.productRepository.findByIds(ids);
   }
 
+  async saveCrop(id: number, image: Image) {
+    const product = await this.productRepository.findOne(id);
+    product.squreCover = image;
+    return await this.productRepository.save(product);
+  }
+
   async getNewEight() {
     return await this.productRepository.find({
       take: 8,
@@ -163,7 +169,6 @@ export class ProductService {
         ...options,
         where: { id: In(finalIds), category: getParams.category },
       });
-
       // const raw = await createQueryBuilder()
       //   .select('productId')
       //   .addSelect('count(*)', 'countNum')

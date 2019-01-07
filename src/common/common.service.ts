@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './common.entity';
 import { ImageFile } from './common.type';
+import { cropImage } from 'shared/utils/cropImage';
 
 const sizeOf = Util.promisify(imageSize);
 
@@ -90,15 +91,23 @@ export class CommonService {
     return await this.ImageRepository.save(image);
   }
 
+  async saveWithCrop(srcPath: string): Promise<Image> {
+    const file = await cropImage(srcPath);
+    const savedFile = await this.saveInCloud(file);
+    this.zip(savedFile.imgUrl);
+    const image = this.save(savedFile);
+    return image;
+  }
+
   async saveInCloud(file) {
-    console.log('file');
     const dimentions: { width: number; height: number } = (await sizeOf(
       file.path,
     )) as any;
-    console.log('dimentions', dimentions);
-    const imgKey = `${Date.now()}-${shortid.generate()}.${
-      file.mimetype.split('/')[1]
-    }`;
+    const type =
+      file.mimetype.indexOf('/') !== -1
+        ? file.mimetype.split('/')[1]
+        : file.mimetype;
+    const imgKey = `${Date.now()}-${shortid.generate()}.${type}`;
     const uploadFolder = process.env.COS_UPLOAD_FOLDER
       ? process.env.COS_UPLOAD_FOLDER + '/'
       : '';
