@@ -23,7 +23,7 @@ export const cropImage = async (
   });
 
   response.data.pipe(stream);
-  return new Promise((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     const obj = { path: dst, mimetype: type, filename: `${name}`, size: 0 };
     stream.on('finish', async () => {
       const { height, width } = await info(dst);
