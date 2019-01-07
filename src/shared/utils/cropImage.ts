@@ -14,7 +14,7 @@ export const cropImage = async (
   const name = Date.now();
   const dotIdx = srcPath.lastIndexOf('.');
   const type = srcPath.slice(dotIdx + 1);
-  const dst = path.resolve(__dirname, 'tmp', `${name}.${type}`);
+  const dst = path.resolve(process.cwd(), 'tmp', `${name}.${type}`);
   const stream = fs.createWriteStream(dst);
   const response = await axios({
     url: srcPath,
