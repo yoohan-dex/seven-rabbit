@@ -1,5 +1,6 @@
 import { crop, info } from 'easyimage';
 import * as fs from 'fs';
+import * as shortid from 'shortid';
 import * as path from 'path';
 import axios from 'axios';
 
@@ -11,7 +12,7 @@ export const cropImage = async (
   size: number;
   filename: string;
 }> => {
-  const name = Date.now();
+  const name = `${Date.now()}-${shortid.generate()}`;
   const dotIdx = srcPath.lastIndexOf('.');
   const type = srcPath.slice(dotIdx + 1);
   const dst = path.resolve(process.cwd(), 'tmp', `${name}.${type}`);
