@@ -57,8 +57,12 @@ export class ProductController {
     console.log('finished select all product');
 
     const cropQs = products.map(product => {
-      console.log('create product crop quene');
-      return this.commonService.saveWithCrop(product.cover.originUrl);
+      console.log('create product crop quene : ', product.id);
+      try {
+        return this.commonService.saveWithCrop(product.cover.originUrl);
+      } catch (e) {
+        console.log('crop error', product.id);
+      }
     });
 
     const images = await Promise.all(cropQs);
