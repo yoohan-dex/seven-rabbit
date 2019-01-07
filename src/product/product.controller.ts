@@ -42,7 +42,6 @@ export class ProductController {
 
   @Post('hot-sort')
   async updateSort(@Body() ids: number[]) {
-    console.log('ids', ids);
     return await this.productService.updateSort(ids);
   }
 
@@ -55,31 +54,20 @@ export class ProductController {
     @Query('page') page: number,
     @Query('size') size: number,
   ) {
-    console.log('working on select all product');
     const { list: products } = await this.productService.getAll({ page, size });
-    console.log('finished select all product');
 
     const cropQs = products.map(product => {
-      console.log('create product crop quene : ', product.id);
       try {
         return this.commonService.saveWithCrop(product.cover.originUrl);
-      } catch (e) {
-        console.log('crop error', product.id);
-      }
+      } catch (e) {}
     });
 
     const images = await Promise.all(cropQs);
-    console.log('finished cropQs');
     const saveQs = products.map((product, idx) => {
-      console.log('create product save quene');
       return this.productService.saveCrop(product.id, images[idx]);
     });
 
-    console.log('finished saveQs');
-
     const afterProcessProducts = await Promise.all(saveQs);
-    console.log('finished save all product!');
-    console.log('congradulation done!');
     return afterProcessProducts;
   }
   // async cropProductCover(@Query('id') id: number) {
@@ -127,7 +115,11 @@ export class ProductController {
 
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
-    return await this.productService.create(createProductDto);
+    const product = await this.productService.create(createProductDto);
+    const image = await this.commonService.saveWithCrop(
+      product.cover.originUrl,
+    );
+    return await this.productService.saveCrop(product.id, image);
   }
 
   @Post(':id')
