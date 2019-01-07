@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './common.entity';
 import { ImageFile } from './common.type';
-import { cropImage } from 'shared/utils/cropImage';
+import { cropImage } from '../shared/utils/cropImage';
 
 const sizeOf = Util.promisify(imageSize);
 
