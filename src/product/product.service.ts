@@ -91,6 +91,10 @@ export class ProductService {
     return await this.hotSortRepository.save(sort);
   }
 
+  async getAllProduct() {
+    return await this.productRepository.find();
+  }
+
   async getAll(getParams: GetProductDto = {}) {
     const options = {
       take: getParams.size || 20,

@@ -52,19 +52,27 @@ export class ProductController {
   }
   @Get('crop')
   async cropAllProductsCover() {
-    const products = await this.productService.getAll();
+    console.log('working on select all product');
+    const products = await this.productService.getAllProduct();
+    console.log('finished select all product');
 
-    const cropQs = products.list.map(product => {
+    const cropQs = products.map(product => {
+      console.log('create product crop quene');
       return this.commonService.saveWithCrop(product.cover.originUrl);
     });
 
     const images = await Promise.all(cropQs);
-
-    const saveQs = products.list.map((product, idx) => {
+    console.log('finished cropQs');
+    const saveQs = products.map((product, idx) => {
+      console.log('create product save quene');
       return this.productService.saveCrop(product.id, images[idx]);
     });
 
+    console.log('finished saveQs');
+
     const afterProcessProducts = await Promise.all(saveQs);
+    console.log('finished save all product!');
+    console.log('congradulation done!');
     return afterProcessProducts;
   }
   // async cropProductCover(@Query('id') id: number) {
