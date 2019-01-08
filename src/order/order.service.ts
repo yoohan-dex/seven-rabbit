@@ -127,6 +127,7 @@ export class OrderService {
       return await this.orderRepository
         .createQueryBuilder()
         .select()
+        .orderBy('createTime', 'DESC')
         .where(where)
         .andWhere(timeQuery)
         .getManyAndCount();
