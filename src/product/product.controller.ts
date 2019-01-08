@@ -6,11 +6,15 @@ import {
   Get,
   Delete,
   Query,
+  Res,
 } from '@nestjs/common';
 import { CreateProductDto } from './product.dto';
 import { ProductService } from './product.service';
 import { StatisticsService } from '../statistics/statistics.service';
 import { CommonService } from '../common/common.service';
+import { getWXACode } from '../shared/utils/getWXACode';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @Controller('product')
 export class ProductController {
@@ -43,6 +47,20 @@ export class ProductController {
   @Post('hot-sort')
   async updateSort(@Body() ids: number[]) {
     return await this.productService.updateSort(ids);
+  }
+
+  @Get('gen-code')
+  async genCode(
+    @Query('page') page: string,
+    @Query('scene') scene: string,
+    @Res() res: Response,
+  ) {
+    console.log('page', page);
+    const url = await getWXACode(page, scene);
+    // const url = '/Users/yoohoo/projects/seven-rabbit/tmp/Byt6fR-fV.png';
+    // const stream = fs.createReadStream(url);
+    console.log('url', url);
+    return res.sendFile(url);
   }
 
   @Get('initial-sort')
