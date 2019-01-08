@@ -17,6 +17,8 @@ export const getWXACode = async (page: string, scene: string): Promise<any> => {
     const url = path.resolve(process.cwd(), 'tmp', `${shortid.generate()}.png`);
     const stream = createWriteStream(url);
     console.log('token2', token);
+    console.log('scene', scene);
+    console.log('page', page);
     const res = await Axios({
       method: 'POST',
       url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${token}`,
@@ -28,7 +30,6 @@ export const getWXACode = async (page: string, scene: string): Promise<any> => {
       },
       responseType: 'stream',
     });
-    console.log('res', res.data);
     res.data.pipe(stream);
     return new Promise(resolve => {
       stream.on('finish', () => resolve(url));

@@ -55,11 +55,20 @@ export class ProductController {
     @Query('scene') scene: string,
     @Res() res: Response,
   ) {
-    console.log('page', page);
     const url = await getWXACode(page, scene);
     // const url = '/Users/yoohoo/projects/seven-rabbit/tmp/Byt6fR-fV.png';
     // const stream = fs.createReadStream(url);
-    console.log('url', url);
+    setTimeout(() => {
+      fs.exists(url, exist => {
+        if (exist) {
+          fs.unlink(url, err => {
+            if (!err) {
+              console.log('delete finsihed');
+            }
+          });
+        }
+      });
+    }, 60000);
     return res.sendFile(url);
   }
 
