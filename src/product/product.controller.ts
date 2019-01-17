@@ -88,7 +88,7 @@ export class ProductController {
     });
     const images = await Promise.all(cropQs);
     const saveQs = products.map((product, idx) => {
-      return this.productService.saveCrop(product.id, images[idx]);
+      return this.productService.saveShareImage(product.id, images[idx]);
     });
 
     const afterProcessProducts = await Promise.all(saveQs);
