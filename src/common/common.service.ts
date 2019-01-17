@@ -96,6 +96,7 @@ export class CommonService {
     const file = isShare
       ? await cropImage(srcPath, 'share')
       : await cropImage(srcPath);
+    console.log('file: ', file);
     const savedFile = await this.saveInCloud(file);
     this.zip(savedFile.imgUrl);
     const image = this.save(savedFile);
