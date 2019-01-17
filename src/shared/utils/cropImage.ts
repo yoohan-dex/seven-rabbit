@@ -32,6 +32,8 @@ export const cropImage = async (
       const isHeight = width > height;
       const isShare = ratio === 'share';
       if (!isShare) {
+        console.log('isShare', isShare);
+        console.log('doing');
         await crop({
           src: dst,
           autoOrient: false,
