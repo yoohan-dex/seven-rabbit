@@ -102,17 +102,21 @@ export class ProductController {
     const { list: products } = await this.productService.getAll({ page, size });
 
     const cropQs = products.map(product => {
-      try {
-        return this.commonService.saveWithCrop(product.cover.originUrl);
-      } catch (e) {}
+      console.log('doing cropQs', product.id);
+      return this.commonService.saveWithCrop(product.cover.originUrl);
     });
 
+    console.log('finish cropQs: ', cropQs);
+
     const images = await Promise.all(cropQs);
+    console.log('images', images);
     const saveQs = products.map((product, idx) => {
+      console.log('doing saveQs', product.id);
       return this.productService.saveCrop(product.id, images[idx]);
     });
 
     const afterProcessProducts = await Promise.all(saveQs);
+    console.log('finish saveQs');
     return afterProcessProducts;
   }
   // async cropProductCover(@Query('id') id: number) {
