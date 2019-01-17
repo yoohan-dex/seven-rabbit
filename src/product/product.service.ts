@@ -41,6 +41,12 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
+  async saveShareImage(id: number, image: Image) {
+    const product = await this.productRepository.findOne(id);
+    product.shareCover = image;
+    return await this.productRepository.save(product);
+  }
+
   async getNewEight() {
     return await this.productRepository.find({
       take: 8,

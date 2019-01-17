@@ -76,6 +76,24 @@ export class ProductController {
   async initSort() {
     return await this.productService.initSort();
   }
+  @Get('crop-for-share')
+  async cropAllProductsShare(
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ) {
+    const { list: products } = await this.productService.getAll({ page, size });
+
+    const cropQs = products.map(product => {
+      return this.commonService.saveWithCrop(product.cover.originUrl, 'share');
+    });
+    const images = await Promise.all(cropQs);
+    const saveQs = products.map((product, idx) => {
+      return this.productService.saveCrop(product.id, images[idx]);
+    });
+
+    const afterProcessProducts = await Promise.all(saveQs);
+    return afterProcessProducts;
+  }
   @Get('crop')
   async cropAllProductsCover(
     @Query('page') page: number,

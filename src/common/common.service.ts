@@ -91,8 +91,11 @@ export class CommonService {
     return await this.ImageRepository.save(image);
   }
 
-  async saveWithCrop(srcPath: string): Promise<Image> {
-    const file = await cropImage(srcPath);
+  async saveWithCrop(srcPath: string, type?: string): Promise<Image> {
+    const isShare = type === 'share';
+    const file = isShare
+      ? await cropImage(srcPath, 'share')
+      : await cropImage(srcPath);
     const savedFile = await this.saveInCloud(file);
     this.zip(savedFile.imgUrl);
     const image = this.save(savedFile);

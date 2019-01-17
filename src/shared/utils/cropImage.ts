@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export const cropImage = async (
   srcPath: string,
+  ratio?: string,
 ): Promise<{
   path: string;
   mimetype: string;
@@ -29,13 +30,23 @@ export const cropImage = async (
     stream.on('finish', async () => {
       const { height, width } = await info(dst);
       const isHeight = width > height;
-
-      await crop({
-        src: dst,
-        autoOrient: false,
-        dst,
-        cropWidth: isHeight ? height : width,
-      });
+      const isShare = ratio === 'share';
+      if (!isShare) {
+        await crop({
+          src: dst,
+          autoOrient: false,
+          dst,
+          cropWidth: isHeight ? height : width,
+        });
+      } else if (isShare) {
+        await crop({
+          src: dst,
+          autoOrient: false,
+          dst,
+          cropWidth: isHeight ? height : width,
+          cropHeight: isHeight ? height * 0.8 : width * 0.8,
+        });
+      }
       resolve(obj);
     });
     stream.on('error', () => reject('error'));
