@@ -26,6 +26,12 @@ export class WxUser {
   @Column({ type: 'simple-array', nullable: true })
   phone: string[];
 
+  /**
+   * 普通用户
+   * 管理员： admin
+   * 主号： primary
+   * 客服： service
+   */
   @Column({ type: 'simple-array' })
   roles: string[];
 

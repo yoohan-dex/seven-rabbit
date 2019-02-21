@@ -109,6 +109,14 @@ export class AuthController {
     );
   }
 
+  @Post('weapp/add-role')
+  async weappAddRole(
+    @User() user: any,
+    @Body() data: { role: string; adminId: string },
+  ) {
+    return await this.authService.saveRole(user, data.role, data.adminId);
+  }
+
   @Post('weapp/decryptPhone')
   async decryptPhone(
     @User() user: WxUserDto,

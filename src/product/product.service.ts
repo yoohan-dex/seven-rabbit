@@ -97,14 +97,11 @@ export class ProductService {
     return await this.hotSortRepository.save(sort);
   }
 
-  async getAllProduct() {
-    return await this.productRepository.find();
-  }
-
   async getAll(getParams: GetProductDto = {}) {
     const options = {
       take: getParams.size || 20,
       skip: getParams.page ? (getParams.page - 1) * (getParams.size || 20) : 0,
+      where: { hot: false },
     };
     if (!getParams.features && getParams.category) {
       const category = await this.categoryRepository.findOne(
@@ -112,7 +109,7 @@ export class ProductService {
       );
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
-        where: { category },
+        where: { ...options.where, category },
       });
       return {
         list: products,
@@ -177,7 +174,7 @@ export class ProductService {
 
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
-        where: { id: In(finalIds), category: getParams.category },
+        where: { id: In(finalIds), category: getParams.category, hot: false },
       });
       // const raw = await createQueryBuilder()
       //   .select('productId')

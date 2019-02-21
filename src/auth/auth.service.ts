@@ -79,6 +79,13 @@ export class AuthService {
     return await this.authRepository.save(user);
   }
 
+  async saveRole(user: WxUser, role: string, adminId: string) {
+    const admin = await this.authRepository.findOne(adminId);
+    if (!admin.roles.includes('admin')) return '权限不够';
+    user.roles.push(role);
+    return await this.authRepository.save(user);
+  }
+
   async bindphone(
     user: WxUser,
     phone: string,

@@ -7,5 +7,7 @@ export class AppController {
 
   @Get('admin')
   @Render('bundle')
-  root() {}
+  root() {
+    return 'Hello World!';
+  }
 }
