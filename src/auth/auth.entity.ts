@@ -9,7 +9,7 @@ import { UserInfo } from './interface';
 
 @Entity()
 export class WxUser {
-  @PrimaryGeneratedColumn('uuid') uuid: string;
+  @PrimaryGeneratedColumn() uuid: string;
 
   @Column({ length: 100 })
   openId: string;
