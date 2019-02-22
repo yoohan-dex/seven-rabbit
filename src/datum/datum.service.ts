@@ -22,7 +22,7 @@ export class DatumService {
     productId: number,
     type: 0 | 1 | 2 | 3 = 0,
   ) {
-    if (user.uuid === followUserId) return;
+    if (parseInt(user.uuid, 10) === parseInt(followUserId, 10)) return;
     const [followUser, product] = await Promise.all([
       this.userRepository.findOne(followUserId),
       this.productRepository.findOne(productId),
