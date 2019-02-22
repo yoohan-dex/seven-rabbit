@@ -11,6 +11,7 @@ import { StatisticsModule } from './statistics/statistics.module';
 import { TagcloudModule } from './tagcloud/tagcloud.module';
 import { OrderModule } from './order/order.module';
 import { BuyerShowModule } from './buyer-show/buyer-show.module';
+import { DatumModule } from './datum/datum.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { BuyerShowModule } from './buyer-show/buyer-show.module';
     TagcloudModule,
     OrderModule,
     BuyerShowModule,
+    DatumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

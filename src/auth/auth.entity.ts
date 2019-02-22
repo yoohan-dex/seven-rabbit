@@ -23,6 +23,9 @@ export class WxUser {
   @Column({ type: 'simple-json', nullable: true })
   userInfo: UserInfo;
 
+  @Column({ nullable: true })
+  nickname: string;
+
   @Column({ type: 'simple-array', nullable: true })
   phone: string[];
 

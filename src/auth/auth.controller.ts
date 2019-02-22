@@ -75,6 +75,7 @@ export class AuthController {
       uuid: id,
       openId,
       roles,
+      nickname,
     } = await this.authService.saveUserInfo(skey, session_key, decryptedData);
     return {
       skey,
@@ -82,6 +83,7 @@ export class AuthController {
       id,
       openId,
       roles,
+      nickname,
     };
   }
 
@@ -91,11 +93,12 @@ export class AuthController {
   }
 
   @Get('weapp/user')
-  async weappUser(@User() user: WxUserDto) {
+  async weappUser(@User() user: any) {
     return {
       id: user.uuid,
       userInfo: user.userInfo,
       roles: user.roles,
+      nickname: user.nickname,
     };
   }
 
@@ -112,9 +115,15 @@ export class AuthController {
   @Post('weapp/add-role')
   async weappAddRole(
     @User() user: any,
-    @Body() data: { role: string; adminId: string },
+    @Body() data: { nickname: string; role: string; adminId: string },
   ) {
-    return await this.authService.saveRole(user, data.role, data.adminId);
+    console.log('user', user);
+    return await this.authService.saveRole(
+      user,
+      data.role,
+      data.nickname,
+      data.adminId,
+    );
   }
 
   @Post('weapp/decryptPhone')

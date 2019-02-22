@@ -15,6 +15,7 @@ import { CommonService } from '../common/common.service';
 import { getWXACode } from '../shared/utils/getWXACode';
 import { Response } from 'express';
 import * as fs from 'fs';
+import { log } from 'console';
 
 @Controller('product')
 export class ProductController {
@@ -52,9 +53,11 @@ export class ProductController {
   @Get('gen-code')
   async genCode(
     @Query('page') page: string,
-    @Query('scene') scene: string,
+    @Query('productId') productId: number,
+    @Query('followUserId') followUserId: string,
     @Res() res: Response,
   ) {
+    const scene = `${productId}&${followUserId}`;
     const url = await getWXACode(page, scene);
     // const url = '/Users/yoohoo/projects/seven-rabbit/tmp/Byt6fR-fV.png';
     // const stream = fs.createReadStream(url);
@@ -63,7 +66,7 @@ export class ProductController {
         if (exist) {
           fs.unlink(url, err => {
             if (!err) {
-              console.log('delete finsihed');
+              log('delete finsihed');
             }
           });
         }
