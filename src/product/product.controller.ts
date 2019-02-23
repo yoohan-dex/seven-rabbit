@@ -129,7 +129,7 @@ export class ProductController {
     this.statisticsService.recordItems({
       productIds: [productId],
       type: 1,
-      user: 'test',
+      user: 123,
     });
     return this.productService.getOne(productId);
   }
@@ -146,7 +146,7 @@ export class ProductController {
       this.statisticsService.recordItems({
         productIds: ids,
         type: 1,
-        user: 'test',
+        user: 123,
       });
       return await this.productService.getListByIds(ids);
     }

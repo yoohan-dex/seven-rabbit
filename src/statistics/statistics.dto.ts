@@ -3,5 +3,5 @@ export class StatisticsDto {
 
   productIds: number[];
 
-  user: string;
+  user: number;
 }
