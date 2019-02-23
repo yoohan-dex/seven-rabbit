@@ -1,10 +1,15 @@
-import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { log } from 'console';
 import * as signale from 'signale';
 import * as Qcloudsms from 'qcloudsms_js';
 import { WxUser } from './auth.entity';
-import { Repository } from 'typeorm';
+import { Repository, Like, Raw } from 'typeorm';
 import { UserInfo } from './interface';
 import { genSmsCode } from './helper/genSmsCode';
 @Injectable()
@@ -15,12 +20,7 @@ export class AuthService {
     private readonly authRepository: Repository<WxUser>,
   ) {
     const { SMS_APP_ID, SMS_APP_KEY } = process.env;
-    console.log(
-      '???',
-      process.env.SMS_APP_ID,
-      process.env.SMS_APP_KEY,
-      process.env,
-    );
+    log('???', process.env.SMS_APP_ID, process.env.SMS_APP_KEY, process.env);
     this.qcloudsms = Qcloudsms(SMS_APP_ID, SMS_APP_KEY);
   }
 
@@ -53,7 +53,7 @@ export class AuthService {
       user.skey = skey;
       user.userInfo = userInfo;
       user.openId = userInfo.openId;
-      console.log('user', user.roles);
+      log('user', user.roles);
       if (!user.roles) {
         user.roles = ['client'];
       }
@@ -85,9 +85,10 @@ export class AuthService {
     nickname: string,
     adminId: string,
   ) {
-    const admin = await this.authRepository.findOne({ uuid: adminId });
-    if (!admin) return '没有这个管理员';
-    if (!admin.roles.includes('admin')) return '权限不够';
+    const admin = await this.authRepository.findOne(adminId);
+    if (!admin) throw new ForbiddenException('没有这个管理员');
+    if (!admin.roles.includes('admin'))
+      throw new ForbiddenException('权限不够');
     if (!user.nickname) {
       user.nickname = nickname;
     }
@@ -95,6 +96,18 @@ export class AuthService {
       user.roles.push(role);
     }
     return await this.authRepository.save(user);
+  }
+
+  async getMemberList(user: WxUser) {
+    log('user!!!!----------', user);
+    if (!user.roles.includes('admin')) throw new ForbiddenException('权限不够');
+    return await this.authRepository.find({
+      where: {
+        roles: Raw(
+          alias => `${alias} like '%primary%' or ${alias} like '%service%'`,
+        ),
+      },
+    });
   }
 
   async bindphone(

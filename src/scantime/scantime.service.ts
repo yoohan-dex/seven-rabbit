@@ -15,7 +15,7 @@ export class ScantimeService {
     private readonly scantimeRepository: Repository<Scantime>,
   ) {}
 
-  async recordOne(productId: number, user: string, seconds: number) {
+  async recordOne(productId: number, user: number, seconds: number) {
     const scantime = new Scantime();
 
     scantime.productId = productId;

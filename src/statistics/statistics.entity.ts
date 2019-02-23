@@ -22,5 +22,5 @@ export class Statistics {
   @Column({ default: 1 })
   type: 1 | 2 | 3;
 
-  @Column('uuid') user: string;
+  @Column('int') user: number;
 }

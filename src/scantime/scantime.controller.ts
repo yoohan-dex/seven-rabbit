@@ -13,6 +13,6 @@ export class ScantimeController {
     @User() user: WxUser,
     @Body('seconds') seconds: number,
   ) {
-    return await this.scantimeService.recordOne(productId, user.uuid, seconds);
+    return await this.scantimeService.recordOne(productId, user.id, seconds);
   }
 }

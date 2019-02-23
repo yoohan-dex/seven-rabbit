@@ -18,7 +18,7 @@ export class DatumService {
 
   async setData(
     user: WxUser,
-    followUserId: string,
+    followUserId: number,
     productId: number,
     type: 0 | 1 | 2 | 3 = 0,
   ) {
@@ -28,7 +28,7 @@ export class DatumService {
       user.roles.includes('service')
     )
       return;
-    if (parseInt(user.uuid, 10) === parseInt(followUserId, 10)) return;
+    if (user.id === followUserId) return;
     const [followUser, product] = await Promise.all([
       this.userRepository.findOne(followUserId),
       this.productRepository.findOne(productId),
@@ -42,7 +42,7 @@ export class DatumService {
     data.followUserId = followUserId;
     data.followUser = followUser;
     data.user = user;
-    data.userId = user.uuid;
+    data.userId = user.id;
     return await this.simpleDataRepository.save(data);
   }
 }

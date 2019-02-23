@@ -1,6 +1,7 @@
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ForbiddenException } from '@nestjs/common';
 
 export const User = createParamDecorator((data, req) => {
-  console.log('user', req.user);
+  if (!req.user) throw new ForbiddenException('需要先登录');
+
   return req.user;
 });

@@ -38,11 +38,11 @@ export class AuthController {
 
       const skey = sha1(session_key);
 
-      const {
-        uuid: id,
-        openId,
-        roles,
-      } = await this.authService.saveUserByOpenId(openid, skey, session_key);
+      const { id, openId, roles } = await this.authService.saveUserByOpenId(
+        openid,
+        skey,
+        session_key,
+      );
       return {
         id,
         openId,
@@ -72,7 +72,7 @@ export class AuthController {
     // save
     const {
       userInfo,
-      uuid: id,
+      id,
       openId,
       roles,
       nickname,
@@ -95,7 +95,7 @@ export class AuthController {
   @Get('weapp/user')
   async weappUser(@User() user: any) {
     return {
-      id: user.uuid,
+      id: user.id,
       userInfo: user.userInfo,
       roles: user.roles,
       nickname: user.nickname,
@@ -117,13 +117,17 @@ export class AuthController {
     @User() user: any,
     @Body() data: { nickname: string; role: string; adminId: string },
   ) {
-    console.log('user', user);
     return await this.authService.saveRole(
       user,
       data.role,
       data.nickname,
       data.adminId,
     );
+  }
+
+  @Get('weapp/members')
+  async getMemberList(@User() user: any) {
+    return await this.authService.getMemberList(user);
   }
 
   @Post('weapp/decryptPhone')

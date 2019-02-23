@@ -11,7 +11,7 @@ export class Scantime {
 
   @Column() productId: number;
 
-  @Column('uuid') user: string;
+  @Column() user: number;
 
   @CreateDateColumn() visitTime: Date;
 

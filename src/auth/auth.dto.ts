@@ -1,16 +1,16 @@
 import {
   IsString,
-  IsUUID,
   IsDate,
   IsNotEmpty,
   IsArray,
   IsOptional,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 import { UserInfo } from './interface';
 
 export class WxUserDto {
-  @IsUUID() readonly uuid: string;
+  @IsNumber() readonly id: number;
 
   @IsString() readonly openId: string;
 
