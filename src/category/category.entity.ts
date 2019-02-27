@@ -23,6 +23,8 @@ export class Category {
   image: Image;
 
   @Column('text') pos: string;
+  @Column({ nullable: true })
+  orderId: number;
 
   @ManyToMany(type => Filter, filter => filter.categories, { eager: true })
   @JoinTable()

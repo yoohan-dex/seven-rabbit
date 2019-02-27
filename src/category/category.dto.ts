@@ -14,6 +14,10 @@ export class CreateCategoryDto {
   @ApiModelProperty()
   @IsArray()
   readonly filters: number[];
+
+  @ApiModelProperty()
+  @IsNumber()
+  readonly orderId: number;
 }
 
 export class UpdateCategoryDto extends CreateCategoryDto {

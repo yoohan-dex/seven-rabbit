@@ -17,7 +17,11 @@ export class CategoryService {
     private readonly imageRepository: Repository<Image>,
   ) {}
   async getAll() {
-    return await this.categoryRepository.find();
+    return await this.categoryRepository.find({
+      order: {
+        orderId: 'ASC',
+      },
+    });
   }
 
   async getOne(id: number) {
@@ -33,6 +37,7 @@ export class CategoryService {
     const category = new Category();
     category.name = createCategoryDto.name;
     category.image = image;
+    category.orderId = createCategoryDto.orderId;
     category.pos = pos;
     category.filters = filters;
     try {
