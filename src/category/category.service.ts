@@ -59,6 +59,7 @@ export class CategoryService {
     category.name = updateCategoryDto.name;
     category.image = image;
     category.pos = pos;
+    category.orderId = updateCategoryDto.orderId;
     category.filters = filters;
     return await this.categoryRepository.save(category);
   }
