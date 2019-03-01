@@ -8,6 +8,26 @@ import {
 import { UserInfo } from './interface';
 
 @Entity()
+export class BackUser {
+  @PrimaryGeneratedColumn() id: number;
+
+  @Column() account: string;
+  @Column() phone: string;
+
+  @Column() password: string;
+
+  @Column('simple-array') roles: string[];
+
+  @Column({ nullable: true })
+  smsCode: string;
+  @Column({ nullable: true })
+  smsSendTime: Date;
+
+  @CreateDateColumn() createTime: Date;
+  @UpdateDateColumn() lastVisitTime: Date;
+}
+
+@Entity()
 export class WxUser {
   @PrimaryGeneratedColumn() id: number;
 

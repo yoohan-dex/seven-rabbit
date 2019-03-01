@@ -1,12 +1,12 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { WxUser } from './auth.entity';
+import { WxUser, BackUser } from './auth.entity';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthMiddleware } from './auth.middleware';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WxUser])],
+  imports: [TypeOrmModule.forFeature([WxUser, BackUser])],
   controllers: [AuthController],
   providers: [AuthService],
 })
@@ -26,6 +26,8 @@ export class AuthModule implements NestModule {
       'order/search',
       // datum/
       'datum/simple',
+      'datum/scan/products',
     );
+    consumer.apply().forRoutes();
   }
 }

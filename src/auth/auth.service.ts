@@ -139,7 +139,6 @@ export class AuthService {
     }
     return await this.authRepository.save(user);
   }
-
   async sendSmsCode(user: WxUser, phone: string) {
     const { SMS_TIMEOUT_MIN, SMS_SIGN } = process.env;
     const cb = (err, res, resData) => {

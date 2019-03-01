@@ -15,7 +15,15 @@ export class DatumService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
-
+  async getProducts() {
+    return await this.simpleDataRepository
+      .createQueryBuilder()
+      .select('product', 'product')
+      .addSelect('count(*)', 'count')
+      .groupBy('productId')
+      .orderBy('count', 'DESC')
+      .getRawMany();
+  }
   async setData(
     user: WxUser,
     followUserId: number,
