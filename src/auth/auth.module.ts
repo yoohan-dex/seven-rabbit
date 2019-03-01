@@ -28,6 +28,5 @@ export class AuthModule implements NestModule {
       'datum/simple',
       'datum/scan/products',
     );
-    consumer.apply().forRoutes();
   }
 }
