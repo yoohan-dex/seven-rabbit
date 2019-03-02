@@ -20,7 +20,20 @@ export class DatumService {
       .createQueryBuilder()
       .select('productId', 'productId')
       .addSelect('count(*)', 'times')
-      .leftJoinAndSelect('product', 'product', 'product.id = productId')
+      .leftJoinAndMapOne(
+        'product',
+        'product',
+        'product',
+        'product.id = productId',
+      )
+      .leftJoinAndMapOne(
+        'product.cover',
+        'image',
+        'image',
+        'image.id = product.coverId',
+      )
+      // .leftJoinAndSelect('product', 'product', 'product.id = productId')
+      // .leftJoinAndSelect('image', 'product_cover', 'image.id = product.coverId')
       .groupBy('productId')
       .orderBy('times', 'DESC')
       .getRawMany();
