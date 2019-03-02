@@ -16,13 +16,13 @@ export class SimpleData {
   @Column('int') userId: number;
   @Column('int') followUserId: number;
 
-  @OneToOne(type => Product)
+  @OneToOne(type => Product, { eager: true })
   product: Product;
 
-  @OneToOne(type => WxUser)
+  @OneToOne(type => WxUser, { eager: true })
   user: WxUser;
 
-  @OneToOne(type => WxUser)
+  @OneToOne(type => WxUser, { eager: true })
   followUser: WxUser;
 
   @CreateDateColumn() actionTime: Date;
