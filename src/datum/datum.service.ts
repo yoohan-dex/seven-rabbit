@@ -18,8 +18,9 @@ export class DatumService {
   async getProducts() {
     return await this.simpleDataRepository
       .createQueryBuilder()
-      .select('product', 'product')
+      .select('productId', 'productId')
       .addSelect('count(*)', 'count')
+      .leftJoinAndSelect('product', 'product', 'product.id = productId')
       .groupBy('productId')
       .orderBy('count', 'DESC')
       .getRawMany();
