@@ -16,15 +16,11 @@ export class DatumService {
     private readonly productRepository: Repository<Product>,
   ) {}
   async getProducts() {
-    const data = await this.simpleDataRepository.find({
-      select: ['product'],
-    });
     return await this.simpleDataRepository
       .createQueryBuilder()
       .select('productId', 'productId')
       .addSelect('count(*)', 'times')
-
-      .leftJoinAndSelect('product', 'product', 'product.id = productId')
+      // .leftJoinAndSelect('product', 'product', 'product.id = productId')
       .groupBy('productId')
       .orderBy('times', 'DESC')
       .getRawMany();
