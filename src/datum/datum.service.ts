@@ -21,7 +21,7 @@ export class DatumService {
       .select('productId')
       .addSelect('count(*)', 'times')
       // .leftJoinAndSelect('data.product', 'product')
-      .leftJoinAndMapOne('data.product', 'product', 'product')
+      .leftJoinAndMapOne('data.p', 'data.product', 'product')
       // .leftJoinAndMapOne(
       //   'data.product.cover',
       //   'image',
