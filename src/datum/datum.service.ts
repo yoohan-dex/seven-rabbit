@@ -21,12 +21,12 @@ export class DatumService {
       .select('productId', 'productId')
       .addSelect('count(*)', 'times')
       .leftJoinAndMapOne('data.product', 'data.product', 'product')
-      .leftJoinAndMapOne(
-        'product.cover',
-        'image',
-        'image',
-        'image.id = product.coverId',
-      )
+      // .leftJoinAndMapOne(
+      //   'data.product.cover',
+      //   'image',
+      //   'image',
+      //   'image.id = product.coverId',
+      // )
       // .leftJoinAndSelect('product', 'product', 'product.id = productId')
       // .leftJoinAndSelect('image', 'product_cover', 'image.id = product.coverId')
       .groupBy('productId')
