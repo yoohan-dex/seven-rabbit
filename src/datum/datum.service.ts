@@ -20,12 +20,8 @@ export class DatumService {
       .createQueryBuilder('data')
       .select('productId')
       .addSelect('count(*)', 'times')
-      .leftJoinAndSelect('data.product', 'product')
-      // .leftJoinAndMapOne(
-      //   'data.product',
-      //   'data.product',
-      //   'product',
-      // )
+      // .leftJoinAndSelect('data.product', 'product')
+      .leftJoinAndMapOne('data.product', 'product', 'product')
       // .leftJoinAndMapOne(
       //   'data.product.cover',
       //   'image',
