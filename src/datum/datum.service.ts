@@ -17,15 +17,10 @@ export class DatumService {
   ) {}
   async getProducts() {
     return await this.simpleDataRepository
-      .createQueryBuilder()
+      .createQueryBuilder('data')
       .select('productId', 'productId')
       .addSelect('count(*)', 'times')
-      .leftJoinAndMapOne(
-        'product',
-        'product',
-        'product',
-        'product.id = productId',
-      )
+      .leftJoinAndMapOne('data.product', 'data.product', 'product')
       .leftJoinAndMapOne(
         'product.cover',
         'image',
