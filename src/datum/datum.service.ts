@@ -16,12 +16,15 @@ export class DatumService {
     private readonly productRepository: Repository<Product>,
   ) {}
   async getProducts() {
-    return await this.simpleDataRepository
+    const simpleDatum: {
+      times: number;
+      productId: number;
+    }[] = await this.simpleDataRepository
       .createQueryBuilder('data')
       .select('productId')
       .addSelect('count(*)', 'times')
       // .leftJoinAndSelect('data.product', 'product')
-      .leftJoinAndMapOne('data.p', 'data.product', 'product')
+      // .leftJoinAndMapOne('data.p', 'data.product', 'product')
       // .leftJoinAndMapOne(
       //   'data.product.cover',
       //   'image',
@@ -32,7 +35,18 @@ export class DatumService {
       // .leftJoinAndSelect('image', 'product_cover', 'image.id = product.coverId')
       .groupBy('productId')
       .orderBy('times', 'DESC')
+      .limit(20)
       .getRawMany();
+
+    const pids = simpleDatum.map(data => data.productId);
+    const products = await this.productRepository.findByIds(pids);
+
+    const sortedProducts = simpleDatum.map(data => ({
+      product: products.find(p => p.id === data.productId),
+      times: data.times,
+    }));
+
+    return sortedProducts;
   }
   async setData(
     user: WxUser,
