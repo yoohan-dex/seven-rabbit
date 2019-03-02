@@ -18,14 +18,8 @@ export class DatumService {
   async getProducts() {
     return await this.simpleDataRepository
       .createQueryBuilder('data')
-      .select('productId', 'productId')
+      .select(['product'])
       .addSelect('count(*)', 'times')
-      .leftJoinAndMapOne(
-        'data.product',
-        'data.product',
-        'product',
-        'product.id = productId',
-      )
       // .leftJoinAndMapOne(
       //   'data.product.cover',
       //   'image',
@@ -58,13 +52,10 @@ export class DatumService {
     if (!followUser || !product) return;
 
     const data = new SimpleData();
-    data.pid = productId;
     data.product = product;
     data.type = type;
-    data.fuid = followUserId;
     data.followUser = followUser;
     data.user = user;
-    data.uid = user.id;
     return await this.simpleDataRepository.save(data);
   }
 }

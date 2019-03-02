@@ -13,10 +13,6 @@ import { WxUser } from '../auth/auth.entity';
 export class SimpleData {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column('int') pid: number;
-  @Column('int') uid: number;
-  @Column('int') fuid: number;
-
   @OneToOne(type => Product, { eager: true })
   @JoinColumn()
   product: Product;
