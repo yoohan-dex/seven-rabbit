@@ -23,16 +23,6 @@ export class DatumService {
       .createQueryBuilder('data')
       .select('productId')
       .addSelect('count(*)', 'times')
-      // .leftJoinAndSelect('data.product', 'product')
-      // .leftJoinAndMapOne('data.p', 'data.product', 'product')
-      // .leftJoinAndMapOne(
-      //   'data.product.cover',
-      //   'image',
-      //   'image',
-      //   'image.id = product.coverId',
-      // )
-      // .leftJoinAndSelect('product', 'product', 'product.id = productId')
-      // .leftJoinAndSelect('image', 'product_cover', 'image.id = product.coverId')
       .groupBy('productId')
       .orderBy('times', 'DESC')
       .limit(20)
@@ -50,9 +40,9 @@ export class DatumService {
   }
   async setData(
     user: WxUser,
-    followUserId: number,
     productId: number,
     type: 0 | 1 | 2 | 3 = 0,
+    followUserId?: number,
   ) {
     if (
       user.roles.includes('primary') ||
@@ -60,17 +50,19 @@ export class DatumService {
       user.roles.includes('service')
     )
       return;
-    if (user.id === followUserId) return;
-    const [followUser, product] = await Promise.all([
-      this.userRepository.findOne(followUserId),
-      this.productRepository.findOne(productId),
-    ]);
-    if (!followUser || !product) return;
+    const queries: any[] = [this.productRepository.findOne(productId)];
+    if (followUserId) {
+      queries.push(this.userRepository.findOne(followUserId));
+    }
+    const [product, followUser] = await Promise.all(queries);
+    if (!product) return;
 
     const data = new SimpleData();
     data.product = product;
     data.type = type;
-    data.followUser = followUser;
+    if (followUser) {
+      data.followUser = followUser;
+    }
     data.user = user;
     return await this.simpleDataRepository.save(data);
   }

@@ -21,13 +21,13 @@ export class SimpleData {
   @JoinColumn()
   user: WxUser;
 
-  @OneToOne(type => WxUser, { eager: true })
+  @OneToOne(type => WxUser, { eager: true, nullable: true })
   @JoinColumn()
   followUser: WxUser;
 
   @CreateDateColumn() actionTime: Date;
 
-  // 0 生成海报 1 扫码， 2 转发
+  // 0 gen poster 1 scan code， 2 after transfer, 3 view
   @Column({ default: 0 })
   type: 0 | 1 | 2 | 3;
 }

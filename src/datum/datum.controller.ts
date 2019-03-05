@@ -6,7 +6,7 @@ import { DatumService } from './datum.service';
 @Controller('datum')
 export class DatumController {
   constructor(private readonly datumService: DatumService) {}
-  @Get('scan/products')
+  @Get('hot/products')
   async getProducts(@User() user: any) {
     return await this.datumService.getProducts();
   }
@@ -14,9 +14,9 @@ export class DatumController {
   async getSimpleData(@User() user: any, @Body() data: SimpleDataDto) {
     return await this.datumService.setData(
       user,
-      data.followUserId,
       data.productId,
       data.type,
+      data.followUserId,
     );
   }
 }

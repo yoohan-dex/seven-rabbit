@@ -255,7 +255,13 @@ export class ProductService {
     const savedProduct = await this.productRepository.save(product);
     if (savedProduct.hot) {
       const sort = await this.hotSortRepository.findOne();
-      sort.productIds.push(savedProduct.id);
+      if (!sort.productIds.includes(savedProduct.id)) {
+        sort.productIds.push(savedProduct.id);
+        if (sort.productIds.map(id => savedProduct.id === id).length > 1) {
+          const idx = sort.productIds.indexOf(savedProduct.id);
+          sort.productIds.splice(idx, 1);
+        }
+      }
       await this.hotSortRepository.save(sort);
     }
     return savedProduct;
