@@ -26,7 +26,7 @@ export class AuthModule implements NestModule {
       'order/search',
       // datum/
       'datum/simple',
-      'datum/scan/products',
+      'datum/hot/products',
     );
   }
 }
