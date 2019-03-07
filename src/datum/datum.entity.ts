@@ -3,27 +3,17 @@ import {
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
-import { Product } from '../product/product.entity';
-import { WxUser } from '../auth/auth.entity';
 
 @Entity()
 export class SimpleData {
   @PrimaryGeneratedColumn() id: number;
 
-  @OneToOne(type => Product, { eager: true })
-  @JoinColumn()
-  product: Product;
+  @Column() productId: number;
 
-  @OneToOne(type => WxUser, { eager: true })
-  @JoinColumn()
-  user: WxUser;
+  @Column() userId: number;
 
-  @OneToOne(type => WxUser, { eager: true, nullable: true })
-  @JoinColumn()
-  followUser: WxUser;
+  @Column() followUserId: number;
 
   @CreateDateColumn() actionTime: Date;
 

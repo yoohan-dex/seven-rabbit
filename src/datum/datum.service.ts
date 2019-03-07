@@ -58,12 +58,12 @@ export class DatumService {
     if (!product) return;
 
     const data = new SimpleData();
-    data.product = product;
+    data.productId = product.id;
     data.type = type;
     if (followUser) {
-      data.followUser = followUser;
+      data.followUserId = followUser.id;
     }
-    data.user = user;
+    data.userId = user.id;
     return await this.simpleDataRepository.save(data);
   }
 }
