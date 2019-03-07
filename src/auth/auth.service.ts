@@ -3,6 +3,7 @@ import {
   HttpException,
   BadRequestException,
   ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { log } from 'console';
@@ -98,8 +99,15 @@ export class AuthService {
     return await this.authRepository.save(user);
   }
 
+  async removeRole(admin: WxUser, user: WxUser, removeRole: string) {
+    if (!admin.roles.includes('admin'))
+      throw new UnauthorizedException('你不是管理员');
+    const removeRoleIdx = user.roles.findIndex(role => role === removeRole);
+    user.roles.splice(removeRoleIdx, 1);
+    return this.authRepository.save(user);
+  }
+
   async getMemberList(user: WxUser) {
-    log('user!!!!----------', user);
     if (!user.roles.includes('admin')) throw new ForbiddenException('权限不够');
     return await this.authRepository.find({
       where: {
