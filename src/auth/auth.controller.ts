@@ -125,6 +125,14 @@ export class AuthController {
     );
   }
 
+  @Post('weapp/remove-role')
+  async weappRemoveRole(
+    @User() user: any,
+    @Body() data: { userId: number; role: string },
+  ) {
+    return await this.authService.removeRole(user, data.userId, data.role);
+  }
+
   @Get('weapp/members')
   async getMemberList(@User() user: any) {
     return await this.authService.getMemberList(user);

@@ -100,14 +100,16 @@ export class AuthService {
     return await this.authRepository.save(user);
   }
 
-  async removeRole(admin: WxUser, user: WxUser, removeRole: string) {
+  async removeRole(admin: WxUser, userId: number, removeRole: string) {
     if (!admin.roles.includes('admin'))
       throw new UnauthorizedException('你不是管理员');
+    const user = await this.authRepository.findOne(userId);
+    if (!user) throw new NotFoundException('数据库没有当前选取的用户');
     const removeRoleIdx = user.roles.findIndex(role => role === removeRole);
     if (!removeRoleIdx)
       throw new NotFoundException(`当前用户没有${removeRole}身份`);
     user.roles.splice(removeRoleIdx, 1);
-    return this.authRepository.save(user);
+    return await this.authRepository.save(user);
   }
 
   async getMemberList(user: WxUser) {
