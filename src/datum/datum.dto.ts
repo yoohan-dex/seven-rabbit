@@ -1,9 +1,9 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class SimpleDataDto {
   @IsNumber() readonly productId: number;
   @IsNumber() readonly type: 0 | 1 | 2 | 3;
-  @IsString()
+  @IsNumber()
   @IsOptional()
   readonly followUserId?: number;
 }
