@@ -51,7 +51,8 @@ export class DatumService {
     )
       return;
     const queries: any[] = [this.productRepository.findOne(productId)];
-    if (followUserId) {
+
+    if (followUserId && typeof followUserId !== 'string') {
       queries.push(this.userRepository.findOne(followUserId));
     }
     const [product, followUser] = await Promise.all(queries);
