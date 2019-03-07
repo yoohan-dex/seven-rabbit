@@ -11,7 +11,7 @@ export class DatumController {
     return await this.datumService.getProducts();
   }
   @Post('simple')
-  async getSimpleData(@User() user: any, @Body() data: SimpleDataDto) {
+  async setSimpleData(@User() user: any, @Body() data: any) {
     return await this.datumService.setData(
       user,
       data.productId,
