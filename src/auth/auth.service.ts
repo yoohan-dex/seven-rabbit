@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ForbiddenException,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { log } from 'console';
@@ -103,6 +104,8 @@ export class AuthService {
     if (!admin.roles.includes('admin'))
       throw new UnauthorizedException('你不是管理员');
     const removeRoleIdx = user.roles.findIndex(role => role === removeRole);
+    if (!removeRoleIdx)
+      throw new NotFoundException(`当前用户没有${removeRole}身份`);
     user.roles.splice(removeRoleIdx, 1);
     return this.authRepository.save(user);
   }
