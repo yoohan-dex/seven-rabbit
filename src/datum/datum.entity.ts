@@ -13,7 +13,8 @@ export class SimpleData {
 
   @Column() userId: number;
 
-  @Column() followUserId: number;
+  @Column({ nullable: true })
+  followUserId: number;
 
   @CreateDateColumn() actionTime: Date;
 
