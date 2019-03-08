@@ -42,7 +42,7 @@ export class DatumService {
     user: WxUser,
     productId: number,
     type: 0 | 1 | 2 | 3 = 0,
-    followUserId?: number,
+    followUserId?: any,
   ) {
     if (
       user.roles.includes('primary') ||
@@ -52,7 +52,7 @@ export class DatumService {
       return;
     const queries: any[] = [this.productRepository.findOne(productId)];
 
-    if (followUserId && typeof followUserId !== 'string') {
+    if (followUserId && followUserId !== 'undefined') {
       queries.push(this.userRepository.findOne(followUserId));
     }
     const [product, followUser] = await Promise.all(queries);

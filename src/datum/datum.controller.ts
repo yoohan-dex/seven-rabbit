@@ -12,6 +12,7 @@ export class DatumController {
   }
   @Post('simple')
   async setSimpleData(@User() user: any, @Body() data: any) {
+    console.log('simple-data', data);
     return await this.datumService.setData(
       user,
       data.productId,
