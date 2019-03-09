@@ -23,6 +23,7 @@ export class DatumService {
   async getProduct(id: number) {
     const product = await this.productRepository.findOne(id);
     if (!product) throw new NotFoundException('没有这个产品');
+    console.log('product', product);
     const data = await this.simpleDataRepository
       .createQueryBuilder('data')
       .select('*')
@@ -30,7 +31,6 @@ export class DatumService {
       .where({
         productId: id,
       })
-      .groupBy('type')
       .getRawMany();
 
     return { data, product };
