@@ -4,6 +4,7 @@ import { SimpleData } from './datum.entity';
 import { Repository } from 'typeorm';
 import { WxUser } from '../auth/auth.entity';
 import { Product } from '../product/product.entity';
+import { SimpleQuery } from './datum.dto';
 
 @Injectable()
 export class DatumService {
@@ -15,7 +16,15 @@ export class DatumService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
-  async getProducts() {
+  async getProducts(query?: SimpleQuery) {
+    let whereQuery;
+    if (query) {
+      if (query.time) {
+        whereQuery = `actionTime >= DATE_SUB(CURDATE(), INTERVAL ${
+          query.time
+        } DAY)`;
+      }
+    }
     const simpleDatum: {
       times: number;
       productId: number;
@@ -23,6 +32,7 @@ export class DatumService {
       .createQueryBuilder('data')
       .select('productId')
       .addSelect('count(*)', 'times')
+      .where(whereQuery)
       .groupBy('productId')
       .orderBy('times', 'DESC')
       .limit(20)

@@ -5,3 +5,7 @@ export class SimpleDataDto {
   @IsNumber() readonly type: 0 | 1 | 2 | 3;
   @IsOptional() readonly followUserId?: number;
 }
+
+export interface SimpleQuery {
+  time?: number;
+}
