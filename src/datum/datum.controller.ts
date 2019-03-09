@@ -15,7 +15,7 @@ export class DatumController {
 
   @Get('hot/product/:id')
   @Roles('admin')
-  async getProductDetail(@Param() productId: number) {
+  async getProductDetail(@Param('id') productId: number) {
     return await this.datumService.getProduct(productId);
   }
   @Post('simple')
