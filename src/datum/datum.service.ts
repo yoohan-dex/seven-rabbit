@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SimpleData } from './datum.entity';
 import { Repository } from 'typeorm';
@@ -16,6 +20,21 @@ export class DatumService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
+  async getProduct(id: number) {
+    const product = await this.productRepository.findOne(id);
+    if (!product) throw new NotFoundException('没有这个产品');
+    const data = await this.simpleDataRepository
+      .createQueryBuilder('data')
+      .select('*')
+      .addSelect('count(*)', 'times')
+      .where({
+        productId: id,
+      })
+      .groupBy('type')
+      .getRawMany();
+
+    return { data, product };
+  }
   async getProducts(query?: SimpleQuery) {
     let whereQuery;
     if (query) {

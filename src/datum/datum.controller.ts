@@ -1,18 +1,25 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
 import { User } from '../shared/decorators/user';
 import { SimpleDataDto, SimpleQuery } from './datum.dto';
 import { DatumService } from './datum.service';
+import { Roles } from '../shared/decorators/roles';
 
 @Controller('datum')
 export class DatumController {
   constructor(private readonly datumService: DatumService) {}
   @Get('hot/products')
-  async getProducts(@User() user: any, @Query() query: SimpleQuery) {
+  @Roles('admin')
+  async getProducts(@Query() query: SimpleQuery) {
     return await this.datumService.getProducts(query);
+  }
+
+  @Get('hot/product/:id')
+  @Roles('admin')
+  async getProductDetail(@Param() productId: number) {
+    return await this.datumService.getProduct(productId);
   }
   @Post('simple')
   async setSimpleData(@User() user: any, @Body() data: any) {
-    console.log('simple-data', data);
     let followUserId;
     if (typeof data.followUserId === 'object') {
       followUserId = data.followUserId.data;
