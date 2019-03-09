@@ -26,10 +26,11 @@ export class DatumService {
     console.log('product', product);
     const data = await this.simpleDataRepository
       .createQueryBuilder('data')
-      .select('count(*)', 'times')
+      .select('*')
       .where({
         productId: id,
       })
+      .groupBy('type')
       .getRawMany();
 
     return { data, product };
