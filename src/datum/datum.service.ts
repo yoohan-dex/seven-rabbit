@@ -26,8 +26,7 @@ export class DatumService {
     console.log('product', product);
     const data = await this.simpleDataRepository
       .createQueryBuilder('data')
-      .select('*')
-      .addSelect('count(*)', 'times')
+      .select('count(*)', 'times')
       .where({
         productId: id,
       })
