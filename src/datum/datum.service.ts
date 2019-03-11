@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SimpleData } from './datum.entity';
-import { Repository } from 'typeorm';
+import { Repository, Raw } from 'typeorm';
 import { WxUser } from '../auth/auth.entity';
 import { Product } from '../product/product.entity';
 import { SimpleQuery } from './datum.dto';
@@ -20,20 +20,47 @@ export class DatumService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
-  async getProduct(id: number) {
+  async getProduct(id: number, query?: SimpleQuery) {
     const product = await this.productRepository.findOne(id);
     if (!product) throw new NotFoundException('没有这个产品');
-    console.log('product', product);
-    const data = await this.simpleDataRepository
-      .createQueryBuilder('data')
-      .select('*')
-      .where({
-        productId: id,
-      })
-      .groupBy('type')
-      .getRawMany();
 
-    return { data, product };
+    let where: any = { productId: id };
+    // put time in query
+    if (query) {
+      if (query.time) {
+        where = {
+          ...where,
+          actionTime: Raw(
+            actionTime =>
+              `${actionTime} >= DATE_SUB(CURDATE(), INTERVAL ${
+                query.time
+              } DAY)`,
+          ),
+        };
+      }
+    }
+
+    // select all quene
+    const genPosterQ = this.simpleDataRepository.findAndCount({
+      where: { ...where, type: 0 },
+    });
+    const scanCodeQ = this.simpleDataRepository.findAndCount({
+      where: { ...where, type: 1 },
+    });
+    const afterTransferQ = this.simpleDataRepository.findAndCount({
+      where: { ...where, type: 2 },
+    });
+    const viewQ = this.simpleDataRepository.findAndCount({
+      where: { ...where, type: 3 },
+    });
+
+    const [genPoster, scanCode, afterTransfer, view] = await Promise.all([
+      genPosterQ,
+      scanCodeQ,
+      afterTransferQ,
+      viewQ,
+    ]);
+    return { product, genPoster, scanCode, afterTransfer, view };
   }
   async getProducts(query?: SimpleQuery) {
     let whereQuery;
