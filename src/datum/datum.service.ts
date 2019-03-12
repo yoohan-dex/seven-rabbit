@@ -41,16 +41,16 @@ export class DatumService {
     }
 
     // select all quene
-    const genPosterQ = this.simpleDataRepository.findAndCount({
+    const genPosterQ = this.simpleDataRepository.count({
       where: { ...where, type: 0 },
     });
-    const scanCodeQ = this.simpleDataRepository.findAndCount({
+    const scanCodeQ = this.simpleDataRepository.count({
       where: { ...where, type: 1 },
     });
-    const afterTransferQ = this.simpleDataRepository.findAndCount({
+    const afterTransferQ = this.simpleDataRepository.count({
       where: { ...where, type: 2 },
     });
-    const viewQ = this.simpleDataRepository.findAndCount({
+    const viewQ = this.simpleDataRepository.count({
       where: { ...where, type: 3 },
     });
 
