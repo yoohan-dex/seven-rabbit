@@ -60,10 +60,10 @@ export class DatumService {
       afterTransferQ,
       viewQ,
     ]);
-    return { product, genPoster, scanCode, afterTransfer, view };
+    return { product, datum: { genPoster, scanCode, afterTransfer, view } };
   }
   async getProducts(query?: SimpleQuery) {
-    let whereQuery;
+    let whereQuery = '';
     if (query) {
       if (query.time) {
         whereQuery = `actionTime >= DATE_SUB(CURDATE(), INTERVAL ${
