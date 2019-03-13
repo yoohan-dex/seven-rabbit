@@ -66,6 +66,7 @@ export class DatumService {
     let whereQuery = '';
     if (query) {
       if (query.time) {
+        console.log('query.time', query.time);
         whereQuery = `actionTime >= DATE_SUB(CURDATE(), INTERVAL ${
           query.time
         } DAY)`;
