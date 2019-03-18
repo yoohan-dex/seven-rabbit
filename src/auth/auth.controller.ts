@@ -38,12 +38,14 @@ export class AuthController {
 
       const skey = sha1(session_key);
 
-      const { id, openId, roles } = await this.authService.saveUserByOpenId(
-        openid,
-        skey,
-        session_key,
-      );
+      const {
+        id,
+        openId,
+        roles,
+        userInfo,
+      } = await this.authService.saveUserByOpenId(openid, skey, session_key);
       return {
+        userInfo,
         id,
         openId,
         skey,
