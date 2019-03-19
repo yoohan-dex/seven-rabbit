@@ -53,20 +53,41 @@ export class DatumService {
     const viewQ = this.simpleDataRepository.count({
       where: { ...where, type: 3 },
     });
+    const userNumQ = this.simpleDataRepository
+      .createQueryBuilder()
+      .select('*')
+      .addSelect('count(*)')
+      .from(qb => {
+        qb.select('*')
+          .from('simple_data', 'innerData')
+          .orderBy('actionTime', 'DESC');
+      }, 'data')
+      .groupBy('userId')
+      .having('productId = :id', { id })
+      .getRawMany();
 
-    const [genPoster, scanCode, afterTransfer, view] = await Promise.all([
+    const [
+      genPoster,
+      scanCode,
+      afterTransfer,
+      view,
+      userNum,
+    ] = await Promise.all([
       genPosterQ,
       scanCodeQ,
       afterTransferQ,
       viewQ,
+      userNumQ,
     ]);
-    return { product, datum: { genPoster, scanCode, afterTransfer, view } };
+    return {
+      product,
+      datum: { genPoster, scanCode, afterTransfer, view, userNum },
+    };
   }
   async getProducts(query?: SimpleQuery) {
     let whereQuery = '';
     if (query) {
       if (query.time) {
-        console.log('query.time', query.time);
         whereQuery = `actionTime >= DATE_SUB(CURDATE(), INTERVAL ${
           query.time
         } DAY)`;
