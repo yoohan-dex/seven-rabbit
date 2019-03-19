@@ -57,13 +57,16 @@ export class DatumService {
       .createQueryBuilder()
       .select('*')
       .addSelect('count(*)')
-      .from(qb => {
-        qb.select('*')
-          .from('simple_data', 'innerData')
-          .orderBy('actionTime', 'DESC');
-      }, 'data')
+      .from(
+        qb =>
+          qb
+            .select('*')
+            .from('simple_data', 'innerData')
+            .orderBy('actionTime', 'DESC'),
+        'data',
+      )
       .groupBy('userId')
-      // .having('productId = :id', { id })
+      .having('productId = :id', { id })
       .getRawMany();
 
     const [
