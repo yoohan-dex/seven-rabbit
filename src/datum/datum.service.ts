@@ -63,7 +63,7 @@ export class DatumService {
           .orderBy('actionTime', 'DESC');
       }, 'data')
       .groupBy('userId')
-      .having('productId = :id', { id })
+      // .having('productId = :id', { id })
       .getRawMany();
 
     const [
