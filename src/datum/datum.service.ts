@@ -56,14 +56,12 @@ export class DatumService {
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
-      .from(
-        qb =>
-          qb
-            .select('*')
-            .from('simple_data', 'innerData')
-            .orderBy('actionTime', 'DESC'),
-        'outerData',
-      )
+      .from(qb => {
+        return qb
+          .select('*')
+          .from('simple_data', 'innerData')
+          .orderBy('actionTime', 'DESC');
+      }, 'outerData')
       // .groupBy('outerData.userId')
       // .having('outerData.productId = :id', { id })
       .getManyAndCount();
