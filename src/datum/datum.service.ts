@@ -56,12 +56,6 @@ export class DatumService {
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
-      // .leftJoinAndMapMany(
-      //   'user',
-      //   'wx_user',
-      //   'user',
-      //   'simpleData.userId = user.id',
-      // )
       .from(
         qb =>
           qb
@@ -89,7 +83,7 @@ export class DatumService {
     ]);
     return {
       product,
-      datum: { genPoster, scanCode, afterTransfer, view, userCount, userData },
+      datum: { genPoster, scanCode, afterTransfer, view, userCount },
     };
   }
   async getProducts(query?: SimpleQuery) {
