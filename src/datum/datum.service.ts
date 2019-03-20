@@ -63,8 +63,8 @@ export class DatumService {
           .from('simple_data', 'innerData')
           .orderBy('actionTime', 'DESC');
       }, 'data')
-      .groupBy('userId')
-      .having('productId = :id', { id })
+      .groupBy('data.userId')
+      .having('data.productId = :id', { id })
       .getRawMany();
 
     const [
