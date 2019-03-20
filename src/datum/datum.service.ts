@@ -56,7 +56,6 @@ export class DatumService {
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
-      .addSelect('count(*)')
       .from(qb => {
         return qb
           .select('*')
@@ -65,7 +64,7 @@ export class DatumService {
       }, 'data')
       .groupBy('data.userId')
       .having('data.productId = :id', { id })
-      .getRawMany();
+      .getManyAndCount();
 
     const [
       genPoster,
