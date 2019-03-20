@@ -62,10 +62,10 @@ export class DatumService {
             .select('*')
             .from('simple_data', 'innerData')
             .orderBy('actionTime', 'DESC'),
-        'data',
+        'outerData',
       )
-      .groupBy('data.userId')
-      .having('data.productId = :id', { id })
+      .groupBy('outerData.userId')
+      .having('outerData.productId = :id', { id })
       .getManyAndCount();
 
     const [
