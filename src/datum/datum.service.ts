@@ -54,14 +54,14 @@ export class DatumService {
       where: { ...where, type: 3 },
     });
     const userNumQ = this.simpleDataRepository
-      .createQueryBuilder('simpleData')
+      .createQueryBuilder()
       .select('*')
-      .leftJoinAndMapMany(
-        'user',
-        'wx_user',
-        'user',
-        'simpleData.userId = user.id',
-      )
+      // .leftJoinAndMapMany(
+      //   'user',
+      //   'wx_user',
+      //   'user',
+      //   'simpleData.userId = user.id',
+      // )
       .from(
         qb =>
           qb
