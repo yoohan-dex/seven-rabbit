@@ -55,12 +55,11 @@ export class DatumService {
     });
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
-      .select('*')
-      .addSelect('count(*)')
-      // .leftJoinAndMapMany('user', WxUser, 'user', 'user.id = data.userId')
+      .select()
+      .leftJoinAndMapMany('user', WxUser, 'user', 'user.id = data.userId')
       .from(qb => {
         return qb
-          .select('*')
+          .select()
           .from(SimpleData, 'innerData')
           .orderBy('actionTime', 'DESC');
       }, 'data')
