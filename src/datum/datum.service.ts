@@ -56,6 +56,7 @@ export class DatumService {
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
+      .leftJoinAndMapMany('user', 'wx_user', 'user', 'data.userId = user.id')
       .from(
         qb =>
           qb
@@ -64,7 +65,6 @@ export class DatumService {
             .orderBy('actionTime', 'DESC'),
         'data',
       )
-      .leftJoinAndMapMany('user', 'wx_user', 'user', 'data.userId = user.id')
       .groupBy('data.userId')
       .having('data.productId = :id', { id })
       .getManyAndCount();
