@@ -61,7 +61,7 @@ export class DatumService {
       .from(qb => {
         return qb
           .select('*')
-          .from('simple_data', 'innerData')
+          .from(SimpleData, 'innerData')
           .orderBy('actionTime', 'DESC');
       }, 'data')
       .groupBy('data.userId')
