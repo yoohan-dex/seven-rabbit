@@ -57,7 +57,7 @@ export class DatumService {
       .createQueryBuilder()
       .select('*')
       .addSelect('count(*)')
-      .leftJoinAndMapMany('user', WxUser, 'user', 'user.id = data.userId')
+      // .leftJoinAndMapMany('user', WxUser, 'user', 'user.id = data.userId')
       .from(qb => {
         return qb
           .select('*')
