@@ -62,10 +62,10 @@ export class DatumService {
         return qb
           .select('*')
           .from(SimpleData, 'innerData')
+          .where('data.productId = :id', { id })
           .orderBy('actionTime', 'DESC');
       }, 'data')
       .groupBy('data.userId')
-      .having('data.productId = :id', { id })
       .getRawMany();
 
     const [
