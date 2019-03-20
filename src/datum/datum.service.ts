@@ -56,28 +56,25 @@ export class DatumService {
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
-      .from(subQuery => {
-        return subQuery
-          .select('*')
-          .from(SimpleData, 'data')
-          .orderBy('actionTime', 'DESC');
-      }, 'data')
-      // .groupBy('outerData.userId')
-      // .having('outerData.productId = :id', { id })
-      .getManyAndCount();
+      .addSelect('count(*)')
+      .from(
+        qb =>
+          qb
+            .select('*')
+            .from('simple_data', 'innerData')
+            .orderBy('actionTime', 'DESC'),
+        'data',
+      )
+      .groupBy('data.userId')
+      .having('data.productId = :id', { id })
+      .getCount();
 
-    // .leftJoinAndMapMany(
-    //   'user',
-    //   'wx_user',
-    //   'user',
-    //   'simpleData.userId = user.id',
-    // )
     const [
       genPoster,
       scanCode,
       afterTransfer,
       view,
-      [userData, userCount],
+      userNum,
     ] = await Promise.all([
       genPosterQ,
       scanCodeQ,
@@ -87,7 +84,7 @@ export class DatumService {
     ]);
     return {
       product,
-      datum: { genPoster, scanCode, afterTransfer, view, userCount },
+      datum: { genPoster, scanCode, afterTransfer, view, userNum },
     };
   }
   async getProducts(query?: SimpleQuery) {
