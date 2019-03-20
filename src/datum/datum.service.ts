@@ -64,10 +64,16 @@ export class DatumService {
             .orderBy('actionTime', 'DESC'),
         'outerData',
       )
-      .groupBy('outerData.userId')
-      .having('outerData.productId = :id', { id })
+      // .groupBy('outerData.userId')
+      // .having('outerData.productId = :id', { id })
       .getManyAndCount();
 
+    // .leftJoinAndMapMany(
+    //   'user',
+    //   'wx_user',
+    //   'user',
+    //   'simpleData.userId = user.id',
+    // )
     const [
       genPoster,
       scanCode,
