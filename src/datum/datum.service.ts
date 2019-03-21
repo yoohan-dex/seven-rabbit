@@ -56,20 +56,7 @@ export class DatumService {
     const userDataQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
-      .from(qb => {
-        return (
-          qb
-            .select('*')
-            // .leftJoinAndMapMany(
-            //   'user',
-            //   'wx_user',
-            //   'user',
-            //   'user.id = innerData.userId',
-            // )
-            .from('simple_data', 'innerData')
-            .orderBy('actionTime', 'DESC')
-        );
-      }, 'data')
+      .from(SimpleData, 'data')
       .groupBy('data.userId')
       .having('data.productId = :id', { id })
       .getRawMany();
