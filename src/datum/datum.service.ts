@@ -55,10 +55,10 @@ export class DatumService {
     });
     const userNumQ = this.simpleDataRepository
       .createQueryBuilder()
-      .select()
+      .select('*')
       .from(qb => {
         return qb
-          .select()
+          .select('*')
           .leftJoinAndMapMany(
             'user',
             'wx_user',
