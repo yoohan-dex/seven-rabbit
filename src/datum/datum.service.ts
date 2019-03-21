@@ -91,10 +91,13 @@ export class DatumService {
     const users = await this.userRepository.findByIds(
       userData.map(data => data.userId),
     );
+    console.log('userData', userData);
+    console.log('users', users);
     const visitedUsers = userData.map(userd => ({
       ...users.find(user => user.id === userd.userId),
       lastViewTime: userd.actionTime,
     }));
+    console.log('visitedUsers', visitedUsers);
     return {
       product,
       datum: {
