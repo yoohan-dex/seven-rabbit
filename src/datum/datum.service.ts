@@ -53,38 +53,40 @@ export class DatumService {
     const viewQ = this.simpleDataRepository.count({
       where: { ...where, type: 3 },
     });
-    const userDataQ = this.simpleDataRepository
-      .createQueryBuilder()
-      .select('*')
-      .from(SimpleData, 'data')
-      .groupBy('data.userId')
-      .having('data.productId = :id', { id })
-      .getRawMany();
+    const allDataQ = this.simpleDataRepository.find({
+      where,
+      order: {
+        actionTime: 'DESC',
+      },
+    });
 
     const [
       genPoster,
       scanCode,
       afterTransfer,
       view,
-      userData,
+      allData,
     ] = await Promise.all([
       genPosterQ,
       scanCodeQ,
       afterTransferQ,
       viewQ,
-      userDataQ,
+      allDataQ,
     ]);
+    const userSet = new Set();
+    allData.forEach(data => {
+      userSet.add(data.userId);
+    });
+    const userIds = Array.from(userSet);
+    const users = await this.userRepository.findByIds(userIds);
 
-    const users = await this.userRepository.findByIds(
-      userData.map(data => data.userId),
-    );
-    console.log('userData', userData);
     console.log('users', users);
-    const visitedUsers = userData.map(userd => ({
-      ...users.find(user => user.id === userd.userId),
-      lastViewTime: userd.actionTime,
+    const visitedUsers = userIds.map(userId => ({
+      ...users.find(user => user.id === userId),
+      lastViewTime: allData.find(d => d.userId === userId).actionTime,
     }));
     console.log('visitedUsers', visitedUsers);
+
     return {
       product,
       datum: {
