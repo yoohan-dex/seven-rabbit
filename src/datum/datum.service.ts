@@ -83,7 +83,7 @@ export class DatumService {
     console.log('users', users);
     const visitedUsers = userIds.map(userId => ({
       ...users.find(user => user.id === userId),
-      lastViewTime: allData.find(d => d.userId === userId).actionTime,
+      viewData: allData.find(d => d.userId === userId),
     }));
     console.log('visitedUsers', visitedUsers);
 
