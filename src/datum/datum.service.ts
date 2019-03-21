@@ -53,24 +53,25 @@ export class DatumService {
     const viewQ = this.simpleDataRepository.count({
       where: { ...where, type: 3 },
     });
-    const userNumQ = this.simpleDataRepository
+    const userDataQ = this.simpleDataRepository
       .createQueryBuilder()
       .select('*')
       .from(qb => {
-        return qb
-          .select('*')
-          .leftJoinAndMapMany(
-            'user',
-            'wx_user',
-            'user',
-            'user.id = innerData.userId',
-          )
-          .from('simple_data', 'innerData')
-          .orderBy('actionTime', 'DESC');
+        return (
+          qb
+            .select('*')
+            // .leftJoinAndMapMany(
+            //   'user',
+            //   'wx_user',
+            //   'user',
+            //   'user.id = innerData.userId',
+            // )
+            .from('simple_data', 'innerData')
+            .orderBy('actionTime', 'DESC')
+        );
       }, 'data')
       .groupBy('data.userId')
       .having('data.productId = :id', { id })
-      .printSql()
       .getRawMany();
 
     const [
@@ -78,17 +79,30 @@ export class DatumService {
       scanCode,
       afterTransfer,
       view,
-      userNum,
+      userData,
     ] = await Promise.all([
       genPosterQ,
       scanCodeQ,
       afterTransferQ,
       viewQ,
-      userNumQ,
+      userDataQ,
     ]);
+
+    const userIds = userData.map(data => data.userId);
+    const users = await this.userRepository.findByIds(userIds);
+    const visitedUsers = userIds.map(userId =>
+      users.find(user => user.id === userId),
+    );
     return {
       product,
-      datum: { genPoster, scanCode, afterTransfer, view, userNum },
+      datum: {
+        genPoster,
+        scanCode,
+        afterTransfer,
+        view,
+        visitedUsers,
+        visitedCount: visitedUsers.length,
+      },
     };
   }
   async getProducts(query?: SimpleQuery) {
