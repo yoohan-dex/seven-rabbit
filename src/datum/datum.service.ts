@@ -70,6 +70,7 @@ export class DatumService {
       }, 'data')
       .groupBy('data.userId')
       .having('data.productId = :id', { id })
+      .printSql()
       .getRawMany();
 
     const [
