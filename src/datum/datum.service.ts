@@ -80,12 +80,10 @@ export class DatumService {
     const userIds = Array.from(userSet);
     const users = await this.userRepository.findByIds(userIds);
 
-    console.log('users', users);
     const visitedUsers = userIds.map(userId => ({
       ...users.find(user => user.id === userId),
       viewData: allData.find(d => d.userId === userId),
     }));
-    console.log('visitedUsers', visitedUsers);
 
     return {
       product,
@@ -99,6 +97,32 @@ export class DatumService {
       },
     };
   }
+
+  async getUserDatum(userId: number) {
+    const targetUser = await this.userRepository.findOne(userId);
+    if (!targetUser) throw new NotFoundException('没有这个用户');
+    const datum = await this.simpleDataRepository.find({
+      select: ['actionTime', 'productId', 'type'],
+      where: {
+        userId: targetUser.id,
+      },
+      order: {
+        actionTime: 'DESC',
+      },
+    });
+    const products = await this.productRepository.findByIds(
+      datum.map(d => d.productId),
+    );
+    const visitDatum = datum.map(d => ({
+      ...d,
+      product: products.find(product => d.productId === product.id),
+    }));
+    return {
+      targetUser,
+      visitDatum,
+    };
+  }
+
   async getProducts(query?: SimpleQuery) {
     let whereQuery = '';
     if (query) {

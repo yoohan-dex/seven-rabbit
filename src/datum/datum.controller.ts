@@ -18,6 +18,11 @@ export class DatumController {
   async getProductDetail(@Param('id') productId: number, @Query() query: any) {
     return await this.datumService.getProduct(productId, query);
   }
+  @Get('user/:id')
+  @Roles('admin')
+  async getUserDatum(@Param('id') userId: number) {
+    return await this.datumService.getUserDatum(userId);
+  }
   @Post('simple')
   async setSimpleData(@User() user: any, @Body() data: any) {
     let followUserId;
