@@ -29,6 +29,7 @@ export class AuthModule implements NestModule {
       'datum/simple',
       'datum/hot/products',
       'datum/hot/product',
+      'datum/user',
     );
   }
 }
