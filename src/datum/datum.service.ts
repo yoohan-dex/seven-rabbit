@@ -103,7 +103,7 @@ export class DatumService {
     const targetUser = await this.userRepository.findOne(userId);
     if (!targetUser) throw new NotFoundException('没有这个用户');
     const datum = await this.simpleDataRepository.find({
-      select: ['actionTime', 'productId', 'type'],
+      select: ['actionTime', 'productId', 'type', 'stay'],
       where: {
         userId: targetUser.id,
       },
