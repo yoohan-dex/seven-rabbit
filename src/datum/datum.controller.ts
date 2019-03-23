@@ -8,18 +8,18 @@ import { Roles } from '../shared/decorators/roles';
 export class DatumController {
   constructor(private readonly datumService: DatumService) {}
   @Get('hot/products')
-  @Roles('admin')
+  @Roles('admin', 'primary', 'service')
   async getProducts(@Query() query: SimpleQuery) {
     return await this.datumService.getProducts(query);
   }
 
   @Get('hot/product/:id')
-  @Roles('admin')
+  @Roles('admin', 'primary', 'service')
   async getProductDetail(@Param('id') productId: number, @Query() query: any) {
     return await this.datumService.getProduct(productId, query);
   }
   @Get('user/:id')
-  @Roles('admin')
+  @Roles('admin', 'primary', 'service')
   async getUserDatum(@Param('id') userId: number) {
     return await this.datumService.getUserDatum(userId);
   }
