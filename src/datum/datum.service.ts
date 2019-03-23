@@ -191,7 +191,7 @@ export class DatumService {
     if (!user || datum.userId !== user.id) {
       throw new BadRequestException('你在做什么呢');
     }
-    datum.stay = stayTime;
+    datum.stay += stayTime;
     return await this.simpleDataRepository.save(datum);
   }
 }
