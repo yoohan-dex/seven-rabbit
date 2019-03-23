@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SimpleData } from './datum.entity';
@@ -183,5 +184,14 @@ export class DatumService {
     }
     data.userId = user.id;
     return await this.simpleDataRepository.save(data);
+  }
+
+  async setDataStay(user: WxUser, dataId: number, stayTime: number) {
+    const datum = await this.simpleDataRepository.findOne(dataId);
+    if (!user || datum.userId !== user.id) {
+      throw new BadRequestException('你在做什么呢');
+    }
+    datum.stay = stayTime;
+    return await this.simpleDataRepository.save(datum);
   }
 }

@@ -38,4 +38,15 @@ export class DatumController {
       data.followUserId,
     );
   }
+  @Post('simple/stay')
+  async setSimpleStay(
+    @User() user: any,
+    @Body() data: { stayTime: number; dataId: number },
+  ) {
+    return await this.datumService.setDataStay(
+      user,
+      data.dataId,
+      data.stayTime,
+    );
+  }
 }
