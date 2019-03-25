@@ -87,6 +87,9 @@ export class DatumService {
     }));
 
     const stayTimeItems = allData.filter(d => d.stay !== 0).map(d => d.stay);
+    if (stayTimeItems.length === 0) {
+      stayTimeItems.push(5);
+    }
     const aveStay = (
       stayTimeItems.reduce((pre, curr) => pre + curr, 0) / stayTimeItems.length
     ).toFixed(1);
