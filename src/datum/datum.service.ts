@@ -86,6 +86,9 @@ export class DatumService {
       viewData: allData.find(d => d.userId === userId),
     }));
 
+    const stayTimeItems = allData.filter(d => d.stay! === 0).map(d => d.stay);
+    const aveStay =
+      stayTimeItems.reduce((pre, curr) => pre + curr, 0) / stayTimeItems.length;
     return {
       product,
       datum: {
@@ -95,6 +98,7 @@ export class DatumService {
         view,
         visitedUsers,
         visitedCount: visitedUsers.length,
+        aveStay,
       },
     };
   }
