@@ -86,7 +86,8 @@ export class DatumService {
       viewData: allData.find(d => d.userId === userId),
     }));
 
-    const stayTimeItems = allData.filter(d => d.stay! === 0).map(d => d.stay);
+    const stayTimeItems = allData.filter(d => d.stay !== 0).map(d => d.stay);
+    console.log('stayTimeitems', stayTimeItems);
     const aveStay =
       stayTimeItems.reduce((pre, curr) => pre + curr, 0) / stayTimeItems.length;
     return {
