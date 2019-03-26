@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
-import { sendCustomerMsg } from 'shared/utils/sendCustomerMsg';
+import { sendCustomerMsg } from '../shared/utils/sendCustomerMsg';
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
