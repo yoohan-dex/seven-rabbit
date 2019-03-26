@@ -5,9 +5,12 @@ import {
   FileInterceptor,
   UploadedFile,
   Get,
+  Query,
+  Body,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
+import { sendCustomerMsg } from 'shared/utils/sendCustomerMsg';
 @Controller('common')
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
@@ -54,5 +57,23 @@ export class CommonController {
       };
     });
     return await Promise.all(ops.map(op => op()));
+  }
+
+  @Post('msg')
+  async postCustomerMsg(@Body() msg: any) {
+    console.log('msg', msg);
+    return '';
+  }
+
+  @Get('test')
+  async testSendCustomerMsg(
+    @Query('openId') openId: string,
+    @Query('content') content: string,
+  ) {
+    return sendCustomerMsg({
+      content: 'sdfdsfsd',
+      openId: 'oDeiG5Eqdh0FoCSUKerwRIoqQNvY',
+      type: 'text',
+    });
   }
 }
