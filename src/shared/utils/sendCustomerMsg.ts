@@ -47,6 +47,7 @@ export const sendCustomerMsg = async ({
       url: `https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=${token}`,
       data,
     });
+    console.log('data', data);
     console.log('res', res.data);
   } catch (err) {
     console.log('err', err);
