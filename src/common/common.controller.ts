@@ -74,6 +74,14 @@ export class CommonController {
     return echostr;
   }
 
+  @Post('message')
+  async receiveMsg(@Query() query: any) {
+    const { signature, timestamp, nonce } = query;
+    if (!qcloud.message.checkSignature(signature, timestamp, nonce))
+      return 'ERR_WHEN_CHECK_SIGNATURE';
+    return 'success';
+  }
+
   @Get('test')
   async testSendCustomerMsg(
     @Query('openId') openId: string,
