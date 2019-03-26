@@ -8,6 +8,7 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
+import * as qcloud from 'wafer-node-sdk';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
 import { sendCustomerMsg } from '../shared/utils/sendCustomerMsg';
@@ -63,6 +64,14 @@ export class CommonController {
   async postCustomerMsg(@Body() msg: any) {
     console.log('msg', msg);
     return '';
+  }
+
+  @Get('message')
+  async checkSignature(@Query() query: any) {
+    const { signature, timestamp, nonce, echostr } = query;
+    if (!qcloud.message.checkSignature(signature, timestamp, nonce))
+      return 'ERR_WHEN_CHECK_SIGNATURE';
+    return echostr;
   }
 
   @Get('test')
