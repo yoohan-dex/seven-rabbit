@@ -8,13 +8,17 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
-import * as qcloud from 'wafer-node-sdk';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
 import { sendCustomerMsg } from '../shared/utils/sendCustomerMsg';
+import sha1 from '../auth/helper/sha1';
 @Controller('common')
 export class CommonController {
-  constructor(private readonly commonService: CommonService) {}
+  private token: string;
+  constructor(private readonly commonService: CommonService) {
+    const { WX_MESSAGE_TOKEN } = process.env;
+    this.token = WX_MESSAGE_TOKEN;
+  }
 
   @Post('upload')
   @UseInterceptors(
@@ -69,7 +73,7 @@ export class CommonController {
   @Get('message')
   async checkSignature(@Query() query: any) {
     const { signature, timestamp, nonce, echostr } = query;
-    if (!qcloud.message.checkSignature(signature, timestamp, nonce))
+    if (!this.checkSignatureFunction(signature, timestamp, nonce))
       return 'ERR_WHEN_CHECK_SIGNATURE';
     return echostr;
   }
@@ -77,7 +81,7 @@ export class CommonController {
   @Post('message')
   async receiveMsg(@Query() query: any) {
     const { signature, timestamp, nonce } = query;
-    if (!qcloud.message.checkSignature(signature, timestamp, nonce))
+    if (!this.checkSignatureFunction(signature, timestamp, nonce))
       return 'ERR_WHEN_CHECK_SIGNATURE';
     return 'success';
   }
@@ -92,5 +96,11 @@ export class CommonController {
       openId: 'oDeiG5Eqdh0FoCSUKerwRIoqQNvY',
       type: 'text',
     });
+  }
+  checkSignatureFunction(signature, timestamp, nonce) {
+    const tmpStr = [this.token, timestamp, nonce].sort().join('');
+    const sign = sha1(tmpStr);
+
+    return sign === signature;
   }
 }
