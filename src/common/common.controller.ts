@@ -99,7 +99,7 @@ export class CommonController {
 
   async testSendCustomerMsg() {
     return sendCustomerMsg({
-      content: 'sdfdsfsd',
+      content: '什么情况啊',
       openId: 'oDeiG5Eqdh0FoCSUKerwRIoqQNvY',
       type: 'text',
     });
