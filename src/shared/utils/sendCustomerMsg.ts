@@ -17,6 +17,7 @@ interface Data {
   image?: {
     media_id: string;
   };
+  access_token: string;
 }
 
 export const sendCustomerMsg = async ({
@@ -35,6 +36,7 @@ export const sendCustomerMsg = async ({
     const data: Data = {
       touser: openId,
       msgtype: type,
+      access_token: token,
     };
 
     if (data.msgtype === 'text') {
