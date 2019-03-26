@@ -64,12 +64,6 @@ export class CommonController {
     return await Promise.all(ops.map(op => op()));
   }
 
-  @Post('msg')
-  async postCustomerMsg(@Body() msg: any) {
-    console.log('msg', msg);
-    return '';
-  }
-
   @Get('message')
   async checkSignature(@Query() query: any) {
     const { signature, timestamp, nonce, echostr } = query;
@@ -79,18 +73,31 @@ export class CommonController {
   }
 
   @Post('message')
-  async receiveMsg(@Query() query: any) {
+  async receiveMsg(
+    @Query() query: any,
+    @Body()
+    msg: {
+      MsgType: 'text' | 'image';
+      Content: string;
+      FromUserName: string;
+    },
+  ) {
     const { signature, timestamp, nonce } = query;
     if (!this.checkSignatureFunction(signature, timestamp, nonce))
       return 'ERR_WHEN_CHECK_SIGNATURE';
+
+    const { MsgType, Content } = msg;
+    if (MsgType === 'text') {
+      const content = Content;
+      if (content === '2') {
+        this.testSendCustomerMsg();
+      }
+    }
+
     return 'success';
   }
 
-  @Get('test')
-  async testSendCustomerMsg(
-    @Query('openId') openId: string,
-    @Query('content') content: string,
-  ) {
+  async testSendCustomerMsg() {
     return sendCustomerMsg({
       content: 'sdfdsfsd',
       openId: 'oDeiG5Eqdh0FoCSUKerwRIoqQNvY',
