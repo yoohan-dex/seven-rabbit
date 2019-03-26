@@ -12,7 +12,7 @@ interface Params {
 
 interface Data {
   touser: string;
-  msgType: Params['type'];
+  msgtype: Params['type'];
   content?: string;
   image?: {
     media_id: string;
@@ -34,12 +34,12 @@ export const sendCustomerMsg = async ({
   try {
     const data: Data = {
       touser: openId,
-      msgType: type,
+      msgtype: type,
     };
 
-    if (data.msgType === 'text') {
+    if (data.msgtype === 'text') {
       data.content = content;
-    } else if (data.msgType === 'image') {
+    } else if (data.msgtype === 'image') {
       data.image = image;
     }
     const res = await Axios({
