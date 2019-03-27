@@ -5,20 +5,12 @@ import {
   FileInterceptor,
   UploadedFile,
   Get,
-  Query,
-  Body,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ImageFile } from './common.type';
-import { sendCustomerMsg } from '../shared/utils/sendCustomerMsg';
-import sha1 from '../auth/helper/sha1';
 @Controller('common')
 export class CommonController {
-  private token: string;
-  constructor(private readonly commonService: CommonService) {
-    const { WX_MESSAGE_TOKEN } = process.env;
-    this.token = WX_MESSAGE_TOKEN;
-  }
+  constructor(private readonly commonService: CommonService) {}
 
   @Post('upload')
   @UseInterceptors(
@@ -62,52 +54,5 @@ export class CommonController {
       };
     });
     return await Promise.all(ops.map(op => op()));
-  }
-
-  @Get('message')
-  async checkSignature(@Query() query: any) {
-    const { signature, timestamp, nonce, echostr } = query;
-    if (!this.checkSignatureFunction(signature, timestamp, nonce))
-      return 'ERR_WHEN_CHECK_SIGNATURE';
-    return echostr;
-  }
-
-  @Post('message')
-  async receiveMsg(
-    @Query() query: any,
-    @Body()
-    msg: {
-      MsgType: 'text' | 'image';
-      Content: string;
-      FromUserName: string;
-    },
-  ) {
-    const { signature, timestamp, nonce } = query;
-    if (!this.checkSignatureFunction(signature, timestamp, nonce))
-      return 'ERR_WHEN_CHECK_SIGNATURE';
-
-    const { MsgType, Content } = msg;
-    if (MsgType === 'text') {
-      const content = Content;
-      if (content === '2') {
-        this.testSendCustomerMsg();
-      }
-    }
-
-    return 'success';
-  }
-
-  async testSendCustomerMsg() {
-    return sendCustomerMsg({
-      content: 's',
-      openId: 'oDeiG5Eqdh0FoCSUKerwRIoqQNvY',
-      type: 'text',
-    });
-  }
-  checkSignatureFunction(signature, timestamp, nonce) {
-    const tmpStr = [this.token, timestamp, nonce].sort().join('');
-    const sign = sha1(tmpStr);
-
-    return sign === signature;
   }
 }

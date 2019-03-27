@@ -12,6 +12,7 @@ import { TagcloudModule } from './tagcloud/tagcloud.module';
 import { OrderModule } from './order/order.module';
 import { BuyerShowModule } from './buyer-show/buyer-show.module';
 import { DatumModule } from './datum/datum.module';
+import { WxModule } from './wx/wx.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DatumModule } from './datum/datum.module';
     OrderModule,
     BuyerShowModule,
     DatumModule,
+    WxModule,
   ],
   controllers: [AppController],
   providers: [AppService],
