@@ -17,13 +17,16 @@ export class WxService {
     const result = await sendFileToWechatServer();
     const mediaIds = result.map(r => r.media_id);
     const mediaArray = mediaIds.map(mediaId => {
-      return new WxMedia();
+      const m = new WxMedia();
+      m.mediaId = mediaId;
+      return m;
     });
     return this.TmpMediaRepository.save(mediaArray);
   }
 
   async getTmpMedia() {
     const media = await this.TmpMediaRepository.find();
+    if (media.length < 1) return await this.saveNewTmpMedia();
     const time = media[0].createTime.getTime();
     const now = new Date().getTime();
     if (now - time > 60 * 24 * 1000 * 2) {
@@ -33,7 +36,7 @@ export class WxService {
   }
   async sendCustomMedia(openId: string, type: 'image' | 'text' = 'image') {
     const medias = await this.getTmpMedia();
-    const media = medias[random(medias.length) - 1];
+    const media = medias[random(medias.length)];
 
     return await sendCustomerMsg({
       openId,
