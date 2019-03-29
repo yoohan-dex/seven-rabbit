@@ -35,19 +35,18 @@ export class WxController {
     if (!this.checkSignatureFunction(signature, timestamp, nonce))
       return 'ERR_WHEN_CHECK_SIGNATURE';
 
-    const { MsgType, Content } = msg;
+    const { MsgType, Content, FromUserName } = msg;
     console.log('msg', msg);
     if (MsgType === 'text') {
       const content = Content;
-      if (content === '2') {
-        this.testSendFiles();
+      if (content === '2' && FromUserName) {
+        this.testSendFiles(FromUserName);
       }
     }
 
     return 'success';
   }
-  @Get('tt')
-  async testSendFiles() {
+  async testSendFiles(openId: string) {
     return await this.wxService.sendCustomMedia('oDeiG5Eqdh0FoCSUKerwRIoqQNvY');
   }
 
