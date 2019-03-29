@@ -47,7 +47,7 @@ export class WxController {
     return 'success';
   }
   async testSendFiles(openId: string) {
-    return await this.wxService.sendCustomMedia('oDeiG5Eqdh0FoCSUKerwRIoqQNvY');
+    return await this.wxService.sendCustomMedia(openId);
   }
 
   checkSignatureFunction(signature, timestamp, nonce) {
