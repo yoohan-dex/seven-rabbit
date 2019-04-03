@@ -32,7 +32,7 @@ export class ProductController {
 
   @Get('hot')
   async getHostList(@Query('page') page: number, @Query('size') size: number) {
-    if (page === 0) return await this.productService.getHotList(0);
+    if (!page) return await this.productService.getHotList(0);
     return this.productService.getHotList(page, size);
   }
 
