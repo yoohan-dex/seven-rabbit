@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
   OneToOne,
   OneToMany,
-} from '../../node_modules/typeorm';
-import { Image } from 'common/common.entity';
+} from 'typeorm';
+import { Image } from '../common/common.entity';
 
 @Entity()
 export class Topic {
