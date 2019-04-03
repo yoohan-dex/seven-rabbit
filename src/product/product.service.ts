@@ -54,15 +54,16 @@ export class ProductService {
     });
   }
 
-  async getHotList(count?: number) {
+  async getHotList(page: number = 1, count: number = 8) {
     const sortObj = await this.hotSortRepository.findOne();
     // const sort = sortObj.productIds;
     const sortIds =
-      count !== undefined
-        ? sortObj.productIds.slice(0, count)
+      page !== 0
+        ? sortObj.productIds.slice((page - 1) * count, count)
         : sortObj.productIds;
     console.time('get hot list');
     const hotList = await this.productRepository.find({
+      select: ['cover', 'id', 'squreCover'],
       where: {
         hot: true,
         id: In(sortIds),

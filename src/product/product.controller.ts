@@ -31,13 +31,14 @@ export class ProductController {
   }
 
   @Get('hot')
-  async getHostList() {
-    return this.productService.getHotList();
+  async getHostList(@Query('page') page: number, @Query('size') size: number) {
+    if (page === 0) return await this.productService.getHotList(0);
+    return this.productService.getHotList(page, size);
   }
 
   @Get('hot/8')
   async getHostList8() {
-    return this.productService.getHotList(8);
+    return this.productService.getHotList(1, 8);
   }
 
   @Get('hot-sort')
