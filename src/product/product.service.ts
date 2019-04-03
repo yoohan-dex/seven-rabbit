@@ -63,7 +63,13 @@ export class ProductService {
         : sortObj.productIds;
     console.time('get hot list');
     const hotList = await this.productRepository.find({
-      select: ['id', 'cover'],
+      join: {
+        alias: 'p',
+        leftJoinAndSelect: {
+          cover: 'p.cover',
+        },
+      },
+      select: ['id', 'name', 'hot', 'cover'],
       where: {
         hot: true,
         id: In(sortIds),
