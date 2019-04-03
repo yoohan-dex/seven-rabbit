@@ -57,7 +57,10 @@ export class ProductService {
   async getHotList(count?: number) {
     const sortObj = await this.hotSortRepository.findOne();
     const sort = sortObj.productIds;
+    console.time('get all hot list');
     const hotList = await this.productRepository.find({ hot: true });
+    console.timeEnd('get all hot list');
+    console.time('sort');
     const sortIds = count !== undefined ? sort.slice(0, count) : sort;
     const realHotList = [];
     sortIds.forEach((sid: any) => {
@@ -67,6 +70,7 @@ export class ProductService {
         realHotList.push(item);
       }
     });
+    console.timeEnd('sort');
     return realHotList;
   }
 

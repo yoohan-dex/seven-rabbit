@@ -13,6 +13,7 @@ import { OrderModule } from './order/order.module';
 import { BuyerShowModule } from './buyer-show/buyer-show.module';
 import { DatumModule } from './datum/datum.module';
 import { WxModule } from './wx/wx.module';
+import { TopicModule } from './topic/topic.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { WxModule } from './wx/wx.module';
     BuyerShowModule,
     DatumModule,
     WxModule,
+    TopicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
