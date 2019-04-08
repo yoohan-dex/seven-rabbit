@@ -61,7 +61,6 @@ export class ProductService {
       page !== 0
         ? sortObj.productIds.slice((page - 1) * count, count)
         : sortObj.productIds;
-    console.time('get hot list');
     const hotList = await this.productRepository.find({
       join: {
         alias: 'p',
@@ -75,8 +74,6 @@ export class ProductService {
         id: In(sortIds),
       },
     });
-    console.timeEnd('get hot list');
-    console.time('sort');
     const realHotList = [];
     sortIds.forEach((sid: any) => {
       const id = parseInt(sid, 10);
@@ -85,7 +82,6 @@ export class ProductService {
         realHotList.push(item);
       }
     });
-    console.timeEnd('sort');
     return realHotList;
   }
 
@@ -129,6 +125,13 @@ export class ProductService {
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
         where: { ...options.where, category },
+        select: ['cover', 'id', 'name', 'features'],
+        join: {
+          alias: 'p',
+          leftJoinAndSelect: {
+            cover: 'p.cover',
+          },
+        },
       });
       return {
         list: products,
