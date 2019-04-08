@@ -125,13 +125,6 @@ export class ProductService {
       const [products, total] = await this.productRepository.findAndCount({
         ...options,
         where: { ...options.where, category },
-        select: ['cover', 'id', 'name', 'features'],
-        join: {
-          alias: 'p',
-          leftJoinAndSelect: {
-            cover: 'p.cover',
-          },
-        },
       });
       return {
         list: products,
