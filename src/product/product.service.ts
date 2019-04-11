@@ -73,7 +73,7 @@ export class ProductService {
       hot: true,
       id: In(pids),
     };
-    if (type) {
+    if (type !== undefined) {
       where.type = type;
     }
     const hotList = await this.productRepository.find({});
