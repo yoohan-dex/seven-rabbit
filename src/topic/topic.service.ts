@@ -67,11 +67,12 @@ export class TopicService {
     const detail = await this.imageRepository.findByIds(topicContent.detail);
     topic.detail = detail;
 
+    const savedTopic = await this.topicRepository.save(topic);
     const sort = await this.topicSortRepository.findOne();
-    sort.topicIds.push(topic.id);
+    sort.topicIds.push(savedTopic.id);
     await this.topicSortRepository.save(sort);
 
-    return topic;
+    return savedTopic;
   }
   async removeTopic(id: number) {
     return await this.topicRepository.delete(id);
