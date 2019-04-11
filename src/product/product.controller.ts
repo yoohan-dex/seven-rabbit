@@ -48,6 +48,13 @@ export class ProductController {
   ) {
     return await this.productService.getHotListByType(type, size);
   }
+  @Get('new-hot-admin')
+  async getNewHotListAdmin(
+    @Query('type') type: number,
+    @Query('size') size: number,
+  ) {
+    return await this.productService.getHotListByTypeAdmin(type, size);
+  }
 
   @Get('new-hot-sort')
   async getNewHotSort(@Query('type') type: number) {

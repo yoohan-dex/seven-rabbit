@@ -63,6 +63,29 @@ export class ProductService {
     }
     return sort;
   }
+  async getHotListByTypeAdmin(type: number, count?: number) {
+    const sort = await this.getHotSortByType(type);
+    const pids = count ? sort.productIds.slice(0, count) : sort.productIds;
+    if (pids.length < 1) {
+      return [];
+    }
+    const hotList = await this.productRepository.find({
+      where: {
+        hot: true,
+        hotType: type,
+        id: In(pids),
+      },
+    });
+    const realHotList = [];
+    pids.forEach((sid: any) => {
+      const id = parseInt(sid, 10);
+      const item = hotList.find(v => v.id === id);
+      if (item) {
+        realHotList.push(item);
+      }
+    });
+    return realHotList;
+  }
   async getHotListByType(type: number, count?: number) {
     const sort = await this.getHotSortByType(type);
     const pids = count ? sort.productIds.slice(0, count) : sort.productIds;
