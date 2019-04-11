@@ -6,7 +6,9 @@ export class TopicDto {
   readonly title?: string;
   @IsNumber() readonly cover: number;
 
-  @IsString() readonly type: 'poster' | 'product';
+  @IsOptional()
+  @IsString()
+  readonly type: 'poster' | 'product';
 
   @IsArray() readonly content: number[];
 }
