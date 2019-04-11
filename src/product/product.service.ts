@@ -101,9 +101,10 @@ export class ProductService {
       where: {
         hot: true,
         hotType: type,
-        id: In(pids),
+        // id: In(pids),
       },
     });
+    return hotList;
     const realHotList = [];
     pids.forEach((sid: any) => {
       const id = parseInt(sid, 10);
