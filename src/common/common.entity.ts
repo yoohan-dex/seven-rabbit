@@ -30,6 +30,6 @@ export class Image {
   @ManyToMany(type => Product, product => product.detail)
   product: Product[];
 
-  @ManyToMany(type => Topic, topic => topic.content)
+  @ManyToMany(type => Topic, topic => topic.detail)
   topic: Topic;
 }

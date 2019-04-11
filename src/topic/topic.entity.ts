@@ -35,7 +35,7 @@ export class Topic {
 
   @ManyToMany(type => Image, image => image.id, { eager: true })
   @JoinTable()
-  content: Image[];
+  detail: Image[];
 
   @CreateDateColumn() createTime: Date;
 }

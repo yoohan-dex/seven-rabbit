@@ -64,8 +64,8 @@ export class TopicService {
 
     const cover = await this.imageRepository.findOne(topicContent.cover);
     topic.cover = cover;
-    const content = await this.imageRepository.findByIds(topicContent.content);
-    topic.content = content;
+    const detail = await this.imageRepository.findByIds(topicContent.detail);
+    topic.detail = detail;
 
     const sort = await this.topicSortRepository.findOne();
     sort.topicIds.push(topic.id);

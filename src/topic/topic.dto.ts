@@ -10,5 +10,5 @@ export class TopicDto {
   @IsString()
   readonly type: 'poster' | 'product';
 
-  @IsArray() readonly content: number[];
+  @IsArray() readonly detail: number[];
 }
