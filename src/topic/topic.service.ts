@@ -78,10 +78,12 @@ export class TopicService {
   }
   async getTopicSort() {
     const sort = await this.topicSortRepository.findOne();
+    console.log('sort', sort);
     if (!sort) {
       const newSort = new TopicSort();
       newSort.topicIds = [];
-      return await this.topicSortRepository.save(newSort);
+      const s = await this.topicSortRepository.save(newSort);
+      return s.topicIds;
     }
     return sort.topicIds;
   }
