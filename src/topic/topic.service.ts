@@ -77,8 +77,7 @@ export class TopicService {
     return await this.topicRepository.delete(id);
   }
   async getTopicSort() {
-    const sort = await this.topicSortRepository.findOne();
-    console.log('dont have sort ?', !sort);
+    const sort = await this.topicSortRepository.findOne(1);
     if (!sort) {
       const newSort = new TopicSort();
       newSort.topicIds = [];
