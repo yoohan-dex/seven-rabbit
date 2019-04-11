@@ -41,6 +41,27 @@ export class ProductController {
     return this.productService.getHotList(1, 8);
   }
 
+  @Get('new-hot')
+  async getNewHotList(
+    @Query('type') type: number,
+    @Query('size') size: number,
+  ) {
+    return await this.productService.getHotListByType(type, size);
+  }
+
+  @Get('new-hot-sort')
+  async getNewHotSort(@Query('type') type: number) {
+    return await this.productService.getHotListByType(type);
+  }
+
+  @Post('new-hot-sort')
+  async updateNewHotSort(
+    @Body('ids') ids: number[],
+    @Body('type') type: number,
+  ) {
+    return await this.productService.updateNewSort(type, ids);
+  }
+
   @Get('hot-sort')
   async getSort() {
     return await this.productService.getSort();

@@ -53,6 +53,42 @@ export class ProductService {
     });
   }
 
+  async getHotSortByType(type: number) {
+    let sort: HotSort;
+    sort = await this.hotSortRepository.findOne({ where: { type } });
+    if (!sort) {
+      sort = new HotSort();
+      sort.type = type;
+    }
+    return sort;
+  }
+  async getHotListByType(type: number, count?: number) {
+    const sort = await this.getHotSortByType(type);
+    const pids = count ? sort.productIds.slice(0, count) : sort.productIds;
+    const hotList = await this.productRepository.find({
+      join: {
+        alias: 'p',
+        leftJoinAndSelect: {
+          cover: 'p.cover',
+        },
+      },
+      select: ['id', 'name', 'hot', 'cover'],
+      where: {
+        hot: true,
+        hotType: type,
+        id: In(pids),
+      },
+    });
+    const realHotList = [];
+    pids.forEach((sid: any) => {
+      const id = parseInt(sid, 10);
+      const item = hotList.find(v => v.id === id);
+      if (item) {
+        realHotList.push(item);
+      }
+    });
+    return realHotList;
+  }
   async getHotList(page: number = 1, count: number = 8) {
     const sortObj = await this.hotSortRepository.findOne();
     const sortIds =
@@ -88,6 +124,11 @@ export class ProductService {
     return sort.productIds;
   }
 
+  async updateNewSort(type: number, ids: number[]) {
+    const sort = await this.hotSortRepository.findOne({ where: { type } });
+    sort.productIds = ids;
+    return await this.hotSortRepository.save(sort);
+  }
   async updateSort(ids: number[]) {
     const sort = await this.hotSortRepository.findOne();
     sort.productIds = ids;
@@ -241,6 +282,7 @@ export class ProductService {
     product.cover = cover;
     product.detail = detail;
     product.features = features;
+    product.hotType = productData.hotType;
     try {
       const savedProduct = await this.productRepository.save(product);
       if (savedProduct.hot) {
@@ -273,9 +315,11 @@ export class ProductService {
     product.cover = cover;
     product.detail = detail;
     product.features = features;
+    product.hotType = productData.hotType;
+
     const savedProduct = await this.productRepository.save(product);
     if (savedProduct.hot) {
-      const sort = await this.hotSortRepository.findOne();
+      const sort = await this.getHotSortByType(product.hotType);
       if (!sort.productIds.includes(savedProduct.id)) {
         sort.productIds.push(savedProduct.id);
         if (sort.productIds.map(id => savedProduct.id === id).length > 1) {

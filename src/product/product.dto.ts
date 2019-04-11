@@ -1,4 +1,10 @@
-import { IsInt, IsString, IsArray, IsBoolean } from 'class-validator';
+import {
+  IsInt,
+  IsString,
+  IsArray,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString() readonly name: string;
@@ -12,6 +18,10 @@ export class CreateProductDto {
   @IsArray() readonly detail: number[];
 
   @IsArray() readonly features: number[];
+
+  @IsOptional()
+  @IsInt()
+  readonly hotType: number;
 }
 
 export class UpdateProductDto extends CreateProductDto {

@@ -18,6 +18,8 @@ import { Category } from '../category/category.entity';
 @Entity()
 export class HotSort {
   @PrimaryGeneratedColumn() id: number;
+  // 0 spring 1 summer 2 autumn 3 winter 4 accesory
+  @Column() type: number;
   @Column('simple-array') productIds: number[];
 }
 
@@ -52,6 +54,10 @@ export class Product {
 
   @Column({ default: false })
   hot: boolean;
+
+  // 0 春 1 夏 2 秋 3 冬 4 配件
+  @Column({ nullable: true })
+  hotType: number;
 
   @Column('int', { default: 0 })
   visitTimes: number;
