@@ -76,7 +76,7 @@ export class ProductService {
     if (type !== undefined) {
       where.type = type;
     }
-    const hotList = await this.productRepository.find({});
+    const hotList = await this.productRepository.find({ where });
     const realHotList = [];
     pids.forEach((sid: any) => {
       const id = parseInt(sid, 10);
