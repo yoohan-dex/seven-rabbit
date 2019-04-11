@@ -31,4 +31,13 @@ export class TopicController {
   async deleteTopic(@Param('id') id: number) {
     return await this.topicSerivce.removeTopic(id);
   }
+
+  @Get('topic-sort')
+  async getTopicSort() {
+    return await this.topicSerivce.getTopicSort();
+  }
+  @Post('topic-sort')
+  async updateTopicSort(sort: number[]) {
+    return await this.topicSerivce.updateTopicSort(sort);
+  }
 }

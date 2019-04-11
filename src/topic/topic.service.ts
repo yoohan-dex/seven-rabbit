@@ -69,4 +69,18 @@ export class TopicService {
   async removeTopic(id: number) {
     return await this.topicRepository.delete(id);
   }
+  async getTopicSort() {
+    const sort = await this.topicSortRepository.findOne();
+    if (!sort) {
+      const newSort = new TopicSort();
+      newSort.topicIds = [];
+      return await this.topicSortRepository.save(newSort);
+    }
+    return sort.topicIds;
+  }
+  async updateTopicSort(ids: number[]) {
+    const sort = await this.topicSortRepository.findOne();
+    sort.topicIds = ids;
+    return await this.topicSortRepository.save(sort);
+  }
 }
