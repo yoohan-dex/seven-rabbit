@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Topic } from './topic.entity';
-import { Repository } from 'typeorm';
+import { Topic, TopicSort } from './topic.entity';
+import { Repository, In } from 'typeorm';
 import { Image } from '../common/common.entity';
 import { TopicDto } from './topic.dto';
 
@@ -12,13 +12,31 @@ export class TopicService {
     private readonly topicRepository: Repository<Topic>,
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
+    @InjectRepository(TopicSort)
+    private readonly topicSortRepository: Repository<TopicSort>,
   ) {}
 
-  async findTopic(id?: number) {
+  async findTopic({ id, count }: { id?: number; count?: number } = {}) {
     if (id) {
       return await this.topicRepository.findOne(id);
     } else {
-      return await this.topicRepository.find();
+      const sortObj = await this.topicSortRepository.findOne();
+      const sortIds = sortObj.topicIds.slice(0, count);
+
+      const topicList = await this.topicRepository.find({
+        where: In(sortIds),
+        take: count,
+      });
+
+      const realTopicList = [];
+      sortIds.forEach((sid: any) => {
+        const tid = parseInt(sid, 10);
+        const item = topicList.find(v => v.id === tid);
+        if (item) {
+          realTopicList.push(item);
+        }
+      });
+      return realTopicList;
     }
   }
 
@@ -41,6 +59,12 @@ export class TopicService {
     topic.cover = cover;
     const content = await this.imageRepository.findByIds(topicContent.content);
     topic.content = content;
+
+    const sort = await this.topicSortRepository.findOne();
+    sort.topicIds.push(topic.id);
+    await this.topicSortRepository.save(sort);
+
+    return topic;
   }
   async removeTopic(id: number) {
     return await this.topicRepository.delete(id);

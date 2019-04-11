@@ -8,6 +8,11 @@ import {
 } from 'typeorm';
 import { Image } from '../common/common.entity';
 
+export class TopicSort {
+  @PrimaryGeneratedColumn() id: number;
+  @Column('simple-array') topicIds: number[];
+}
+
 @Entity()
 export class Topic {
   @PrimaryGeneratedColumn() id: number;

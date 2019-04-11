@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product, HotSort } from './product.entity';
 import { Repository, createQueryBuilder, In } from 'typeorm';
-import { Signale } from 'signale';
 import * as R from 'ramda';
 
 import { Image } from '../common/common.entity';
@@ -56,7 +55,6 @@ export class ProductService {
 
   async getHotList(page: number = 1, count: number = 8) {
     const sortObj = await this.hotSortRepository.findOne();
-    // const sort = sortObj.productIds;
     const sortIds =
       page !== 0
         ? sortObj.productIds.slice((page - 1) * count, count)

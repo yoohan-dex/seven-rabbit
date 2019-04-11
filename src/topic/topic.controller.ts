@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { TopicDto } from './topic.dto';
 
@@ -7,8 +15,8 @@ export class TopicController {
   constructor(private readonly topicSerivce: TopicService) {}
 
   @Get('/:id')
-  async getTopic(@Param('id') id: number) {
-    return await this.topicSerivce.findTopic(id);
+  async getTopic(@Param('id') id: number, @Query('size') size: number) {
+    return await this.topicSerivce.findTopic({ id, count: size });
   }
 
   @Post('/:id')
