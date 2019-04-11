@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 import { Product } from '../product/product.entity';
+import { Topic } from 'topic/topic.entity';
 
 @Entity()
 export class Image {
@@ -22,4 +29,7 @@ export class Image {
 
   @ManyToMany(type => Product, product => product.detail)
   product: Product[];
+
+  @ManyToMany(type => Topic, topic => topic.content)
+  topic: Topic;
 }

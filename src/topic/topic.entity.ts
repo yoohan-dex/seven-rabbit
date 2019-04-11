@@ -5,6 +5,9 @@ import {
   CreateDateColumn,
   OneToOne,
   OneToMany,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Image } from '../common/common.entity';
 
@@ -26,10 +29,12 @@ export class Topic {
   @Column({ default: 'poster' })
   type: 'poster' | 'product';
 
-  @OneToOne(type => Image)
+  @OneToOne(type => Image, { eager: true })
+  @JoinColumn()
   cover: Image;
 
-  @OneToMany(type => Image, image => image.id)
+  @ManyToMany(type => Image, image => image.id, { eager: true })
+  @JoinTable()
   content: Image[];
 
   @CreateDateColumn() createTime: Date;

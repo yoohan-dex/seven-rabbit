@@ -25,12 +25,12 @@ export class TopicService {
 
       const topicList = await this.topicRepository.find({
         select: ['id'],
-        join: {
-          alias: 't',
-          leftJoinAndSelect: {
-            cover: 't.cover',
-          },
-        },
+        // join: {
+        //   alias: 't',
+        //   leftJoinAndSelect: {
+        //     cover: 't.cover',
+        //   },
+        // },
         where: In(sortIds),
         take: count,
       });
@@ -77,7 +77,7 @@ export class TopicService {
     return await this.topicRepository.delete(id);
   }
   async getTopicSort() {
-    const sort = await this.topicSortRepository.findOne(1);
+    const sort = await this.topicSortRepository.findOne();
     if (!sort) {
       const newSort = new TopicSort();
       newSort.topicIds = [];
