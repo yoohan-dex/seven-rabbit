@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Product } from '../product/product.entity';
-import { Topic } from 'topic/topic.entity';
+import { Topic } from '../topic/topic.entity';
 
 @Entity()
 export class Image {
