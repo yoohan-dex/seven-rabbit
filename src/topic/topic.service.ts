@@ -24,13 +24,13 @@ export class TopicService {
       const sortIds = sortObj.topicIds.slice(0, count);
 
       const topicList = await this.topicRepository.find({
-        select: ['id'],
-        // join: {
-        //   alias: 't',
-        //   leftJoinAndSelect: {
-        //     cover: 't.cover',
-        //   },
-        // },
+        select: ['id', 'cover'],
+        join: {
+          alias: 't',
+          leftJoinAndSelect: {
+            cover: 't.cover',
+          },
+        },
         where: In(sortIds),
         take: count,
       });
