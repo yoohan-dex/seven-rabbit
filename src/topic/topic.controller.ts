@@ -14,9 +14,13 @@ import { TopicDto } from './topic.dto';
 export class TopicController {
   constructor(private readonly topicSerivce: TopicService) {}
 
+  @Get()
+  async getTopicBySize(@Query('size') size: number) {
+    return await this.topicSerivce.findTopic({ count: size });
+  }
   @Get('/:id')
-  async getTopic(@Param('id') id: number, @Query('size') size: number) {
-    return await this.topicSerivce.findTopic({ id, count: size });
+  async getTopicDetail(@Param('id') id: number) {
+    return await this.topicSerivce.findTopic({ id });
   }
 
   @Post('/:id')
