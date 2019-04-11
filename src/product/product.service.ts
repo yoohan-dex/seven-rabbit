@@ -59,6 +59,7 @@ export class ProductService {
     if (!sort) {
       sort = new HotSort();
       sort.type = type;
+      sort.productIds = [];
     }
     return sort;
   }
