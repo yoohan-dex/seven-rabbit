@@ -12,11 +12,10 @@ import { Image } from '../common/common.entity';
 export class Topic {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column() primaryTitle: string;
-
-  @Column() secondTitle: string;
-
-  @Column() footerTitle: string;
+  @Column({
+    nullable: true,
+  })
+  title?: string;
 
   @Column({ default: 'poster' })
   type: 'poster' | 'product';

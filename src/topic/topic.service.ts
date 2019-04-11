@@ -30,14 +30,19 @@ export class TopicService {
       topic = new Topic();
     }
 
-    topic.primaryTitle = topicContent.primaryTitle;
-    topic.secondTitle = topicContent.secondTitle;
-    topic.footerTitle = topicContent.footerTitle;
-    topic.type = topicContent.type;
+    if (topicContent.title) {
+      topic.title = topicContent.title;
+    }
+    if (topicContent.type) {
+      topic.type = topicContent.type;
+    }
 
     const cover = await this.imageRepository.findOne(topicContent.cover);
     topic.cover = cover;
     const content = await this.imageRepository.findByIds(topicContent.content);
     topic.content = content;
+  }
+  async removeTopic(id: number) {
+    return await this.topicRepository.delete(id);
   }
 }
