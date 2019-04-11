@@ -78,7 +78,7 @@ export class TopicService {
   }
   async getTopicSort() {
     const sort = await this.topicSortRepository.findOne();
-    console.log('sort', sort);
+    console.log('dont have sort ?', !sort);
     if (!sort) {
       const newSort = new TopicSort();
       newSort.topicIds = [];
