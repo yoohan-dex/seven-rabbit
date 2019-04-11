@@ -69,13 +69,14 @@ export class ProductService {
     if (pids.length < 1) {
       return [];
     }
-    const hotList = await this.productRepository.find({
-      where: {
-        hot: true,
-        hotType: type,
-        id: In(pids),
-      },
-    });
+    const where: any = {
+      hot: true,
+      id: In(pids),
+    };
+    if (type) {
+      where.type = type;
+    }
+    const hotList = await this.productRepository.find({});
     const realHotList = [];
     pids.forEach((sid: any) => {
       const id = parseInt(sid, 10);
