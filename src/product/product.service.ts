@@ -103,6 +103,7 @@ export class ProductService {
         hotType: type,
         // id: In(pids),
       },
+      take: count, // todo! 记得加上排序后去掉这个吧
     });
     return hotList;
     const realHotList = [];
