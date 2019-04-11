@@ -47,7 +47,7 @@ export class TopicService {
     }
   }
 
-  async saveTopic(topicContent: TopicDto, id: number) {
+  async saveTopic(topicContent: TopicDto, id?: number) {
     let topic: Topic;
     if (id) {
       topic = await this.topicRepository.findOne(id);

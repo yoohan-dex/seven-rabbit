@@ -23,6 +23,10 @@ export class TopicController {
     return await this.topicSerivce.findTopic({ id });
   }
 
+  @Post()
+  async createTopic(@Body('topicContent') topicContent: TopicDto) {
+    return await this.topicSerivce.saveTopic(topicContent);
+  }
   @Post('/:id')
   async postTopic(
     @Param('id') id: number,
