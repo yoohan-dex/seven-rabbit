@@ -20,8 +20,8 @@ export class TopicService {
     if (id) {
       return await this.topicRepository.findOne(id);
     } else {
-      const sortObj = await this.topicSortRepository.findOne();
-      const sortIds = sortObj.topicIds.slice(0, count);
+      // const sortObj = await this.topicSortRepository.findOne();
+      // const sortIds = sortObj.topicIds.slice(0, count);
 
       const topicList = await this.topicRepository.find({
         select: ['id', 'cover'],
@@ -31,19 +31,19 @@ export class TopicService {
             cover: 't.cover',
           },
         },
-        where: In(sortIds),
+        // where: In(sortIds), // todo! 记得去把这个排序功能完善， 然后加上这个
         take: count,
       });
-
-      const realTopicList = [];
-      sortIds.forEach((sid: any) => {
-        const tid = parseInt(sid, 10);
-        const item = topicList.find(v => v.id === tid);
-        if (item) {
-          realTopicList.push(item);
-        }
-      });
-      return realTopicList;
+      return topicList;
+      // const realTopicList = [];
+      // sortIds.forEach((sid: any) => {
+      //   const tid = parseInt(sid, 10);
+      //   const item = topicList.find(v => v.id === tid);
+      //   if (item) {
+      //     realTopicList.push(item);
+      //   }
+      // });
+      // return realTopicList;
     }
   }
 
