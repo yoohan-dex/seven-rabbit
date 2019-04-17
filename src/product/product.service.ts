@@ -101,11 +101,10 @@ export class ProductService {
       where: {
         hot: true,
         hotType: type,
-        // id: In(pids),
+        id: In(pids),
       },
-      take: count, // todo! 记得加上排序后去掉这个吧
+      // take: count, // todo! 记得加上排序后去掉这个吧
     });
-    return hotList;
     const realHotList = [];
     pids.forEach((sid: any) => {
       const id = parseInt(sid, 10);
