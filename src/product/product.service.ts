@@ -156,25 +156,21 @@ export class ProductService {
     sort.productIds = ids;
     return await this.hotSortRepository.save(sort);
   }
-  async updateSort(ids: number[]) {
-    const sort = await this.hotSortRepository.findOne();
+  async updateSort(hotType: number, ids: number[]) {
+    const sort = await this.getHotSortByType(hotType);
     sort.productIds = ids;
     return await this.hotSortRepository.save(sort);
   }
 
-  async initSort() {
+  async initSort(hotType: number) {
     const hotProducts = await this.productRepository.find({
-      hot: true,
+      select: ['id'],
+      where: { hot: true, hotType },
     });
-    const hotIds = hotProducts.map(p => p.id);
-    const sort = await this.hotSortRepository.findOne();
-    if (!sort) {
-      const newSort = new HotSort();
-      newSort.productIds = hotIds;
-      return await this.hotSortRepository.save(newSort);
-    }
+    const ids = hotProducts.map(p => p.id);
 
-    sort.productIds = hotIds;
+    const sort = await this.getHotSortByType(hotType);
+    sort.productIds.push(...ids);
     return await this.hotSortRepository.save(sort);
   }
 
@@ -313,7 +309,7 @@ export class ProductService {
     try {
       const savedProduct = await this.productRepository.save(product);
       if (savedProduct.hot) {
-        const sort = await this.hotSortRepository.findOne();
+        const sort = await this.getHotSortByType(product.hotType);
         sort.productIds.push(savedProduct.id);
         await this.hotSortRepository.save(sort);
       }

@@ -7,6 +7,7 @@ import {
   Delete,
   Query,
   Res,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateProductDto } from './product.dto';
 import { ProductService } from './product.service';
@@ -75,8 +76,8 @@ export class ProductController {
   }
 
   @Post('hot-sort')
-  async updateSort(@Body() ids: number[]) {
-    return await this.productService.updateSort(ids);
+  async updateSort(@Body('ids') ids: number[], @Body('type') hotType: number) {
+    return await this.productService.updateSort(hotType, ids);
   }
 
   @Get('gen-code')
@@ -105,8 +106,9 @@ export class ProductController {
   }
 
   @Get('initial-sort')
-  async initSort() {
-    return await this.productService.initSort();
+  async initSort(@Query('type') hotType: number) {
+    if (!hotType) throw new BadRequestException('没有热单品的类型');
+    return await this.productService.initSort(hotType);
   }
   @Get('crop-for-share')
   async cropAllProductsShare(
