@@ -151,7 +151,7 @@ export class ProductService {
   }
 
   async updateNewSort(type: number, ids: number[]) {
-    const sort = await this.hotSortRepository.findOne({ where: { type } });
+    const sort = await this.getHotSortByType(type);
     sort.productIds = ids;
     return await this.hotSortRepository.save(sort);
   }

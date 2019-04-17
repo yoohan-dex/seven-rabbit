@@ -59,7 +59,7 @@ export class ProductController {
 
   @Get('new-hot-sort')
   async getNewHotSort(@Query('type') type: number) {
-    return await this.productService.getHotListByType(type);
+    return await this.productService.getHotSortByType(type);
   }
 
   @Post('new-hot-sort')
@@ -77,7 +77,7 @@ export class ProductController {
 
   @Post('hot-sort')
   async updateSort(@Body('ids') ids: number[], @Body('type') hotType: number) {
-    return await this.productService.updateSort(hotType, ids);
+    return await this.productService.updateNewSort(hotType, ids);
   }
 
   @Get('gen-code')
