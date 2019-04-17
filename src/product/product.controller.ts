@@ -59,7 +59,8 @@ export class ProductController {
 
   @Get('new-hot-sort')
   async getNewHotSort(@Query('type') type: number) {
-    return await this.productService.getHotSortByType(type);
+    const sort = await this.productService.getHotSortByType(type);
+    return sort.productIds;
   }
 
   @Post('new-hot-sort')
