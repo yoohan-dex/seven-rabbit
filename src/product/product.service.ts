@@ -170,7 +170,7 @@ export class ProductService {
     const ids = hotProducts.map(p => p.id);
 
     const sort = await this.getHotSortByType(hotType);
-    sort.productIds.push(...ids);
+    sort.productIds = ids;
     return await this.hotSortRepository.save(sort);
   }
 
