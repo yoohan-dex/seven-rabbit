@@ -18,7 +18,6 @@ export class CategoryService {
   ) {}
   async getAll() {
     return await this.categoryRepository.find({
-      select: ['id', 'name'],
       order: {
         orderId: 'ASC',
       },
