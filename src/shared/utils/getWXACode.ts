@@ -19,7 +19,7 @@ export const getWXACode = async (page: string, scene: string): Promise<any> => {
       data: {
         scene,
         page,
-        width: 300,
+        width: 1280,
         // line_color: '#78a4fa',
       },
       responseType: 'stream',
