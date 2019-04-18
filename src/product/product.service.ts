@@ -193,6 +193,9 @@ export class ProductService {
             cover: 'p.cover',
           },
         },
+        order: {
+          createTime: 'DESC',
+        },
       });
       return {
         list: products,
