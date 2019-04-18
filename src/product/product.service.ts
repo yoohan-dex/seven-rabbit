@@ -191,7 +191,6 @@ export class ProductService {
           alias: 'p',
           leftJoinAndSelect: {
             cover: 'p.cover',
-            feat: 'p.features',
           },
         },
       });
