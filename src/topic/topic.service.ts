@@ -33,6 +33,7 @@ export class TopicService {
             alias: 't',
             leftJoinAndSelect: {
               cover: 't.cover',
+              background: 't.background',
             },
           },
           // where: In(sortIds), // todo! 记得去把这个排序功能完善， 然后加上这个
