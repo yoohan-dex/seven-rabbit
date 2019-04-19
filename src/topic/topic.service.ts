@@ -16,25 +16,32 @@ export class TopicService {
     private readonly topicSortRepository: Repository<TopicSort>,
   ) {}
 
-  async findTopic({ id, count }: { id?: number; count?: number } = {}) {
+  async findTopic({
+    id,
+    count,
+    admin,
+  }: { id?: number; count?: number; admin?: boolean } = {}) {
     if (id) {
       return await this.topicRepository.findOne(id);
     } else {
       // const sortObj = await this.topicSortRepository.findOne();
       // const sortIds = sortObj.topicIds.slice(0, count);
-
-      const topicList = await this.topicRepository.find({
-        select: ['id', 'cover'],
-        join: {
-          alias: 't',
-          leftJoinAndSelect: {
-            cover: 't.cover',
+      if (!admin) {
+        const topicList = await this.topicRepository.find({
+          select: ['id', 'cover'],
+          join: {
+            alias: 't',
+            leftJoinAndSelect: {
+              cover: 't.cover',
+            },
           },
-        },
-        // where: In(sortIds), // todo! 记得去把这个排序功能完善， 然后加上这个
-        take: count,
-      });
-      return topicList;
+          // where: In(sortIds), // todo! 记得去把这个排序功能完善， 然后加上这个
+          take: count,
+        });
+        return topicList;
+      } else {
+        return await this.topicRepository.find();
+      }
       // const realTopicList = [];
       // sortIds.forEach((sid: any) => {
       //   const tid = parseInt(sid, 10);
@@ -61,9 +68,12 @@ export class TopicService {
     if (topicContent.type) {
       topic.type = topicContent.type;
     }
-
-    const cover = await this.imageRepository.findOne(topicContent.cover);
+    const [cover, background] = await Promise.all([
+      this.imageRepository.findOne(topicContent.cover),
+      this.imageRepository.findOne(topicContent.background),
+    ]);
     topic.cover = cover;
+    topic.background = background;
     const detail = await this.imageRepository.findByIds(topicContent.detail);
     topic.detail = detail;
 

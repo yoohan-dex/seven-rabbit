@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   OneToOne,
-  OneToMany,
   JoinColumn,
   ManyToMany,
   JoinTable,
@@ -32,6 +31,10 @@ export class Topic {
   @OneToOne(type => Image, { eager: true })
   @JoinColumn()
   cover: Image;
+
+  @OneToOne(type => Image, { eager: true })
+  @JoinColumn()
+  background: Image;
 
   @ManyToMany(type => Image, image => image.id, { eager: true })
   @JoinTable()

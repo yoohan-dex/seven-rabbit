@@ -15,8 +15,11 @@ export class TopicController {
   constructor(private readonly topicSerivce: TopicService) {}
 
   @Get()
-  async getTopicBySize(@Query('size') size: number) {
-    return await this.topicSerivce.findTopic({ count: size });
+  async getTopicBySize(
+    @Query('size') size: number,
+    @Query('admin') admin: boolean,
+  ) {
+    return await this.topicSerivce.findTopic({ count: size, admin });
   }
   @Get('/:id')
   async getTopicDetail(@Param('id') id: number) {

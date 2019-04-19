@@ -27,7 +27,7 @@ export class ProductService {
     @InjectRepository(HotSort)
     private readonly hotSortRepository: Repository<HotSort>,
   ) {}
-  async getOne(id) {
+  async getOne(id: number) {
     return await this.productRepository.findOne(id);
   }
   async getListByIds(ids: number[]) {
