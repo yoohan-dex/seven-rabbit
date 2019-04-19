@@ -28,7 +28,7 @@ export class TopicService {
       // const sortIds = sortObj.topicIds.slice(0, count);
       if (!admin) {
         const topicList = await this.topicRepository.find({
-          select: ['id', 'cover'],
+          select: ['id', 'cover', 'background'],
           join: {
             alias: 't',
             leftJoinAndSelect: {
