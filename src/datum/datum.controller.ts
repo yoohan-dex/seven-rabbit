@@ -18,6 +18,18 @@ export class DatumController {
   async getProductDetail(@Param('id') productId: number, @Query() query: any) {
     return await this.datumService.getProduct(productId, query);
   }
+
+  @Get('topic/data')
+  async getTopicData(
+    @Query('userId') userId: number,
+    @Query('topicId') topicId: number,
+  ) {
+    return await this.datumService.getTopicData({
+      userId,
+      topicId,
+    });
+  }
+
   @Get('user/:id')
   @Roles('admin', 'primary', 'service')
   async getUserDatum(@Param('id') userId: number) {

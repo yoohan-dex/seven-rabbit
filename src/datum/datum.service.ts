@@ -5,11 +5,12 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SimpleData } from './datum.entity';
+import { SimpleData, TopicData } from './datum.entity';
 import { Repository, Raw } from 'typeorm';
 import { WxUser } from '../auth/auth.entity';
 import { Product } from '../product/product.entity';
 import { SimpleQuery } from './datum.dto';
+import { Topic } from 'topic/topic.entity';
 
 @Injectable()
 export class DatumService {
@@ -20,6 +21,10 @@ export class DatumService {
     private readonly userRepository: Repository<WxUser>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(TopicData)
+    private readonly topicDataRepository: Repository<TopicData>,
+    @InjectRepository(Topic)
+    private readonly topicRepository: Repository<Topic>,
   ) {}
   async getProduct(id: number, query?: SimpleQuery) {
     const product = await this.productRepository.findOne(id);
@@ -201,5 +206,45 @@ export class DatumService {
     }
     datum.stay += stayTime * 1;
     return await this.simpleDataRepository.save(datum);
+  }
+
+  async setTopicData(user: WxUser, topicId: number) {
+    const topicData = new TopicData();
+    topicData.userId = user.id;
+    topicData.topicId = topicId;
+
+    return await this.topicDataRepository.save(topicData);
+  }
+
+  async getTopicData({
+    userId,
+    topicId,
+  }: { userId?: number; topicId?: number } = {}) {
+    const where: any = {};
+
+    if (userId) {
+      where.userId = userId;
+    }
+    if (topicId) {
+      where.topicId = topicId;
+    }
+    const data = await this.topicDataRepository.find({ where });
+
+    let topicIds = data.map(v => v.topicId);
+    const topicIdsSet = new Set(topicIds);
+    topicIds = Array.from(topicIdsSet);
+
+    let userIds = data.map(v => v.userId);
+    const userIdsSet = new Set(userIds);
+    userIds = Array.from(userIdsSet);
+
+    const topicList = await this.topicRepository.findByIds(topicIds);
+    const userList = await this.userRepository.findByIds(userIds);
+
+    return data.map(d => ({
+      ...d,
+      topic: topicList.find(t => t.id === d.topicId),
+      user: userList.find(u => u.id === d.userId),
+    }));
   }
 }

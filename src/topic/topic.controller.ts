@@ -9,10 +9,15 @@ import {
 } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { TopicDto } from './topic.dto';
+import { DatumService } from '../datum/datum.service';
+import { User } from '../shared/decorators/user';
 
 @Controller('topic')
 export class TopicController {
-  constructor(private readonly topicSerivce: TopicService) {}
+  constructor(
+    private readonly topicSerivce: TopicService,
+    private readonly datumService: DatumService,
+  ) {}
 
   @Get()
   async getTopicBySize(
@@ -22,7 +27,8 @@ export class TopicController {
     return await this.topicSerivce.findTopic({ count: size, admin });
   }
   @Get('/:id')
-  async getTopicDetail(@Param('id') id: number) {
+  async getTopicDetail(@Param('id') id: number, @User() user: any) {
+    await this.datumService.setTopicData(user, id);
     return await this.topicSerivce.findTopic({ id });
   }
 
