@@ -10,7 +10,7 @@ import { Repository, Raw } from 'typeorm';
 import { WxUser } from '../auth/auth.entity';
 import { Product } from '../product/product.entity';
 import { SimpleQuery } from './datum.dto';
-import { Topic } from 'topic/topic.entity';
+import { Topic } from '../topic/topic.entity';
 
 @Injectable()
 export class DatumService {
