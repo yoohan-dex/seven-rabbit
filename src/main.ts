@@ -15,7 +15,7 @@ async function bootstrap() {
   app.setBaseViewsDir(__dirname + '/public');
   app.engine('html', swig);
   app.setViewEngine('html');
-  app.enableCors();
+  app.enableCors({ methods: ['post'] });
 
   const options = new DocumentBuilder()
     .setTitle('seven rabbit server')

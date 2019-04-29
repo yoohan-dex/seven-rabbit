@@ -451,6 +451,11 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/amdefine/download/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-expressions@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/angular-expressions/download/angular-expressions-1.0.0.tgz#3430436e4d8108ff7cf30c6b8b9dbfa7b437d395"
+  integrity sha1-NDBDbk2BCP988wxri52/p7Q305U=
+
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/ansi-align/download/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
@@ -2387,6 +2392,20 @@ dir-glob@^2.0.0:
   dependencies:
     arrify "^1.0.1"
     path-type "^3.0.0"
+
+docxtemplater-image-module@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/docxtemplater-image-module/download/docxtemplater-image-module-3.1.0.tgz#ee949199ce407b89d583176f103930a27dab814d"
+  integrity sha1-7pSRmc5Ae4nVgxdvEDkwon2rgU0=
+  dependencies:
+    xmldom "^0.1.27"
+
+docxtemplater@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.npm.taobao.org/docxtemplater/download/docxtemplater-3.10.1.tgz#80b33b7fc831472d9e6b9acd68206dab97871e69"
+  integrity sha1-gLM7f8gxRy2ea5rNaCBtq5eHHmk=
+  dependencies:
+    xmldom "^0.1.27"
 
 domain-browser@^1.1.1:
   version "1.2.0"
@@ -4417,6 +4436,13 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jszip@2:
+  version "2.6.1"
+  resolved "https://registry.npm.taobao.org/jszip/download/jszip-2.6.1.tgz#b88f3a7b2e67a2a048152982c7a3756d9c4828f0"
+  integrity sha1-uI86ey5noqBIFSmCx6N1bZxIKPA=
+  dependencies:
+    pako "~1.0.2"
+
 keyv@3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/keyv/download/keyv-3.0.0.tgz#44923ba39e68b12a7cec7df6c3268c031f2ef373"
@@ -4942,9 +4968,14 @@ mixin-deep@^1.2.0:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.18.1, moment@^2.22.2:
+moment@^2.18.1:
   version "2.22.2"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.npm.taobao.org/moment/download/moment-2.24.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmoment%2Fdownload%2Fmoment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -5452,6 +5483,11 @@ package-json@^4.0.0:
     registry-auth-token "^3.0.1"
     registry-url "^3.0.3"
     semver "^5.1.0"
+
+pako@~1.0.2:
+  version "1.0.10"
+  resolved "https://registry.npm.taobao.org/pako/download/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
+  integrity sha1-Qyi621CGpCaqkPVBl31JVdpclzI=
 
 pako@~1.0.5:
   version "1.0.6"
@@ -7670,6 +7706,11 @@ xml2js@^0.4.17, xml2js@^0.4.19:
 xmlbuilder@~9.0.1:
   version "9.0.7"
   resolved "http://registry.npm.taobao.org/xmlbuilder/download/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
+
+xmldom@^0.1.27:
+  version "0.1.27"
+  resolved "https://registry.npm.taobao.org/xmldom/download/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
+  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
 
 xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"

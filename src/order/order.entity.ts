@@ -5,11 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne,
-  OneToOne,
   ManyToMany,
-  JoinColumn,
   JoinTable,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Image } from '../common/common.entity';
 import { Content } from './content.entity';
@@ -87,6 +86,10 @@ export class Order {
   })
   @JoinTable()
   issueReason: IssueReason[];
+
+  @OneToOne(type => Image, { eager: true })
+  @JoinColumn()
+  neckTag: Image;
 
   @Column({ nullable: true })
   cost: number;

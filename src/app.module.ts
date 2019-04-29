@@ -14,6 +14,7 @@ import { BuyerShowModule } from './buyer-show/buyer-show.module';
 import { DatumModule } from './datum/datum.module';
 import { WxModule } from './wx/wx.module';
 import { TopicModule } from './topic/topic.module';
+import { GenOrderModule } from './gen-order/gen-order.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TopicModule } from './topic/topic.module';
     DatumModule,
     WxModule,
     TopicModule,
+    GenOrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
