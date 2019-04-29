@@ -136,7 +136,7 @@ export class GenOrderService {
       order.neckTagType === 2
         ? await this.getImageFromWeb(order.neckTag)
         : order.neckTagType === 0
-          ? path.resolve(process.cwd(), 'word/neckTag.jpg')
+          ? path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
           : '';
     const previewUrlsAwait = order.previewImages.map(image =>
       this.getImageFromWeb(image),

@@ -1,11 +1,15 @@
 import { Get, Controller, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('system-manager-486')
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('admin')
-  @Render('bundle')
-  root() {}
+  // @Get('admin')
+  // @Render('bundle')
+  // root() {}
+
+  @Get('super-word-generator')
+  @Render('index')
+  wordGenerator() {}
 }
