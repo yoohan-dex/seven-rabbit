@@ -66,6 +66,7 @@ export class GenOrderService {
       order.material = willSavedOrder.material;
       order.detail = willSavedOrder.detail;
       order.express = willSavedOrder.express;
+      order.seller = willSavedOrder.seller;
       order.isHurry = isHurry;
       if (neckTag) {
         const neckTagImage = await this.imageRepository.findOne(neckTag);
@@ -81,8 +82,8 @@ export class GenOrderService {
       }
       const savedOrder = await this.orderRepository.save(order);
       const filename = await this.parseFileName(savedOrder);
-      const url1 = await this.genWord(await this.parse2Word(savedOrder, 1), 1);
-      const url2 = await this.genWord(await this.parse2Word(savedOrder, 1), 2);
+      const url1 = await this.genWord(await this.parse2Word(savedOrder), 1);
+      const url2 = await this.genWord(await this.parse2Word(savedOrder), 2);
       return {
         url1,
         url2,
@@ -93,7 +94,7 @@ export class GenOrderService {
       throw new BadRequestException(err.message);
     }
   }
-  async parse2Word(order: OrderCommon, step: 1 | 2) {
+  async parse2Word(order: OrderCommon) {
     const size = [
       '90',
       '100',
@@ -162,7 +163,6 @@ export class GenOrderService {
     return wordObj;
   }
   async genWord(obj: any, step: 1 | 2) {
-    console.log('step', step);
     const docName = step === 1 ? '4crop' : '4printing';
     const content = fs.readFileSync(
       path.resolve(process.cwd(), `src/gen-order/${docName}.docx`),

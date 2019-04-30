@@ -66,9 +66,7 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
   }
 
   const clothesMsg = colorIdx.map((idx, i, arr) => {
-    // tslint:disable-next-line:prefer-const
     let color: string;
-    // tslint:disable-next-line:readonly-array
     let sizeArr: string[];
 
     color = colorAndSizeArr[idx];
