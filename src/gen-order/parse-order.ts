@@ -62,7 +62,7 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
     }
   });
   if (colorIdx.length === 0) {
-    throw new Error('尺码格式错误，请重新编辑');
+    throw new Error('尺码没有写颜色哦，请重新编辑，要有色这个关键词');
   }
 
   const clothesMsg = colorIdx.map((idx, i, arr) => {
@@ -224,6 +224,12 @@ export const parseDate = (str: string) => {
   }
 
   return moment(fullTime, 'YYYY-MM-DD').valueOf();
+};
+
+export const parseCompany = (str: string) => {
+  const idx = str.indexOf('（新）' || '（老）');
+  if (idx === -1) return str;
+  return str.slice(0, idx);
 };
 
 export const checkTotal = (
