@@ -113,6 +113,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     };
   });
   return obj as {
+    readonly transactionCode: string;
     readonly productName: string;
     readonly material: string;
     readonly pattern: string;

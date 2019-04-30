@@ -47,6 +47,7 @@ export class GenOrderService {
         : 1000001;
       order.orderNum = orderNum;
       order.orderName = willSavedOrder.orderName;
+      order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
       order.scaleType = willSavedOrder.scaleType;
       order.scaleText = willSavedOrder.scaleText;

@@ -17,6 +17,7 @@ export class OrderCommon {
   @Column() orderNum: number;
   @Column() orderNumYear: number;
   @Column() orderName: string;
+  @Column() transactionCode: string;
   @CreateDateColumn() createTime: Date;
 
   // client
