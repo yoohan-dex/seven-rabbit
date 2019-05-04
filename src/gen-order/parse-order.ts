@@ -130,6 +130,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     readonly remark: string;
     readonly sendTime: string;
     readonly company: string;
+    readonly isHurry: boolean;
   };
 };
 
@@ -227,6 +228,20 @@ export const parseDate = (str: string) => {
   return moment(fullTime, 'YYYY-MM-DD').valueOf();
 };
 
+export const parseSendTime = (str: string) => {
+  let isHurry = false;
+  let date = str;
+  const idx = str.indexOf('（加急）');
+  if (idx !== -1) {
+    isHurry = true;
+    date = date.slice(0, idx);
+  }
+  return {
+    date,
+    isHurry,
+  };
+};
+
 export const parseCompany = (str: string) => {
   const idx = str.indexOf('（新）' || '（老）');
   if (idx === -1) return str;
@@ -261,6 +276,7 @@ export const parseCommon = (item: string) => {
   //   parseInt(afterFormat.price, 10),
   // );
   const pattern = parsePattern(afterFormat.pattern);
+  const sendTime = parseSendTime(afterFormat.sendTime);
   const final = {
     ...afterFormat,
     ...client,
@@ -276,9 +292,10 @@ export const parseCommon = (item: string) => {
     scaleText: pattern.scaleText,
     clientCompany: afterFormat.company,
     price: parseInt(afterFormat.price, 10),
-    sendTime: afterFormat.sendTime,
     clothesMsg,
     total,
+    isHurry: sendTime.isHurry,
+    sendTime: sendTime.date,
     totalNum: parseInt(afterFormat.totalNum, 10),
     servicer: parseServicer(afterFormat.seller),
   };

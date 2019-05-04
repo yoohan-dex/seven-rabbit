@@ -28,7 +28,6 @@ export class GenOrderService {
   ) {}
   async genOrder(
     msg: string,
-    isHurry: boolean,
     previewImageIds: number[],
     neckTagType: number,
     neckTag?: number,
@@ -70,7 +69,7 @@ export class GenOrderService {
       order.detail = willSavedOrder.detail;
       order.express = willSavedOrder.express;
       order.seller = willSavedOrder.seller;
-      order.isHurry = isHurry;
+      order.isHurry = willSavedOrder.isHurry;
       if (neckTag) {
         const neckTagImage = await this.imageRepository.findOne(neckTag);
         order.neckTag = neckTagImage;

@@ -8,7 +8,6 @@ import {
 
 export class GenOrderDto {
   @IsString() readonly message: string;
-  @IsBoolean() readonly isHurry: boolean;
   @IsNumber() readonly neckTagType: number;
   @IsOptional()
   @IsNumber()

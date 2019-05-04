@@ -10,7 +10,6 @@ export class GenOrderController {
   async gen(@Body() msg: GenOrderDto) {
     return await this.genOrderService.genOrder(
       msg.message,
-      msg.isHurry,
       msg.preview,
       msg.neckTagType,
       msg.neckTag,
