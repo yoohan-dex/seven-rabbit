@@ -39,16 +39,17 @@ export class GenOrderService {
         order: { orderNum: 'DESC' },
       });
       order.orderNumYear = new Date().getFullYear();
-      const orderNum = lastOrder
-        ? lastOrder.orderNumYear === order.orderNumYear
-          ? lastOrder.orderNum + 1
-          : 1000001
-        : 1000001;
-      order.orderNum = orderNum;
+      // const orderNum = lastOrder
+      //   ? lastOrder.orderNumYear === order.orderNumYear
+      //     ? lastOrder.orderNum + 1
+      //     : 1000001
+      //   : 1000001;
+      order.orderNum = parseInt(
+        `${order.orderNumYear}${willSavedOrder.transactionCode}`,
+        10,
+      );
       order.orderName = willSavedOrder.orderName;
-      order.transactionCode = `${order.orderNumYear}${
-        willSavedOrder.transactionCode
-      }`;
+      order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
       order.scaleType = willSavedOrder.scaleType;
       order.scaleText = willSavedOrder.scaleText;
@@ -219,7 +220,7 @@ export class GenOrderService {
     });
   }
   parseFileName(order: OrderCommon) {
-    const orderNumber = `${order.orderNum.toString().slice(2)}`;
+    const orderNumber = order.transactionCode;
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
     const orderName = order.orderName;
