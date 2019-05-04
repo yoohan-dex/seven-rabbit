@@ -1,7 +1,7 @@
 export default {
-  common: `0#单号
+  common: `0#效果图
+1#单号
 00005
-1#效果图
 2#产品名称
 白色黑色长T
 2#面料

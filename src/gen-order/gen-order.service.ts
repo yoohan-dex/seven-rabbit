@@ -47,7 +47,9 @@ export class GenOrderService {
         : 1000001;
       order.orderNum = orderNum;
       order.orderName = willSavedOrder.orderName;
-      order.transactionCode = willSavedOrder.transactionCode;
+      order.transactionCode = `${order.orderNumYear}${
+        willSavedOrder.transactionCode
+      }`;
       order.pattern = willSavedOrder.pattern;
       order.scaleType = willSavedOrder.scaleType;
       order.scaleText = willSavedOrder.scaleText;
@@ -81,6 +83,7 @@ export class GenOrderService {
           previewImage.find(image => image.id === id),
         );
       }
+      console.log('order', order);
       const savedOrder = await this.orderRepository.save(order);
       const filename = await this.parseFileName(savedOrder);
       const url1 = await this.genWord(await this.parse2Word(savedOrder), 1);

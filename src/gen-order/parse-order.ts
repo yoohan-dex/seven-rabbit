@@ -238,9 +238,9 @@ export const checkTotal = (
   totalNumber: number,
   price: number,
 ) => {
-  if (total !== totalNumber * price) {
-    throw new Error('请检查一遍金额是否计算错误');
-  }
+  // if (total !== totalNumber * price) {
+  //   throw new Error('请检查一遍金额是否计算错误');
+  // }
 };
 export const parseCommon = (item: string) => {
   if (typeof item !== 'string') {
@@ -255,11 +255,11 @@ export const parseCommon = (item: string) => {
   );
   const client = parseClient(afterFormat.address);
   const total = parseTotal(afterFormat.total);
-  checkTotal(
-    total,
-    parseInt(afterFormat.totalNum, 10),
-    parseInt(afterFormat.price, 10),
-  );
+  // checkTotal(
+  //   total,
+  //   parseInt(afterFormat.totalNum, 10),
+  //   parseInt(afterFormat.price, 10),
+  // );
   const pattern = parsePattern(afterFormat.pattern);
   const final = {
     ...afterFormat,
@@ -282,6 +282,7 @@ export const parseCommon = (item: string) => {
     totalNum: parseInt(afterFormat.totalNum, 10),
     servicer: parseServicer(afterFormat.seller),
   };
+  console.log('finla', final);
   delete final.sizeAndNum;
   delete final.address;
   return final;
