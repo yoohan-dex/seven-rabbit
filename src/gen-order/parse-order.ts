@@ -236,7 +236,11 @@ export const parseSendTime = (str: string) => {
     isHurry = true;
     date = date.slice(0, idx);
   }
+  const monthIdx = date.indexOf('月');
+  const dayIdx = date.indexOf('日');
+  const dayNumber = date.slice(monthIdx + 1, dayIdx);
   return {
+    day: dayNumber,
     date,
     isHurry,
   };
@@ -296,6 +300,7 @@ export const parseCommon = (item: string) => {
     total,
     isHurry: sendTime.isHurry,
     sendTime: sendTime.date,
+    sendDay: sendTime.day,
     totalNum: parseInt(afterFormat.totalNum, 10),
     servicer: parseServicer(afterFormat.seller),
   };
