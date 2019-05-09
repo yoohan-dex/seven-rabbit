@@ -147,9 +147,7 @@ export class GenOrderService {
       clothesMsg,
       childType: order.scaleType === 0 || order.scaleType === 2,
       adultType: order.scaleType === 1 || order.scaleType === 2,
-      hurry: order.isHurry
-        ? `${order.sendTime.slice(monthIdx + 1, order.sendTime.length - 1)}号`
-        : '',
+      hurry: order.isHurry ? `${order.sendDay}号` : '',
       ...sizeType,
       neckTagUrl,
     };
