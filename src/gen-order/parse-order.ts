@@ -306,6 +306,8 @@ export const parseCommon = (item: string) => {
     sendDay: sendTime.day,
     totalNum: parseInt(afterFormat.totalNum, 10),
     servicer: parseServicer(afterFormat.seller),
+    printingRemark:
+      afterFormat.printingRemark === '无' ? '' : afterFormat.printingRemark,
   };
   console.log('finla', final);
   delete final.sizeAndNum;
