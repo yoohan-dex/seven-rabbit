@@ -44,7 +44,7 @@ export class GenOrderService {
       //     ? lastOrder.orderNum + 1
       //     : 1000001
       //   : 1000001;
-      order.orderNum = parseInt(willSavedOrder.transactionCode, 10);
+      order.orderNum = parseInt(willSavedOrder.transactionCode.slice(4), 10);
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
@@ -138,8 +138,8 @@ export class GenOrderService {
       order.neckTagType === 2
         ? await this.getImageFromWeb(order.neckTag)
         : order.neckTagType === 0
-        ? path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
-        : '';
+          ? path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
+          : '';
     const previewUrlsAwait = order.previewImages.map(image =>
       this.getImageFromWeb(image),
     );
@@ -217,11 +217,10 @@ export class GenOrderService {
     });
   }
   parseFileName(order: OrderCommon) {
-    const orderNumber = order.transactionCode.slice(4);
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
     const orderName = order.orderName;
-    const name = `【${orderNumber}】${date}(${
+    const name = `【${order.orderNum}】${date}(${
       order.sendDay
     })（${orderName}）.docx`;
     return name;
