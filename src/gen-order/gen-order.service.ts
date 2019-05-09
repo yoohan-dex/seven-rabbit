@@ -215,7 +215,7 @@ export class GenOrderService {
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
     const orderName = order.orderName;
-    const name = `【${order.transactionCode}】${date}(${
+    const name = `【${order.transactionCode.slice(4)}】${date}(${
       order.sendDay
     })（${orderName}）.docx`;
     return name;
