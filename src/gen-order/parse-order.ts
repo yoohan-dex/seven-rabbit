@@ -309,7 +309,6 @@ export const parseCommon = (item: string) => {
     printingRemark:
       afterFormat.printingRemark === '无' ? '' : afterFormat.printingRemark,
   };
-  console.log('finla', final);
   delete final.sizeAndNum;
   delete final.address;
   return final;
