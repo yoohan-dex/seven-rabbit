@@ -35,14 +35,11 @@ export class GenOrderService {
     try {
       const willSavedOrder = parseCommon(msg);
       const order = new OrderCommon();
-      (order.orderNumYear = parseInt(
+      order.orderNumYear = parseInt(
         willSavedOrder.transactionCode.slice(0, 4),
         10,
-      )),
-        (order.orderNum = parseInt(
-          willSavedOrder.transactionCode.slice(4),
-          10,
-        ));
+      );
+      order.orderNum = parseInt(willSavedOrder.transactionCode.slice(4), 10);
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
