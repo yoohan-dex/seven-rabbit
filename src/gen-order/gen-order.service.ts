@@ -35,16 +35,14 @@ export class GenOrderService {
     try {
       const willSavedOrder = parseCommon(msg);
       const order = new OrderCommon();
-      const lastOrder = await this.orderRepository.findOne({
-        order: { orderNum: 'DESC' },
-      });
-      order.orderNumYear = new Date().getFullYear();
-      // const orderNum = lastOrder
-      //   ? lastOrder.orderNumYear === order.orderNumYear
-      //     ? lastOrder.orderNum + 1
-      //     : 1000001
-      //   : 1000001;
-      order.orderNum = parseInt(willSavedOrder.transactionCode.slice(4), 10);
+      (order.orderNumYear = parseInt(
+        willSavedOrder.transactionCode.slice(0, 4),
+        10,
+      )),
+        (order.orderNum = parseInt(
+          willSavedOrder.transactionCode.slice(4),
+          10,
+        ));
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
@@ -220,7 +218,7 @@ export class GenOrderService {
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
     const orderName = order.orderName;
-    const name = `【${order.orderNum}】${date}(${
+    const name = `【${order.transactionCode}】${date}(${
       order.sendDay
     })（${orderName}）.docx`;
     return name;
