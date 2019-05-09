@@ -79,7 +79,10 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
     }
 
     const sizeAndCount = sizeArr.map(item => {
-      const [size, count] = item.split('=').map(s => s.trim());
+      const [size, count] = item
+        .replace(/＝/g, '=')
+        .split('=')
+        .map(s => s.trim());
 
       total += parseInt(count, 10);
       return {
