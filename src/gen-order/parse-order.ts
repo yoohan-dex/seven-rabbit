@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { chineseType, type } from './type';
 import { ClothesMsg, Rule, Material } from './gen-order.entity';
+import { BadRequestException } from '@nestjs/common';
 
 export const replaceBr = (str: string) => {
   if (!str.includes('<br/>')) {
@@ -18,7 +19,7 @@ export const isNumber = (str: string, errMsg: string) => {
   if (Number.isInteger(int)) {
     return str;
   }
-  throw new Error(errMsg);
+  throw new BadRequestException(errMsg);
 };
 export const breakClass = (str: string) =>
   str
