@@ -21,10 +21,14 @@ export class OrderCommon {
   @CreateDateColumn() createTime: Date;
 
   // client
-  @Column() clientName: string;
-  @Column() clientCompany: string;
-  @Column() clientAddress: string;
-  @Column() clientPhone: string;
+  @Column({ nullable: true })
+  clientName: string;
+  @Column({ nullable: true })
+  clientCompany: string;
+  @Column({ nullable: true })
+  clientAddress: string;
+  @Column({ nullable: true })
+  clientPhone: string;
 
   // custom message
   @Column() material: string;

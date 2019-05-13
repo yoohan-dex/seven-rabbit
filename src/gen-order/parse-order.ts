@@ -157,6 +157,15 @@ export const parseClient = (str: string) => {
     };
   }
   const [clientAddress, clientName, clientPhone] = str.split('，');
+  const errMsg =
+    '以「地址，姓名，手机」这个格式填写地址，你可能填错了。如果不需要地址，填待定';
+  if (!clientAddress) {
+    throw new BadRequestException('缺少地址', errMsg);
+  } else if (!clientName) {
+    throw new BadRequestException('缺少客户姓名', errMsg);
+  } else if (!clientPhone) {
+    throw new BadRequestException('缺少手机号码', errMsg);
+  }
   return {
     clientAddress,
     clientName,
@@ -181,15 +190,25 @@ export const parsePattern = (str: string) => {
   let scaleType = -1;
   let scaleText = '';
   let finalText = str;
+  const exist = str.includes('（') && str.includes('）') && str.includes('码');
+  let reallyExist = false;
+
   const keywords = ['儿童放大一码', '成人放大一码', '全放大一码'];
   keywords.forEach((word, i) => {
     if (str.includes(word)) {
+      reallyExist = true;
       const idx = str.indexOf(word);
       finalText = str.slice(0, idx - 1);
       scaleType = i;
       scaleText = word;
     }
   });
+  if (exist && !reallyExist) {
+    throw new BadRequestException(
+      '放大格式错误',
+      '放大码数的可选项只有「儿童放大一码」，「成人放大一码」，「全放大一码」，必须精确地填写',
+    );
+  }
   return {
     finalText,
     scaleType,
