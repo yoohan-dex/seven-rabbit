@@ -13,7 +13,13 @@ export const removeLineNum = (str: string) => {
   const reg = /\d+#/g;
   return str.replace(reg, '#');
 };
-
+export const isNumber = (str: string, errMsg: string) => {
+  const int = parseInt(str, 10);
+  if (Number.isInteger(int)) {
+    return str;
+  }
+  throw new Error(errMsg);
+};
 export const breakClass = (str: string) =>
   str
     .split('#')
@@ -142,6 +148,13 @@ export const parseTotal = (str: string) => {
 };
 
 export const parseClient = (str: string) => {
+  if (str === '待定') {
+    return {
+      clientAddress: '',
+      clientName: '',
+      clientPhone: '',
+    };
+  }
   const [clientAddress, clientName, clientPhone] = str.split('，');
   return {
     clientAddress,
@@ -284,6 +297,10 @@ export const parseCommon = (item: string) => {
   // );
   const pattern = parsePattern(afterFormat.pattern);
   const sendTime = parseSendTime(afterFormat.sendTime);
+  isNumber(afterFormat.transactionCode, '单号格式错误');
+  isNumber(afterFormat.price, '单价格式错误');
+  isNumber(afterFormat.total, '总数格式错误');
+  isNumber(afterFormat.totalNum, '总价格式错误');
   const final = {
     ...afterFormat,
     ...client,
