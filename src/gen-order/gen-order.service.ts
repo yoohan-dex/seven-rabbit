@@ -64,6 +64,7 @@ export class GenOrderService {
       order.express = willSavedOrder.express;
       order.seller = willSavedOrder.seller;
       order.isHurry = willSavedOrder.isHurry;
+      order.remark = willSavedOrder.remark;
       if (neckTag) {
         const neckTagImage = await this.imageRepository.findOne(neckTag);
         order.neckTag = neckTagImage;
@@ -171,11 +172,11 @@ export class GenOrderService {
     imageModuleOptions.getSize = (img: any, tagValue, tagName) => {
       if (tagName === 'neckTagUrl') {
         if (
-          tagValue === path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
+          tagValue === path.resolve(process.cwd(), 'src/gen-order/empty.png')
         ) {
-          return [120, 120];
+          return [5, 5];
         }
-        return [5, 5];
+        return [120, 120];
       }
       const dimentions: { width: number; height: number } = sizeOf(img) as any;
       return [650, (dimentions.height / dimentions.width) * 650];

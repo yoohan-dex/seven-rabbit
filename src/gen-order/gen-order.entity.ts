@@ -69,6 +69,8 @@ export class OrderCommon {
   @Column() express: string;
   @Column() sendTime: string;
   @Column() sendDay: string;
+
+  @Column() remark: string;
 }
 
 export interface ClothesMsg {

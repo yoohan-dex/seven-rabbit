@@ -229,7 +229,12 @@ const parseServicer = (str: string) => {
     return '010';
   }
 };
-
+export const parseRemark = (str: string) => {
+  if (str === '无') {
+    return '';
+  }
+  return str;
+};
 export const parseDate = (str: string) => {
   const willRemoveIdx = str.indexOf('之前');
   const afterSliceStr =
@@ -326,6 +331,7 @@ export const parseCommon = (item: string) => {
     price: parseInt(afterFormat.price, 10),
     clothesMsg,
     total,
+    remark: parseRemark(afterFormat.remark),
     isHurry: sendTime.isHurry,
     sendTime: sendTime.date,
     sendDay: sendTime.day,
