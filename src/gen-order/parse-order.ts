@@ -16,6 +16,7 @@ export const removeLineNum = (str: string) => {
 };
 export const isNumber = (str: string, errMsg: string) => {
   const int = parseInt(str, 10);
+
   if (Number.isInteger(int)) {
     return str;
   }
@@ -171,19 +172,6 @@ export const parseClient = (str: string) => {
     clientName,
     clientPhone,
   };
-};
-
-export const parseMaterial = (str: string): Material[] => {
-  const ms = str.split('m');
-  ms.shift();
-  return ms.map((m, idx) => {
-    const [primary, addition] = m.replace(/\n/g, '').split('p');
-    return {
-      num: idx + 1,
-      primary: primary || ' ',
-      addition: addition || ' ',
-    };
-  });
 };
 
 export const parsePattern = (str: string) => {

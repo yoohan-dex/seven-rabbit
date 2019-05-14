@@ -128,19 +128,19 @@ export class GenOrderService {
       });
       return colorAndCount;
     });
-    const monthIdx = order.sendTime.indexOf('月');
     const neckTagUrl =
       order.neckTagType === 2
         ? await this.getImageFromWeb(order.neckTag)
         : order.neckTagType === 0
           ? path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
-          : '';
+          : path.resolve(process.cwd(), 'src/gen-order/empty.png');
     const previewUrlsAwait = order.previewImages.map(image =>
       this.getImageFromWeb(image),
     );
     const previewUrls = await Promise.all(previewUrlsAwait);
     const wordObj = {
       ...order,
+      material: this.parseMaterial2XML(order.material, '过洗水'),
       orderNumber: `${order.orderNumYear}${order.orderNum.toString().slice(2)}`,
       createTime: `${order.createTime.getMonth() +
         1}月${order.createTime.getDate()}日`,
@@ -170,7 +170,12 @@ export class GenOrderService {
     };
     imageModuleOptions.getSize = (img: any, tagValue, tagName) => {
       if (tagName === 'neckTagUrl') {
-        return [120, 120];
+        if (
+          tagValue === path.resolve(process.cwd(), 'src/gen-order/neckTag.jpg')
+        ) {
+          return [120, 120];
+        }
+        return [5, 5];
       }
       const dimentions: { width: number; height: number } = sizeOf(img) as any;
       return [650, (dimentions.height / dimentions.width) * 650];
@@ -217,5 +222,15 @@ export class GenOrderService {
       order.sendDay
     })（${orderName}）.docx`;
     return name;
+  }
+  parseMaterial2XML(str: string, highLight: string) {
+    const washIdx = str.indexOf(highLight);
+    if (washIdx !== -1) {
+      const head = str.slice(0, washIdx);
+      const tail = str.slice(washIdx + highLight.length);
+      // tslint:disable-next-line:max-line-length
+      return `<w:p><w:r><w:t>布料：${head}</w:t></w:r><w:r><w:rPr><w:color w:val=\"FF0000\"/></w:rPr><w:t>${highLight}</w:t></w:r><w:r><w:t>${tail}</w:t></w:r></w:p>`;
+    }
+    return `<w:p><w:r><w:t>布料：${str}</w:t></w:r></w:p>`;
   }
 }
