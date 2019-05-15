@@ -10,6 +10,11 @@ export const replaceBr = (str: string) => {
   const reg = /\<br\/\>/g;
   return str.replace(reg, '\n');
 };
+export const replaceComma = (str: string) => {
+  const reg = /,/g;
+  return str.replace(reg, '，');
+};
+
 export const removeLineNum = (str: string) => {
   const reg0 = /\d+#/g;
   const reg1 = /\d+＃/g;
@@ -102,11 +107,19 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
         .replace(/＝/g, '=')
         .split('=')
         .map(s => s.trim());
-
+      const regM = /m/g;
+      const regS = /s/g;
+      const regL = /l/g;
+      const regX = /x/g;
+      const realSize = size
+        .replace(regS, 'S')
+        .replace(regL, 'L')
+        .replace(regM, 'M')
+        .replace(regX, 'X');
       total += parseInt(count, 10);
       return {
         count: parseInt(count, 10),
-        size,
+        size: realSize,
       } as Rule;
     });
 
@@ -315,7 +328,9 @@ export const parseCommon = (item: string) => {
     throw new Error('item have to be a string');
   }
 
-  const afterGen = genClass(breakClass(removeLineNum(replaceBr(item))));
+  const afterGen = genClass(
+    breakClass(removeLineNum(replaceBr(replaceComma(item)))),
+  );
   const afterFormat = formatCategory(afterGen);
   const clothesMsg = parseSizeAndCount(
     afterFormat.sizeAndNum,
