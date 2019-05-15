@@ -11,8 +11,9 @@ export const replaceBr = (str: string) => {
   return str.replace(reg, '\n');
 };
 export const removeLineNum = (str: string) => {
-  const reg = /\d+#/g;
-  return str.replace(reg, '#');
+  const reg0 = /\d+#/g;
+  const reg1 = /\d+＃/g;
+  return str.replace(reg0, '#').replace(reg1, '#');
 };
 export const isNumber = (str: string, errMsg: string) => {
   const int = parseInt(str, 10);
@@ -57,7 +58,7 @@ export const genClass = (classes: ReadonlyArray<string>) => {
 export const parseSizeAndCount = (str: string, totalCount: number) => {
   // tslint:disable-next-line:prefer-const
   let total = 0;
-
+  console.log('str', str);
   const colorAndSizeArr = str
     .split('\n')
     .map(item => item.trim())

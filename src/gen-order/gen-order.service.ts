@@ -88,7 +88,8 @@ export class GenOrderService {
         filename2: `${filename}`,
       };
     } catch (err) {
-      throw new BadRequestException(err.message);
+      console.log('err', err);
+      throw new BadRequestException('订单解析错误', err.message);
     }
   }
   async parse2Word(order: OrderCommon) {
