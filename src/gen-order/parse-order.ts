@@ -13,7 +13,14 @@ export const replaceBr = (str: string) => {
 export const removeLineNum = (str: string) => {
   const reg0 = /\d+#/g;
   const reg1 = /\d+＃/g;
-  return str.replace(reg0, '#').replace(reg1, '#');
+  const reg2 = /#/g;
+  const reg3 = /＃/g;
+
+  return str
+    .replace(reg0, '#')
+    .replace(reg1, '#')
+    .replace(reg2, '#')
+    .replace(reg3, '#');
 };
 export const isNumber = (str: string, errMsg: string) => {
   const int = parseInt(str, 10);
