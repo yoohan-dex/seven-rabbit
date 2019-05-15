@@ -15,12 +15,15 @@ export const removeLineNum = (str: string) => {
   const reg1 = /\d+＃/g;
   const reg2 = /#/g;
   const reg3 = /＃/g;
-
+  const reg4 = /\d+$/g;
+  const reg5 = /$/g;
   return str
-    .replace(reg0, '#')
-    .replace(reg1, '#')
-    .replace(reg2, '#')
-    .replace(reg3, '#');
+    .replace(reg0, '$')
+    .replace(reg1, '$')
+    .replace(reg2, '$')
+    .replace(reg3, '$')
+    .replace(reg4, '$')
+    .replace(reg5, '$');
 };
 export const isNumber = (str: string, errMsg: string) => {
   const int = parseInt(str, 10);
@@ -32,7 +35,7 @@ export const isNumber = (str: string, errMsg: string) => {
 };
 export const breakClass = (str: string) =>
   str
-    .split('#')
+    .split('$')
     .filter(content => content !== '')
     .slice(1);
 // .map(s => s.trim());
