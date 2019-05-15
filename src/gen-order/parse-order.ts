@@ -124,7 +124,7 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
 export const formatCategory = (categories: ReadonlyArray<Category>) => {
   // tslint:disable-next-line:prefer-const
   let obj = {};
-  if (categories.length !== type.length) {
+  if (categories.length < type.length) {
     throw new BadRequestException('订单解析错误', '你可能有些信息漏了写');
   }
   categories.forEach(item => {
