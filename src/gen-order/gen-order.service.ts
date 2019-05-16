@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { parseCommon } from './parse-order';
@@ -34,6 +38,13 @@ export class GenOrderService {
   ) {
     try {
       const willSavedOrder = parseCommon(msg);
+
+      const isExsit = await this.orderRepository.findOne({
+        transactionCode: willSavedOrder.transactionCode,
+      });
+      if (isExsit) {
+        throw new ConflictException('此订单已存在', '请查看单号是否已被使用');
+      }
       const order = new OrderCommon();
       order.orderNumYear = parseInt(
         willSavedOrder.transactionCode.slice(0, 4),
@@ -65,6 +76,9 @@ export class GenOrderService {
       order.seller = willSavedOrder.seller;
       order.isHurry = willSavedOrder.isHurry;
       order.remark = willSavedOrder.remark;
+      order.sender = willSavedOrder.sender;
+      order.senderPhone = willSavedOrder.senderPhone;
+      order.package = willSavedOrder.package;
       if (neckTag) {
         const neckTagImage = await this.imageRepository.findOne(neckTag);
         order.neckTag = neckTagImage;

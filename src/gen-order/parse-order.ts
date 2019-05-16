@@ -73,7 +73,6 @@ export const genClass = (classes: ReadonlyArray<string>) => {
 export const parseSizeAndCount = (str: string, totalCount: number) => {
   // tslint:disable-next-line:prefer-const
   let total = 0;
-  console.log('str', str);
   const colorAndSizeArr = str
     .split('\n')
     .map(item => item.trim())
@@ -205,6 +204,16 @@ export const parseClient = (str: string) => {
     clientName,
     clientPhone,
   };
+};
+
+export const parseAgent = (str: string) => {
+  const agents = ['撕人', '地雷'];
+  if (!agents.includes(str)) return false;
+  const agentMessage = [
+    { sender: '定制有嘻哈' },
+    { sender: '致服团队', senderPhone: '18630402156' },
+  ];
+  return agentMessage[agents.indexOf(str)];
 };
 
 export const parsePattern = (str: string) => {
@@ -349,6 +358,8 @@ export const parseCommon = (item: string) => {
   isNumber(afterFormat.price, '单价格式错误');
   isNumber(afterFormat.total, '总数格式错误');
   isNumber(afterFormat.totalNum, '总价格式错误');
+  const agent = parseAgent(afterFormat.seller);
+
   const final = {
     ...afterFormat,
     ...client,
@@ -366,6 +377,9 @@ export const parseCommon = (item: string) => {
     price: parseInt(afterFormat.price, 10),
     clothesMsg,
     total,
+    sender: agent && agent.sender,
+    senderPhone: agent && agent.senderPhone,
+    package: agent && '空白透明包装袋',
     remark: parseRemark(afterFormat.remark),
     isHurry: sendTime.isHurry,
     sendTime: sendTime.date,

@@ -13,11 +13,11 @@ import { Image } from '../common/common.entity';
 @Entity()
 export class OrderCommon {
   @PrimaryGeneratedColumn() id: number;
+  @Column() transactionCode: string;
   // order id
   @Column() orderNum: number;
   @Column() orderNumYear: number;
   @Column() orderName: string;
-  @Column() transactionCode: string;
   @CreateDateColumn() createTime: Date;
 
   // client
@@ -33,6 +33,10 @@ export class OrderCommon {
   // custom message
   @Column() material: string;
   @Column() printing: string;
+  @Column({
+    default: '七兔包装袋',
+  })
+  package: string;
   @Column() printingRemark: string;
   // ! 0 儿童放大一码 1 成人放大一码 2 全放大一码
   @Column() pattern: string;
@@ -55,6 +59,14 @@ export class OrderCommon {
   // ! 黑兔 白兔 阿叉 -> yuanyuan
   @Column() servicer: string;
   @Column() seller: string;
+  @Column({
+    default: '七兔',
+  })
+  sender: string;
+  @Column({
+    default: '13420194742',
+  })
+  senderPhone: string;
 
   // price
   @Column() totalNum: number;
