@@ -102,6 +102,18 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
     }
 
     const sizeAndCount = sizeArr.map(item => {
+      const transferSize = (size: string) => {
+        let xs = 0;
+        for (const letter of size) {
+          if (letter === 'X') {
+            xs += 1;
+          }
+        }
+        if (xs < 2) {
+          return size;
+        }
+        return `${xs}XL`;
+      };
       const [size, count] = item
         .replace(/＝/g, '=')
         .split('=')
@@ -116,10 +128,12 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
         .replace(regM, 'M')
         .replace(regX, 'X');
       total += parseInt(count, 10);
-      return {
+      const s = {
         count: parseInt(count, 10),
-        size: realSize,
+        size: transferSize(realSize),
       } as Rule;
+      console.log('s', s);
+      return s;
     });
 
     return {
