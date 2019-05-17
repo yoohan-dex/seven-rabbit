@@ -64,6 +64,7 @@ export class GenOrderService {
       order.sendTime = willSavedOrder.sendTime;
       order.sendDay = willSavedOrder.sendDay;
       order.servicer = willSavedOrder.servicer;
+      order.service = willSavedOrder.service;
       order.totalNum = willSavedOrder.totalNum;
       order.clothesMsg = willSavedOrder.clothesMsg;
       order.clientName = willSavedOrder.clientName;

@@ -58,6 +58,7 @@ export class OrderCommon {
   // ! 楼主 小白 坤布 番茄 艺洋 002  -> 010
   // ! 黑兔 白兔 阿叉 -> yuanyuan
   @Column() servicer: string;
+  @Column() service: string;
   @Column() seller: string;
   @Column({
     default: '七兔',

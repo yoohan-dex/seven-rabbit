@@ -283,10 +283,12 @@ const parseOrderName = (
 };
 
 const parseServicer = (str: string) => {
+  const reg = '－';
+  const theSeller = str.replace(reg, '-').split('-')[0];
   const seller005 = ['白兔', '黑兔', '阿叉'];
   let is005 = false;
   seller005.forEach(seller => {
-    if (str.includes(seller)) {
+    if (theSeller.includes(seller)) {
       is005 = true;
     }
   });
@@ -295,6 +297,10 @@ const parseServicer = (str: string) => {
   } else {
     return '010';
   }
+};
+const parseServerce = (str: string) => {
+  const reg = '－';
+  return str.replace(reg, '-').split('-')[1];
 };
 export const parseRemark = (str: string) => {
   if (str === '无') {
@@ -468,6 +474,7 @@ export const parseCommon = (item: string) => {
     sendDay: sendTime.day,
     totalNum: parseInt(afterFormat.totalNum, 10),
     servicer: parseServicer(afterFormat.seller),
+    service: parseServerce(afterFormat.seller),
     printingRemark:
       afterFormat.printingRemark === '无' ? '' : afterFormat.printingRemark,
   };
