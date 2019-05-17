@@ -76,9 +76,10 @@ export class GenOrderService {
       order.seller = willSavedOrder.seller;
       order.isHurry = willSavedOrder.isHurry;
       order.remark = willSavedOrder.remark;
-      order.sender = willSavedOrder.sender;
-      order.senderPhone = willSavedOrder.senderPhone;
-      order.package = willSavedOrder.package;
+      if (willSavedOrder.sender) order.sender = willSavedOrder.sender;
+      if (willSavedOrder.senderPhone)
+        order.senderPhone = willSavedOrder.senderPhone;
+      if (willSavedOrder.package) order.package = willSavedOrder.package;
       if (neckTag) {
         const neckTagImage = await this.imageRepository.findOne(neckTag);
         order.neckTag = neckTagImage;

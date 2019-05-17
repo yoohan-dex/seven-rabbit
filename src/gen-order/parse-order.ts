@@ -70,6 +70,18 @@ export const genClass = (classes: ReadonlyArray<string>) => {
   );
 };
 
+export const removeNumberFromSize = (str: string) => {
+  if (str.length > 4) {
+    const number = parseInt(str, 10);
+    if (number > 150) {
+      const letters = str.replace(`${number}`, '');
+      return letters;
+    }
+    return str;
+  }
+  return str;
+};
+
 export const parseSizeAndCount = (str: string, totalCount: number) => {
   // tslint:disable-next-line:prefer-const
   let total = 0;
@@ -130,9 +142,8 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
       total += parseInt(count, 10);
       const s = {
         count: parseInt(count, 10),
-        size: transferSize(realSize),
+        size: transferSize(removeNumberFromSize(realSize)),
       } as Rule;
-      console.log('s', s);
       return s;
     });
 
@@ -314,6 +325,10 @@ export const parseDate = (str: string) => {
 };
 
 export const parseSendTime = (str: string) => {
+  const error = new BadRequestException(
+    '下单信息解析错误',
+    '请检查发货日期格式，请以「XX月XX日」或「XX.XX」的日期格式填写',
+  );
   let isHurry = false;
   let date = str;
   const idx = str.indexOf('（加急）');
@@ -321,12 +336,65 @@ export const parseSendTime = (str: string) => {
     isHurry = true;
     date = date.slice(0, idx);
   }
+  const dotIdx = date.indexOf('.');
+  if (dotIdx !== -1) {
+    let month = date.slice(0, dotIdx);
+    let day = date.slice(dotIdx + 1);
+    if (month.length > 1) {
+      month = month.slice(month.length - 2, month.length);
+    }
+    if (Number.isNaN(parseInt(month, 10))) {
+      month = month.slice(month.length - 1, month.length);
+      if (Number.isNaN(parseInt(month, 10))) {
+        throw error;
+      }
+    }
+
+    if (day.length > 1) {
+      day = day.slice(0, 2);
+    }
+    if (Number.isNaN(parseInt(day, 10))) {
+      throw error;
+    }
+    return {
+      date: `${month}月${day}日`,
+      day,
+      isHurry,
+    };
+  }
+
   const monthIdx = date.indexOf('月');
-  const dayIdx = date.indexOf('日');
-  const dayNumber = date.slice(monthIdx + 1, dayIdx);
+  let dayNumber = date.slice(monthIdx + 1, monthIdx + 3);
+
+  let monthNumber = date.slice(0, monthIdx);
+  console.log('month', monthNumber);
+
+  if (monthNumber.length > 1) {
+    monthNumber = monthNumber.slice(monthNumber.length - 2, monthNumber.length);
+    console.log('month', monthNumber);
+  }
+  if (Number.isNaN(parseInt(monthNumber, 10))) {
+    monthNumber = monthNumber.slice(monthNumber.length - 1, monthNumber.length);
+    console.log('month', monthNumber);
+    if (Number.isNaN(parseInt(monthNumber, 10))) {
+      console.log('month', monthNumber);
+
+      throw error;
+    }
+  }
+  if (dayNumber.length > 1) {
+    console.log('day', dayNumber);
+
+    dayNumber = dayNumber.slice(0, 2);
+    console.log('day', dayNumber);
+  }
+  if (Number.isNaN(parseInt(dayNumber, 10))) {
+    console.log('day', dayNumber);
+    throw error;
+  }
   return {
     day: dayNumber,
-    date,
+    date: `${monthNumber}月${dayNumber}日`,
     isHurry,
   };
 };
