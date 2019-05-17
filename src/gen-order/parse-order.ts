@@ -193,7 +193,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     readonly price: string;
     readonly total: string;
     readonly address: string;
-    readonly seller: string;
+    seller: string;
     readonly express: string;
     readonly remark: string;
     readonly sendTime: string;
@@ -373,29 +373,20 @@ export const parseSendTime = (str: string) => {
   let dayNumber = date.slice(monthIdx + 1, monthIdx + 3);
 
   let monthNumber = date.slice(0, monthIdx);
-  console.log('month', monthNumber);
 
   if (monthNumber.length > 1) {
     monthNumber = monthNumber.slice(monthNumber.length - 2, monthNumber.length);
-    console.log('month', monthNumber);
   }
   if (Number.isNaN(parseInt(monthNumber, 10))) {
     monthNumber = monthNumber.slice(monthNumber.length - 1, monthNumber.length);
-    console.log('month', monthNumber);
     if (Number.isNaN(parseInt(monthNumber, 10))) {
-      console.log('month', monthNumber);
-
       throw error;
     }
   }
   if (dayNumber.length > 1) {
-    console.log('day', dayNumber);
-
     dayNumber = dayNumber.slice(0, 2);
-    console.log('day', dayNumber);
   }
   if (Number.isNaN(parseInt(dayNumber, 10))) {
-    console.log('day', dayNumber);
     throw error;
   }
   return {
@@ -447,6 +438,9 @@ export const parseCommon = (item: string) => {
   isNumber(afterFormat.total, '总数格式错误');
   isNumber(afterFormat.totalNum, '总价格式错误');
   const agent = parseAgent(afterFormat.seller);
+  if (agent) {
+    afterFormat.seller = `${afterFormat.seller}-006`;
+  }
 
   const final = {
     ...afterFormat,
