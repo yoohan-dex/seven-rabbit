@@ -71,7 +71,7 @@ export const genClass = (classes: ReadonlyArray<string>) => {
 };
 
 export const removeNumberFromSize = (str: string) => {
-  if (str.length > 4) {
+  if (str.length >= 4) {
     const number = parseInt(str, 10);
     if (number > 150) {
       const letters = str.replace(`${number}`, '');
