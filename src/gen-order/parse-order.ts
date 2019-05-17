@@ -248,7 +248,11 @@ export const parsePattern = (str: string) => {
   let scaleType = -1;
   let scaleText = '';
   let finalText = str;
-  const exist = str.includes('（') && str.includes('）') && str.includes('码');
+  const exist =
+    str.includes('（') &&
+    str.includes('）') &&
+    str.includes('码') &&
+    str.includes('放大');
   let reallyExist = false;
 
   const keywords = ['儿童放大一码', '成人放大一码', '全放大一码'];
