@@ -299,8 +299,13 @@ const parseServicer = (str: string) => {
   }
 };
 const parseServerce = (str: string) => {
+  const agent = parseAgent(str);
+  if (agent) {
+    return '006';
+  }
   const reg = '－';
-  return str.replace(reg, '-').split('-')[1];
+  const service = str.replace(reg, '-').split('-')[1];
+  return service;
 };
 export const parseRemark = (str: string) => {
   if (str === '无') {
@@ -441,7 +446,7 @@ export const parseCommon = (item: string) => {
   if (agent) {
     afterFormat.seller = `${afterFormat.seller}-006`;
   }
-
+  console.log('serlleer', afterFormat.seller);
   const final = {
     ...afterFormat,
     ...client,
