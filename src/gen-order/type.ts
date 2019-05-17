@@ -1,5 +1,4 @@
 export const type: ReadonlyArray<any> = [
-  'pi',
   'transactionCode',
   'productName',
   'material',
@@ -19,7 +18,6 @@ export const type: ReadonlyArray<any> = [
   'company',
 ];
 export const chineseType: ReadonlyArray<any> = [
-  '效果图',
   '单号',
   '产品名称',
   '面料',

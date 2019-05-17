@@ -18,17 +18,19 @@ export const replaceComma = (str: string) => {
 export const removeLineNum = (str: string) => {
   const reg0 = /\d+#/g;
   const reg1 = /\d+＃/g;
-  const reg2 = /#/g;
+  const reg2 = /\d+\$/g;
+  const reg4 = /#/g;
   const reg3 = /＃/g;
-  const reg4 = /\d+$/g;
-  const reg5 = /$/g;
-  return str
+  const reg5 = /\$/g;
+
+  const removed = str
     .replace(reg0, '$')
     .replace(reg1, '$')
     .replace(reg2, '$')
     .replace(reg3, '$')
     .replace(reg4, '$')
     .replace(reg5, '$');
+  return removed;
 };
 export const isNumber = (str: string, errMsg: string) => {
   const int = parseInt(str, 10);
@@ -38,12 +40,11 @@ export const isNumber = (str: string, errMsg: string) => {
   }
   throw new BadRequestException(errMsg);
 };
-export const breakClass = (str: string) =>
-  str
-    .split('$')
-    .filter(content => content !== '')
-    .slice(1);
-// .map(s => s.trim());
+export const breakClass = (str: string) => {
+  const s1 = str.split('$').filter(content => content !== '');
+  return s1.slice(1);
+  // .map(s => s.trim());
+};
 
 interface Category {
   readonly category: string;
@@ -193,7 +194,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     readonly price: string;
     readonly total: string;
     readonly address: string;
-    seller: string;
+    readonly seller: string;
     readonly express: string;
     readonly remark: string;
     readonly sendTime: string;
@@ -233,6 +234,8 @@ export const parseClient = (str: string) => {
 
 export const parseAgent = (str: string) => {
   const agents = ['撕人', '地雷'];
+  const s1 = encodeURIComponent(agents[0]);
+  const s2 = encodeURIComponent(str.trim());
   if (!agents.includes(str)) return false;
   const agentMessage = [
     { sender: '定制有嘻哈' },
@@ -443,10 +446,6 @@ export const parseCommon = (item: string) => {
   isNumber(afterFormat.total, '总数格式错误');
   isNumber(afterFormat.totalNum, '总价格式错误');
   const agent = parseAgent(afterFormat.seller);
-  if (agent) {
-    afterFormat.seller = `${afterFormat.seller}-006`;
-  }
-  console.log('serlleer', afterFormat.seller);
   const final = {
     ...afterFormat,
     ...client,
