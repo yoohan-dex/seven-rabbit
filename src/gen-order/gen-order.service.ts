@@ -49,11 +49,9 @@ export class GenOrderService {
       const rightColor = curr.clothesMsg.find(msg => {
         return msg.color === color;
       });
-      rightColor.rules.forEach(d => d.)
 
       return [...pre, rightColor.rules] as Rule[];
     }, []);
-
 
     const count = {};
     rightColorMsg.forEach(m => {
