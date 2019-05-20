@@ -30,6 +30,31 @@ export class GenOrderService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
   ) {}
+
+  async getInfo(material: string, color: string) {
+    const order = await this.orderRepository.find({
+      where: {
+        material: `%${material}%`,
+      },
+    });
+
+    const rightColorMsg = order.reduce((pre, curr) => {
+      if (
+        !curr.clothesMsg.some(msg => {
+          return msg.color === color;
+        })
+      ) {
+        return pre;
+      }
+      const rightColor = curr.clothesMsg.find(msg => {
+        return msg.color === color;
+      });
+
+      return [...pre, rightColor.rules];
+    }, []);
+
+    return rightColorMsg;
+  }
   async genOrder(
     msg: string,
     previewImageIds: number[],

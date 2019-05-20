@@ -23,4 +23,9 @@ export class GenOrderController {
   ) {
     res.download(url, filename);
   }
+
+  @Get('information')
+  async getInformation(@Query() query: { material: string; color: string }) {
+    return await this.genOrderService.getInfo(query.material, query.color);
+  }
 }

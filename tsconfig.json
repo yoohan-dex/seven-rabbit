@@ -3,6 +3,7 @@
     "module": "commonjs",
     "declaration": false,
     "noImplicitAny": false,
+    "allowJs": true,
     "removeComments": true,
     "noLib": false,
     "lib": ["es2016"],
@@ -11,7 +12,6 @@
     "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
-    "allowJs": true,
     "outDir": "./dist",
     "baseUrl": "./src"
   },

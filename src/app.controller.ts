@@ -10,6 +10,6 @@ export class AppController {
   // root() {}
 
   @Get('super-word-generator')
-  @Render('index')
+  @Render('bundle')
   wordGenerator() {}
 }
