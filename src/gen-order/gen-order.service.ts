@@ -36,9 +36,11 @@ export class GenOrderService {
       where: {
         material: Like(`%${material}%`),
       },
+      order: {
+        transactionCode: 'DESC',
+      },
     });
-
-    const rightColorMsg: Rule[] = order.reduce((pre, curr) => {
+    const rightColorMsg: Rule[][] = order.reduce((pre, curr) => {
       if (
         !curr.clothesMsg.some(msg => {
           return msg.color === color;
@@ -52,14 +54,15 @@ export class GenOrderService {
 
       return [...pre, rightColor.rules] as Rule[];
     }, []);
-
     const count = {};
     rightColorMsg.forEach(m => {
-      if (count[m.size]) {
-        count[m.size] = count[m.size] += m.count;
-      } else {
-        count[m.size] = m.count;
-      }
+      m.forEach(r => {
+        if (count[r.size]) {
+          count[r.size] = count[r.size] += r.count;
+        } else {
+          count[r.size] = r.count;
+        }
+      });
     });
     return count;
   }
