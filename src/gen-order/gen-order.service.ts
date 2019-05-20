@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -17,7 +17,7 @@ import * as path from 'path';
 
 import * as imageSize from 'image-size';
 
-import { OrderCommon } from './gen-order.entity';
+import { OrderCommon, Rule } from './gen-order.entity';
 import { Image } from '../common/common.entity';
 
 const sizeOf = imageSize;
@@ -34,11 +34,11 @@ export class GenOrderService {
   async getInfo(material: string, color: string) {
     const order = await this.orderRepository.find({
       where: {
-        material: `%${material}%`,
+        material: Like(`%${material}%`),
       },
     });
 
-    const rightColorMsg = order.reduce((pre, curr) => {
+    const rightColorMsg: Rule[] = order.reduce((pre, curr) => {
       if (
         !curr.clothesMsg.some(msg => {
           return msg.color === color;
@@ -49,11 +49,21 @@ export class GenOrderService {
       const rightColor = curr.clothesMsg.find(msg => {
         return msg.color === color;
       });
+      rightColor.rules.forEach(d => d.)
 
-      return [...pre, rightColor.rules];
+      return [...pre, rightColor.rules] as Rule[];
     }, []);
 
-    return rightColorMsg;
+
+    const count = {};
+    rightColorMsg.forEach(m => {
+      if (count[m.size]) {
+        count[m.size] = count[m.size] += m.count;
+      } else {
+        count[m.size] = m.count;
+      }
+    });
+    return count;
   }
   async genOrder(
     msg: string,
