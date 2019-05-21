@@ -53,7 +53,6 @@ export class GenOrderService {
         transactionCode: 'DESC',
       },
     });
-    console.log('order', order);
     const rightColorMsg: Rule[][] = order.reduce((pre, curr) => {
       if (
         !curr.clothesMsg.some(msg => {
