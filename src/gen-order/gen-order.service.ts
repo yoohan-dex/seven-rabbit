@@ -34,15 +34,14 @@ export class GenOrderService {
   async getInfo(material: string[], color: string) {
     const materialWhereString = material.reduce((pre, mtr, idx) => {
       if (idx === 0) {
-        return `material like %${mtr}%`;
+        return `material like '%${mtr}%'`;
       }
-      return `${pre} or material like %${mtr}%`;
+      return `${pre} or material like '%${mtr}%'`;
     }, '');
     const order = await this.orderRepository.find({
-      where: {
-        material: Raw(materialWhereString),
-        // transactionCode: MoreThan(201900638),
-      },
+      where: Raw(materialWhereString),
+      // transactionCode: MoreThan(201900638),
+
       order: {
         transactionCode: 'DESC',
       },
