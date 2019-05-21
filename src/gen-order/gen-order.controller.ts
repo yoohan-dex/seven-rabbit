@@ -25,7 +25,16 @@ export class GenOrderController {
   }
 
   @Get('information')
-  async getInformation(@Query() query: { material: string[]; color: string }) {
-    return await this.genOrderService.getInfo(query.material, query.color);
+  async getInformation(@Query()
+  query: {
+    material: string[];
+    color: string;
+    pattern: string[];
+  }) {
+    return await this.genOrderService.getInfo(
+      query.material,
+      query.pattern,
+      query.color,
+    );
   }
 }

@@ -31,15 +31,22 @@ export class GenOrderService {
     private readonly imageRepository: Repository<Image>,
   ) {}
 
-  async getInfo(material: string[], color: string) {
+  async getInfo(material: string[], pattern: string[], color: string) {
     const materialWhereString = material.reduce((pre, mtr, idx) => {
       if (idx === 0) {
         return `material like '%${mtr}%'`;
       }
       return `${pre} or material like '%${mtr}%'`;
     }, '');
+    const patternWhereString = pattern.reduce((pre, mtr, idx) => {
+      if (idx === 0) {
+        return `pattern like '%${mtr}%'`;
+      }
+      return `${pre} or pattern like '%${mtr}%'`;
+    }, '');
     const order = await this.orderRepository.find({
-      where: Raw(materialWhereString),
+      where: `(${materialWhereString}) AND (${patternWhereString})`,
+
       // transactionCode: MoreThan(201900638),
 
       order: {
