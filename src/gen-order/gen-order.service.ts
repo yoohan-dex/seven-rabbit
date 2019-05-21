@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, MoreThan, Raw } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -31,10 +31,17 @@ export class GenOrderService {
     private readonly imageRepository: Repository<Image>,
   ) {}
 
-  async getInfo(material: string, color: string) {
+  async getInfo(material: string[], color: string) {
+    const materialWhereString = material.reduce((pre, mtr, idx) => {
+      if (idx === 0) {
+        return `material like %${mtr}%`;
+      }
+      return `${pre} or material like %${mtr}%`;
+    }, '');
     const order = await this.orderRepository.find({
       where: {
-        material: Like(`%${material}%`),
+        material: Raw(materialWhereString),
+        // transactionCode: MoreThan(201900638),
       },
       order: {
         transactionCode: 'DESC',
