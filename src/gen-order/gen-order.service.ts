@@ -56,7 +56,9 @@ export class GenOrderService {
     const rightColorMsg: Rule[][] = order.reduce((pre, curr) => {
       if (
         !curr.clothesMsg.some(msg => {
-          return msg.color === color;
+          const c = color.slice(0, color.length - 1);
+          const mc = msg.color.slice(0, msg.color.length - 1);
+          return mc.includes(c);
         })
       ) {
         return pre;
