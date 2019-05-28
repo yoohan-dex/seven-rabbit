@@ -12,6 +12,7 @@ export class GenOrderController {
       msg.message,
       msg.preview,
       msg.neckTagType,
+      msg.overWrite,
       msg.neckTag,
     );
   }

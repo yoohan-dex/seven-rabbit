@@ -12,5 +12,8 @@ export class GenOrderDto {
   @IsOptional()
   @IsNumber()
   readonly neckTag: number;
+  @IsOptional()
+  @IsBoolean()
+  readonly overWrite: boolean;
   @IsArray() readonly preview: number[];
 }

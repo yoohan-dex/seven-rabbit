@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, MoreThan, Raw } from 'typeorm';
+import { Repository } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -83,6 +83,7 @@ export class GenOrderService {
     msg: string,
     previewImageIds: number[],
     neckTagType: number,
+    overWrite: boolean,
     neckTag?: number,
   ) {
     try {
@@ -91,8 +92,14 @@ export class GenOrderService {
       const isExsit = await this.orderRepository.findOne({
         transactionCode: willSavedOrder.transactionCode,
       });
-      if (isExsit) {
-        throw new ConflictException('此订单已存在', '请查看单号是否已被使用');
+      if (overWrite && isExsit) {
+        await this.orderRepository.delete(isExsit.id);
+      }
+      if (!overWrite && isExsit) {
+        throw new ConflictException(
+          '此订单已存在',
+          `请查看单号「${willSavedOrder.transactionCode}」是否已被使用`,
+        );
       }
       const order = new OrderCommon();
       order.orderNumYear = parseInt(

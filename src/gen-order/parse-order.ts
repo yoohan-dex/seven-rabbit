@@ -16,23 +16,15 @@ export const replaceComma = (str: string) => {
 };
 
 export const removeLineNum = (str: string) => {
-  const reg0 = /\d+#/g;
-  const reg1 = /\d+＃/g;
   const reg2 = /\d+\$/g;
   const reg7 = /\d+＄/g;
 
-  const reg4 = /#/g;
-  const reg3 = /＃/g;
   const reg5 = /\$/g;
   const reg6 = /＄/g;
 
   const removed = str
-    .replace(reg0, '$')
-    .replace(reg1, '$')
     .replace(reg2, '$')
     .replace(reg7, '$')
-    .replace(reg3, '$')
-    .replace(reg4, '$')
     .replace(reg5, '$')
     .replace(reg6, '$');
   return removed;
