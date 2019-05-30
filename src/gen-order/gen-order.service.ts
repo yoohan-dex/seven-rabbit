@@ -31,7 +31,12 @@ export class GenOrderService {
     private readonly imageRepository: Repository<Image>,
   ) {}
 
-  async getInfo(material: string[], pattern: string[], color: string) {
+  async getInfo(
+    material: string[],
+    pattern: string[],
+    color: string,
+    except: string[],
+  ) {
     const materialWhereString = material.reduce((pre, mtr, idx) => {
       if (idx === 0) {
         return `material like '%${mtr}%'`;
@@ -46,27 +51,36 @@ export class GenOrderService {
     }, '');
     const order = await this.orderRepository.find({
       where: `(${materialWhereString}) AND (${patternWhereString})`,
-
-      // transactionCode: MoreThan(201900638),
-
       order: {
         transactionCode: 'DESC',
       },
     });
-    const rightColorMsg: Rule[][] = order.reduce((pre, curr) => {
-      if (
-        !curr.clothesMsg.some(msg => {
-          return msg.color.includes(color);
-        })
-      ) {
-        return pre;
-      }
-      const rightColor = curr.clothesMsg.find(msg => {
-        return msg.color.includes(color);
+    const filter = (e: string[]) => (o: OrderCommon) => {
+      if (!e || e.length < 1) return true;
+      let ok = true;
+      e.forEach(v => {
+        if (o.material.includes(v)) {
+          ok = false;
+        }
       });
+      return ok;
+    };
+    const rightColorMsg: Rule[][] = order
+      .filter(filter(except))
+      .reduce((pre, curr) => {
+        if (
+          !curr.clothesMsg.some(msg => {
+            return msg.color.includes(color);
+          })
+        ) {
+          return pre;
+        }
+        const rightColor = curr.clothesMsg.find(msg => {
+          return msg.color.includes(color);
+        });
 
-      return [...pre, rightColor.rules] as Rule[];
-    }, []);
+        return [...pre, rightColor.rules] as Rule[];
+      }, []);
     const count = {};
     rightColorMsg.forEach(m => {
       m.forEach(r => {

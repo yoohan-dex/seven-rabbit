@@ -31,11 +31,13 @@ export class GenOrderController {
     material: string[];
     color: string;
     pattern: string[];
+    except: string[];
   }) {
     return await this.genOrderService.getInfo(
       query.material,
       query.pattern,
       query.color,
+      query.except,
     );
   }
 }
