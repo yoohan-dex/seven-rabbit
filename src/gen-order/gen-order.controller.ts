@@ -24,7 +24,10 @@ export class GenOrderController {
   ) {
     res.download(url, filename);
   }
-
+  @Get('info-by-order')
+  async getInfoByOrder(@Query() query: { orders: string[]; color: string }) {
+    return await this.genOrderService.getInfoByOrder(query.orders, query.color);
+  }
   @Get('information')
   async getInformation(@Query()
   query: {

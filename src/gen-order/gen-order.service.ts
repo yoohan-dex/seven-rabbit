@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -20,6 +20,13 @@ import * as imageSize from 'image-size';
 import { OrderCommon, Rule } from './gen-order.entity';
 import { Image } from '../common/common.entity';
 
+import * as mammoth from 'mammoth';
+
+const p = path.resolve(process.cwd(), `src/gen-order/output.docx`);
+mammoth.convertToHtml({ path: p }).then(res => {
+  const r = res.value;
+  console.log('res', r);
+});
 const sizeOf = imageSize;
 
 @Injectable()
@@ -30,6 +37,39 @@ export class GenOrderService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
   ) {}
+
+  async getInfoByOrder(orders: string[], color: string) {
+    const order = await this.orderRepository.find({
+      transactionCode: In(orders),
+    });
+    const rightColorMsg: Rule[][] = order.reduce((pre, curr) => {
+      if (
+        !curr.clothesMsg.some(msg => {
+          return msg.color.includes(color);
+        })
+      ) {
+        return pre;
+      }
+      const rightColor = curr.clothesMsg.find(msg => {
+        return msg.color.includes(color);
+      });
+
+      return [...pre, rightColor.rules] as Rule[];
+    }, []);
+    const count = {};
+    let total = 0;
+    rightColorMsg.forEach(m => {
+      m.forEach(r => {
+        total += r.count;
+        if (count[r.size]) {
+          count[r.size] = count[r.size] += r.count;
+        } else {
+          count[r.size] = r.count;
+        }
+      });
+    });
+    return { count, total };
+  }
 
   async getInfo(
     material: string[],
@@ -65,6 +105,7 @@ export class GenOrderService {
       });
       return ok;
     };
+
     const rightColorMsg: Rule[][] = order
       .filter(filter(except))
       .reduce((pre, curr) => {
