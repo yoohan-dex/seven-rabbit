@@ -265,7 +265,7 @@ export class GenOrderService {
       }) as any;
       colorAndCount.color = msg.color;
       // colorAndCount.total = msg.count;
-      const kk = order.keep.find(k => k.color === msg.color);
+      const kk = order.keep && order.keep.find(k => k.color === msg.color);
       if (kk) {
         colorAndCount.total = this.parseCount2XML(
           `${msg.count}`,
