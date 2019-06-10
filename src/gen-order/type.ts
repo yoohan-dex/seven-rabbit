@@ -16,6 +16,7 @@ export const type: ReadonlyArray<any> = [
   'remark',
   'sendTime',
   'company',
+  'keep',
 ];
 export const chineseType: ReadonlyArray<any> = [
   '单号',
@@ -35,4 +36,5 @@ export const chineseType: ReadonlyArray<any> = [
   '特别备注',
   '发货日期',
   '机构',
+  '留版',
 ];

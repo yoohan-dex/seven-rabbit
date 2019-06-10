@@ -44,6 +44,7 @@ export class OrderCommon {
   @Column() scaleText: string;
   @Column() detail: string;
   @Column('json') clothesMsg: ClothesMsg[];
+  @Column('json') keep: ClothesMsg[];
 
   // ! 0 七兔领标 1 空白领标 2 客户领标
   @Column({ default: 0 })

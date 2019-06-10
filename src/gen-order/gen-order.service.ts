@@ -23,10 +23,10 @@ import { Image } from '../common/common.entity';
 import * as mammoth from 'mammoth';
 
 const p = path.resolve(process.cwd(), `src/gen-order/output.docx`);
-mammoth.convertToHtml({ path: p }).then(res => {
-  const r = res.value;
-  console.log('res', r);
-});
+// mammoth.convertToHtml({ path: p }).then(res => {
+//   const r = res.value;
+//   console.log('res', r);
+// });
 const sizeOf = imageSize;
 
 @Injectable()
@@ -188,6 +188,7 @@ export class GenOrderService {
       order.seller = willSavedOrder.seller;
       order.isHurry = willSavedOrder.isHurry;
       order.remark = willSavedOrder.remark;
+      order.keep = willSavedOrder.keep;
       if (willSavedOrder.sender) order.sender = willSavedOrder.sender;
       if (willSavedOrder.senderPhone)
         order.senderPhone = willSavedOrder.senderPhone;
@@ -208,14 +209,25 @@ export class GenOrderService {
       const filename = await this.parseFileName(savedOrder);
       const url1 = await this.genWord(await this.parse2Word(savedOrder), 1);
       const url2 = await this.genWord(await this.parse2Word(savedOrder), 2);
-      return {
+      let url3: any;
+      if (savedOrder.keep) {
+        url3 = await this.genWord(await this.parse2Word(savedOrder), 3);
+      }
+      const r = {
         url1,
         url2,
         filename1: `【裁片】${filename}`,
         filename2: `${filename}`,
       };
+      if (url3) {
+        return {
+          ...r,
+          url3,
+          filename3: `【留版】${filename}`,
+        };
+      }
+      return r;
     } catch (err) {
-      console.log('err', err);
       throw new BadRequestException('订单解析错误', err.message);
     }
   }
@@ -239,10 +251,11 @@ export class GenOrderService {
     ];
 
     const sizeType = {};
+    const keepSizeType = {};
     size.forEach(s => {
       sizeType[s] = false;
     });
-    const clothesMsg = order.clothesMsg.map(msg => {
+    const clothesMsg = order.clothesMsg.map((msg, ii) => {
       msg.rules.forEach(rule => {
         sizeType[rule.size] = true;
       });
@@ -251,12 +264,49 @@ export class GenOrderService {
         colorAndCount[s] = '';
       }) as any;
       colorAndCount.color = msg.color;
-      colorAndCount.total = msg.count;
+      // colorAndCount.total = msg.count;
+      const kk = order.keep.find(k => k.color === msg.color);
+      if (kk) {
+        colorAndCount.total = this.parseCount2XML(
+          `${msg.count}`,
+          `+${kk.count}`,
+        );
+      } else {
+        colorAndCount.total = this.parseCount2XML(`${msg.count}`);
+      }
       msg.rules.forEach(rule => {
-        colorAndCount[rule.size] = rule.count;
+        if (order.keep && kk) {
+          kk.rules.forEach(rr => {
+            if (rr.size === rule.size) {
+              colorAndCount[rule.size] = this.parseCount2XML(
+                `${rule.count}`,
+                `+${rr.count}`,
+              );
+            }
+          });
+        } else if (!colorAndCount[rule.size]) {
+          colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
+        }
       });
       return colorAndCount;
     });
+    const keep =
+      order.keep &&
+      order.keep.map(msg => {
+        msg.rules.forEach(rule => {
+          keepSizeType[rule.size] = true;
+        });
+        const colorAndCount: any = {};
+        size.forEach(s => {
+          colorAndCount[s] = '';
+        }) as any;
+        colorAndCount.color = msg.color;
+        colorAndCount.total = msg.count;
+        msg.rules.forEach(rule => {
+          colorAndCount[rule.size] = rule.count;
+        });
+        return colorAndCount;
+      });
     const neckTagUrl =
       order.neckTagType === 2
         ? await this.getImageFromWeb(order.neckTag)
@@ -274,6 +324,7 @@ export class GenOrderService {
       createTime: `${order.createTime.getMonth() +
         1}月${order.createTime.getDate()}日`,
       clothesMsg,
+      keep,
       childType: order.scaleType === 0 || order.scaleType === 2,
       adultType: order.scaleType === 1 || order.scaleType === 2,
       hurry: order.isHurry ? `${order.sendDay}号` : '',
@@ -283,10 +334,14 @@ export class GenOrderService {
     previewUrls.forEach((url, i) => {
       wordObj[`previewUrl${i}`] = url;
     });
+    previewUrls.forEach((url, i) => {
+      wordObj[`keepPreview${i}`] = url;
+    });
+    console.log('wordObj', wordObj);
     return wordObj;
   }
-  async genWord(obj: any, step: 1 | 2) {
-    const docName = step === 1 ? '4crop' : '4printing';
+  async genWord(obj: any, step: 1 | 2 | 3) {
+    const docName = step === 1 ? '4crop' : step === 2 ? '4printing' : '4keep';
     const content = fs.readFileSync(
       path.resolve(process.cwd(), `src/gen-order/${docName}.docx`),
     );
@@ -307,6 +362,9 @@ export class GenOrderService {
         return [120, 120];
       }
       const dimentions: { width: number; height: number } = sizeOf(img) as any;
+      if (tagName.includes('keepPreview')) {
+        return [200, (dimentions.height / dimentions.width) * 200];
+      }
       return [650, (dimentions.height / dimentions.width) * 650];
     };
     const imageModule = new docImageModule(imageModuleOptions);
@@ -361,5 +419,12 @@ export class GenOrderService {
       return `<w:p><w:r><w:t>布料：${head}</w:t></w:r><w:r><w:rPr><w:color w:val=\"FF0000\"/></w:rPr><w:t>${highLight}</w:t></w:r><w:r><w:t>${tail}</w:t></w:r></w:p>`;
     }
     return `<w:p><w:r><w:t>布料：${str}</w:t></w:r></w:p>`;
+  }
+  parseCount2XML(str: string, highLight?: string) {
+    if (highLight) {
+      // tslint:disable-next-line:max-line-length
+      return `<w:p><w:r><w:t>${str}</w:t></w:r><w:r><w:rPr><w:color w:val=\"FF0000\"/></w:rPr><w:t>${highLight}</w:t></w:r></w:p>`;
+    }
+    return `<w:p><w:r><w:t>${str}</w:t></w:r></w:p>`;
   }
 }

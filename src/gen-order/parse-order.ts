@@ -80,7 +80,7 @@ export const removeNumberFromSize = (str: string) => {
   return str;
 };
 
-export const parseSizeAndCount = (str: string, totalCount: number) => {
+export const parseSizeAndCount = (str: string, totalCount?: number) => {
   // tslint:disable-next-line:prefer-const
   let total = 0;
   const colorAndSizeArr = str
@@ -151,7 +151,8 @@ export const parseSizeAndCount = (str: string, totalCount: number) => {
       rules: sizeAndCount,
     };
   });
-  if (total !== totalCount) {
+
+  if (totalCount && total !== totalCount) {
     throw new Error(
       `上传订单的总数不对， 请重新计算检查一下, 订单写着 ${totalCount} 件, 但计算后是 ${total} 件`,
     );
@@ -197,6 +198,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     readonly sendTime: string;
     readonly company: string;
     readonly isHurry: boolean;
+    readonly keep: string;
   };
 };
 
@@ -433,6 +435,7 @@ export const parseCommon = (item: string) => {
     afterFormat.sizeAndNum,
     parseInt(afterFormat.totalNum, 10),
   );
+  const keep = afterFormat.keep !== '无' && parseSizeAndCount(afterFormat.keep);
   const client = parseClient(afterFormat.address);
   const total = parseTotal(afterFormat.total);
   // checkTotal(
@@ -463,6 +466,7 @@ export const parseCommon = (item: string) => {
     clientCompany: afterFormat.company,
     price: parseInt(afterFormat.price, 10),
     clothesMsg,
+    keep,
     total,
     sender: agent && agent.sender,
     senderPhone: agent && agent.senderPhone,
