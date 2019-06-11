@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, RelationQueryBuilder } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -282,10 +282,13 @@ export class GenOrderService {
                 `${rule.count}`,
                 `+${rr.count}`,
               );
+            } else {
+              colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
             }
           });
         } else if (!colorAndCount[rule.size]) {
           colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
+        } else {
         }
       });
       return colorAndCount;
