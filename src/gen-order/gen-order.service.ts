@@ -340,7 +340,6 @@ export class GenOrderService {
     previewUrls.forEach((url, i) => {
       wordObj[`keepPreview${i}`] = url;
     });
-    console.log('wordObj', wordObj);
     return wordObj;
   }
   async genWord(obj: any, step: 1 | 2 | 3) {
@@ -410,7 +409,7 @@ export class GenOrderService {
     const orderName = order.orderName;
     const name = `【${order.transactionCode.slice(4)}】${date}(${
       order.sendDay
-    })（${orderName}）.docx`;
+    })（${orderName.replace('#', '==').replace('＃', '==')}）.docx`;
     return name;
   }
   parseMaterial2XML(str: string, highLight: string) {

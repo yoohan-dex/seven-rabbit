@@ -22,7 +22,7 @@ export class GenOrderController {
     @Query('filename') filename: string,
     @Res() res: Response,
   ) {
-    res.download(url, filename);
+    res.download(url, filename.replace('==', '#'));
   }
   @Get('info-by-order')
   async getInfoByOrder(@Query() query: { orders: string[]; color: string }) {
