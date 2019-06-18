@@ -409,7 +409,10 @@ export class GenOrderService {
     const orderName = order.orderName;
     const name = `【${order.transactionCode.slice(4)}】${date}(${
       order.sendDay
-    })（${orderName.replace('#', '==').replace('＃', '==')}）.docx`;
+    })（${orderName
+      .replace('#', '==')
+      .replace('＃', '==')
+      .trim()}）.docx`;
     return name;
   }
   parseMaterial2XML(str: string, highLight: string) {
