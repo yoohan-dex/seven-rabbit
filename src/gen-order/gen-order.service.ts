@@ -160,12 +160,12 @@ export class GenOrderService {
       const ifA = willSavedOrder.transactionCode.includes('A');
       const afterRemoveA =
         ifA && willSavedOrder.transactionCode.replace('A', '');
-      console.log('ifA', ifA);
-      order.orderNumYear = ifA ? 2019 : parseInt(afterRemoveA.slice(0, 4), 10);
+      order.orderNumYear = ifA
+        ? 2019
+        : parseInt(willSavedOrder.transactionCode.slice(0, 4), 10);
       order.orderNum = ifA
         ? parseInt(afterRemoveA, 10)
-        : parseInt(afterRemoveA.slice(4), 10);
-      console.log(order);
+        : parseInt(willSavedOrder.transactionCode.slice(4), 10);
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
