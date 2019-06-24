@@ -445,7 +445,7 @@ export const parseCommon = (item: string) => {
   // );
   const pattern = parsePattern(afterFormat.pattern);
   const sendTime = parseSendTime(afterFormat.sendTime);
-  isNumber(afterFormat.transactionCode, '单号格式错误');
+  // isNumber(afterFormat.transactionCode, '单号格式错误');
   isNumber(afterFormat.price, '单价格式错误');
   isNumber(afterFormat.total, '总数格式错误');
   isNumber(afterFormat.totalNum, '总价格式错误');
