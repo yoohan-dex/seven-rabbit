@@ -157,11 +157,9 @@ export class GenOrderService {
         );
       }
       const order = new OrderCommon();
-      order.orderNumYear = parseInt(
-        willSavedOrder.transactionCode.slice(0, 4),
-        10,
-      );
-      order.orderNum = parseInt(willSavedOrder.transactionCode.slice(4), 10);
+      const afterRemoveA = willSavedOrder.transactionCode.replace('A', '');
+      order.orderNumYear = parseInt(afterRemoveA.slice(0, 4), 10);
+      order.orderNum = parseInt(afterRemoveA.slice(4), 10);
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
