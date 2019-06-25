@@ -410,10 +410,11 @@ export class GenOrderService {
   parseFileName(order: OrderCommon) {
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
+    const ifA = order.transactionCode.includes('A');
     const orderName = order.orderName;
-    const name = `【${order.transactionCode.slice(4)}】${date}(${
-      order.sendDay
-    })（${orderName
+    const name = `【${
+      ifA ? order.transactionCode : order.transactionCode.slice(4)
+    }】${date}(${order.sendDay})（${orderName
       .replace('#', '==')
       .replace('＃', '==')
       .trim()}）.docx`;
