@@ -97,7 +97,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
     }
   });
   if (colorIdx.length === 0) {
-    genError('尺码没有写颜色哦，请重新编辑，要有色这个关键词');
+    genError('尺码或留版没有写颜色哦，请重新编辑，要有色这个关键词');
   }
 
   const clothesMsg = colorIdx.map((idx, i, arr) => {
@@ -426,7 +426,7 @@ export const checkTotal = (
 };
 export const parseCommon = (item: string) => {
   if (typeof item !== 'string') {
-    throw new Error('item have to be a string');
+    genError('item have to be a string');
   }
 
   const afterGen = genClass(
