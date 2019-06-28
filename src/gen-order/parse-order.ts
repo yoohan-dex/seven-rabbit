@@ -337,7 +337,7 @@ export const parseDate = (str: string) => {
   const day = afterSliceStr.slice(monthIdx + 1, dayIdx);
   const fullTime = `${year}-${month}-${day}`;
   if (!moment(fullTime, 'YYYY-MM-DD').isValid()) {
-    genErrorError('发货时间格式错误，请检查一下');
+    genError('发货时间格式错误，请检查一下');
   }
 
   return moment(fullTime, 'YYYY-MM-DD').valueOf();
