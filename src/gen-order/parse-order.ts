@@ -2,7 +2,9 @@ import * as moment from 'moment';
 import { chineseType, type } from './type';
 import { ClothesMsg, Rule, Material } from './gen-order.entity';
 import { BadRequestException } from '@nestjs/common';
-
+const genError = (msg: string) => {
+  throw new BadRequestException('订单解析错误', msg);
+};
 export const replaceBr = (str: string) => {
   if (!str.includes('<br/>')) {
     return str;
@@ -95,7 +97,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
     }
   });
   if (colorIdx.length === 0) {
-    throw new Error('尺码没有写颜色哦，请重新编辑，要有色这个关键词');
+    genError('尺码没有写颜色哦，请重新编辑，要有色这个关键词');
   }
 
   const clothesMsg = colorIdx.map((idx, i, arr) => {
@@ -153,7 +155,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
   });
 
   if (totalCount && total !== totalCount) {
-    throw new Error(
+    genError(
       `上传订单的总数不对， 请重新计算检查一下, 订单写着 ${totalCount} 件, 但计算后是 ${total} 件`,
     );
   }
@@ -335,7 +337,7 @@ export const parseDate = (str: string) => {
   const day = afterSliceStr.slice(monthIdx + 1, dayIdx);
   const fullTime = `${year}-${month}-${day}`;
   if (!moment(fullTime, 'YYYY-MM-DD').isValid()) {
-    throw new Error('发货时间格式错误，请检查一下');
+    genErrorError('发货时间格式错误，请检查一下');
   }
 
   return moment(fullTime, 'YYYY-MM-DD').valueOf();
