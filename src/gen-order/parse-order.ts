@@ -171,10 +171,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
   categories.forEach(item => {
     const idx = chineseType.indexOf(item.category);
     if (idx === -1) {
-      throw new BadRequestException(
-        '订单解析错误',
-        `请检查订单信息的「${item.category}」标题， 可能中文写错了`,
-      );
+      genError(`请检查订单信息的「${item.category}」标题， 可能中文写错了`);
     }
     obj = {
       ...obj,
