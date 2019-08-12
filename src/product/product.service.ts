@@ -237,7 +237,7 @@ export class ProductService {
         const products = matchProduct.filter(p =>
           featureIds.some(featureId => p.featureId === featureId),
         );
-        const idsSet = new Set();
+        const idsSet = new Set<number>();
         for (const product of products) {
           idsSet.add(product.productId);
         }

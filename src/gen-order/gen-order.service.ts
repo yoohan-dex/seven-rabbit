@@ -270,6 +270,7 @@ export class GenOrderService {
       colorAndCount.color = msg.color;
       // colorAndCount.total = msg.count;
       const kk = order.keep && order.keep.find(k => k.color === msg.color);
+
       if (kk) {
         colorAndCount.total = this.parseCount2XML(
           `${msg.count}`,
@@ -282,11 +283,10 @@ export class GenOrderService {
         if (order.keep && kk) {
           kk.rules.forEach(rr => {
             if (rr.size === rule.size) {
-              colorAndCount[rule.size] = this.parseCount2XML(
-                `${rule.count}`,
-                `+${rr.count}`,
-              );
-            } else {
+              const c = this.parseCount2XML(`${rule.count}`, `+${rr.count}`);
+              colorAndCount[rule.size] = c;
+              // tslint:disable-next-line:no-construct
+            } else if (new String(colorAndCount[rule.size]).length < 10) {
               colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
             }
           });
