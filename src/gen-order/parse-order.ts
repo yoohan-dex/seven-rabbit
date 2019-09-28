@@ -165,7 +165,9 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
   // tslint:disable-next-line:prefer-const
   let obj = {};
   if (categories.length < type.length) {
-    throw new BadRequestException('订单解析错误', '你可能有些信息漏了写');
+    if (type.filter(str => str === 'editService').length > categories.length) {
+      throw new BadRequestException('订单解析错误', '你可能有些信息漏了写');
+    }
   }
   categories.forEach(item => {
     const idx = chineseType.indexOf(item.category);
