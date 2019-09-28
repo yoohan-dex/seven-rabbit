@@ -63,7 +63,6 @@ export const genClass = (classes: ReadonlyArray<string>) => {
         i === arr.length - 1
           ? curr.slice(idx + 1)
           : curr.slice(idx + 1, curr.length - 1);
-
       return [...pre, { category, content }];
     },
     [],
@@ -198,6 +197,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
     readonly company: string;
     readonly isHurry: boolean;
     readonly keep: string;
+    readonly editService: string;
   };
 };
 
@@ -429,6 +429,7 @@ export const parseCommon = (item: string) => {
   const afterGen = genClass(
     breakClass(removeLineNum(replaceBr(replaceComma(item)))),
   );
+
   const afterFormat = formatCategory(afterGen);
   const clothesMsg = parseSizeAndCount(
     afterFormat.sizeAndNum,
