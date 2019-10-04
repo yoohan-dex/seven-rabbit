@@ -236,13 +236,14 @@ export const parseAgent = (str: string) => {
   const agents = ['撕人', '地雷', '晓凯'];
   // const s1 = encodeURIComponent(agents[0]);
   // const s2 = encodeURIComponent(str.trim());
-  if (!agents.includes(str)) return false;
+  if (agents.every(a => !str.includes(a))) return false;
   const agentMessage = [
     { sender: '定制有嘻哈' },
     { sender: '致服团队', senderPhone: '18630402156' },
     { sender: '宏创服饰' },
   ];
-  return agentMessage[agents.indexOf(str)];
+  const idx = agents.findIndex(a => str.includes(a));
+  return agentMessage[idx];
 };
 
 export const parsePattern = (str: string) => {
@@ -453,6 +454,7 @@ export const parseCommon = (item: string) => {
   isNumber(afterFormat.total, '总数格式错误');
   isNumber(afterFormat.totalNum, '总价格式错误');
   const agent = parseAgent(afterFormat.seller);
+  console.log('agent:', agent);
   const final = {
     ...afterFormat,
     ...client,
