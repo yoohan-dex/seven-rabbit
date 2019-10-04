@@ -158,14 +158,20 @@ export class GenOrderService {
       }
       const order = new OrderCommon();
       const ifA = willSavedOrder.transactionCode.includes('A');
+      const ifXK = willSavedOrder.transactionCode.includes('XK');
       const afterRemoveA =
         ifA && willSavedOrder.transactionCode.replace('A', '');
-      order.orderNumYear = ifA
-        ? 2019
-        : parseInt(willSavedOrder.transactionCode.slice(0, 4), 10);
+      const afterRemoveXK =
+        ifXK && willSavedOrder.transactionCode.replace('XK', '');
+      order.orderNumYear =
+        ifA || ifXK
+          ? new Date().getFullYear()
+          : parseInt(willSavedOrder.transactionCode.slice(0, 4), 10);
       order.orderNum = ifA
         ? parseInt(afterRemoveA, 10)
-        : parseInt(willSavedOrder.transactionCode.slice(4), 10);
+        : ifXK
+          ? parseInt(afterRemoveXK, 10)
+          : parseInt(willSavedOrder.transactionCode.slice(4), 10);
       order.orderName = willSavedOrder.orderName;
       order.transactionCode = willSavedOrder.transactionCode;
       order.pattern = willSavedOrder.pattern;
@@ -411,9 +417,10 @@ export class GenOrderService {
     const date = `${order.createTime.getFullYear()}-${order.createTime.getMonth() +
       1}-${order.createTime.getDate()}`;
     const ifA = order.transactionCode.includes('A');
+    const ifXK = order.transactionCode.includes('XK');
     const orderName = order.orderName;
     const name = `【${
-      ifA ? order.transactionCode : order.transactionCode.slice(4)
+      ifA || ifXK ? order.transactionCode : order.transactionCode.slice(4)
     }】${date}(${order.sendDay})（${orderName
       .replace('#', '==')
       .replace('＃', '==')

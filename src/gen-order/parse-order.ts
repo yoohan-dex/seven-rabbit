@@ -233,13 +233,14 @@ export const parseClient = (str: string) => {
 };
 
 export const parseAgent = (str: string) => {
-  const agents = ['撕人', '地雷'];
-  const s1 = encodeURIComponent(agents[0]);
-  const s2 = encodeURIComponent(str.trim());
+  const agents = ['撕人', '地雷', '晓凯'];
+  // const s1 = encodeURIComponent(agents[0]);
+  // const s2 = encodeURIComponent(str.trim());
   if (!agents.includes(str)) return false;
   const agentMessage = [
     { sender: '定制有嘻哈' },
     { sender: '致服团队', senderPhone: '18630402156' },
+    { sender: '宏创服饰' },
   ];
   return agentMessage[agents.indexOf(str)];
 };
@@ -307,7 +308,7 @@ const parseServicer = (str: string) => {
 };
 const parseServerce = (str: string) => {
   const agent = parseAgent(str);
-  if (agent) {
+  if (agent && agent.sender !== '宏创服饰') {
     return '006';
   }
   const reg = '－';
