@@ -344,7 +344,7 @@ export class GenOrderService {
     };
     wordObj.clientPhone =
       wordObj.clientPhone.length === 11
-        ? wordObj.clientPhone.slice(0, 7)
+        ? wordObj.clientPhone.slice(0, 7) + '****'
         : wordObj.clientPhone;
     // hide phone number message
     previewUrls.forEach((url, i) => {
