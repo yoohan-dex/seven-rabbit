@@ -20,8 +20,6 @@ import * as imageSize from 'image-size';
 import { OrderCommon, Rule } from './gen-order.entity';
 import { Image } from '../common/common.entity';
 
-import * as mammoth from 'mammoth';
-
 const p = path.resolve(process.cwd(), `src/gen-order/output.docx`);
 // mammoth.convertToHtml({ path: p }).then(res => {
 //   const r = res.value;
@@ -344,6 +342,11 @@ export class GenOrderService {
       ...sizeType,
       neckTagUrl,
     };
+    wordObj.clientPhone =
+      wordObj.clientPhone.length === 11
+        ? wordObj.clientPhone.slice(0, 7)
+        : wordObj.clientPhone;
+    // hide phone number message
     previewUrls.forEach((url, i) => {
       wordObj[`previewUrl${i}`] = url;
     });
