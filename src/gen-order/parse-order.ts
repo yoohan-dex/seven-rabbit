@@ -215,7 +215,9 @@ export const parseClient = (str: string) => {
       clientPhone: '',
     };
   }
-  const [clientAddress, clientName, clientPhone] = str.split('，');
+  const [clientAddress, clientName, clientPhone] = str
+    .split('，')
+    .map(c => c.trim());
   const errMsg =
     '以「地址，姓名，手机」这个格式填写地址，你可能填错了。如果不需要地址，填待定';
   if (!clientAddress) {
