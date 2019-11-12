@@ -33,5 +33,6 @@ export class AuthModule implements NestModule {
       // topic/
       'topic/*',
     );
+    consumer.apply();
   }
 }

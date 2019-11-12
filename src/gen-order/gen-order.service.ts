@@ -343,7 +343,7 @@ export class GenOrderService {
       neckTagUrl,
     };
     wordObj.clientPhone =
-      wordObj.clientPhone.length === 11
+      wordObj.clientPhone.trim().length === 11
         ? wordObj.clientPhone.slice(0, 7) + '****'
         : wordObj.clientPhone;
     // hide phone number message
