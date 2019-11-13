@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "DEPLOY_MODE=dev nodemon",
-    "clearTypeError": "rm -rf node_modules/@types/superagent && rm -rf node_modules/@types/qrcode",
+    "clearTypeError": "rm -rf node_modules/@types/superagent && rm -rf node_modules/@types/qrcode && rm -rf node_modules/exceljs/index.d.ts",
     "prestart:prod": "rm -rf dist && tsc && cp -rf src/public dist/public",
     "prerestart:prod": "rm -rf dist && tsc && cp -rf src/public dist/public",
     "restart:prod": "pm2 restart all && pm2 monit",
