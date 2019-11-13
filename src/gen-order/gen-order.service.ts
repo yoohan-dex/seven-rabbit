@@ -474,7 +474,10 @@ export class GenOrderService {
       orders.forEach(o => {
         workSheet.addRow({
           id: o.transactionCode,
-          phone: o.clientPhone.slice(7),
+          phone:
+            o.clientPhone && o.clientPhone.trim().length === 11
+              ? o.clientPhone.trim().slice(7)
+              : o.clientPhone,
         });
       });
 
