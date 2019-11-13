@@ -43,4 +43,15 @@ export class GenOrderController {
       query.except,
     );
   }
+
+  @Get('sheet')
+  async GetSheet(@Query('time') time: string[]) {
+    const url = await this.genOrderService.sheet(time);
+    return { url };
+  }
+
+  @Get('download-sheet')
+  async downloadSheet(@Query('url') url, @Res() res: Response) {
+    res.download(url, '手机后4位.xlsx');
+  }
 }

@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, RelationQueryBuilder } from 'typeorm';
+import { Repository, In, RelationQueryBuilder, Between } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -12,6 +12,7 @@ import * as docGenerator from 'docxtemplater';
 import * as docImageModule from 'docxtemplater-image-module';
 import * as fs from 'fs';
 import { createWriteStream } from 'fs';
+import * as excel from 'exceljs';
 
 import * as path from 'path';
 
@@ -446,5 +447,41 @@ export class GenOrderService {
       return `<w:p><w:r><w:t>${str}</w:t></w:r><w:r><w:rPr><w:color w:val=\"FF0000\"/></w:rPr><w:t>${highLight}</w:t></w:r></w:p>`;
     }
     return `<w:p><w:r><w:t>${str}</w:t></w:r></w:p>`;
+  }
+
+  async sheet(time: string[]) {
+    if (Array.isArray(time) && time.length === 2) {
+      const url = path.resolve(
+        process.cwd(),
+        'excel',
+        `output-phone4number-${new Date().getTime()}.xlsx`,
+      );
+
+      const workbook = new excel.Workbook();
+      workbook.creator = 'yaofan';
+      const workSheet = workbook.addWorksheet(`${time[0]}-${time[1]}`);
+
+      workSheet.columns = [
+        { header: '单号', key: 'id', width: 30 },
+        { header: '后4位', key: 'phone', width: 12 },
+      ];
+
+      const orders = await this.orderRepository.find({
+        where: {
+          createTime: Between(time[0], time[1]),
+        },
+      });
+      orders.forEach(o => {
+        workSheet.addRow({
+          id: o.transactionCode,
+          phone: o.clientPhone.slice(7),
+        });
+      });
+
+      await workbook.xlsx.writeFile(url);
+      return url;
+    } else {
+      throw new BadRequestException('参数有问题', '时间选取不对');
+    }
   }
 }
