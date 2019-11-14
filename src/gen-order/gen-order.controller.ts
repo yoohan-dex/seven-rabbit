@@ -54,7 +54,9 @@ export class GenOrderController {
 
   @Get('sheet')
   async GetSheet(@Query('time') time: string[], @Query('jwt') jwt: string) {
-    if (jwt !== 'i m yaofan, who r u')
+    const { ORDER_GET_JWT } = process.env;
+
+    if (jwt !== ORDER_GET_JWT)
       throw new UnauthorizedException('权限问题', '你没有访问的权限');
     const url = await this.genOrderService.sheet(time);
     return { url };
