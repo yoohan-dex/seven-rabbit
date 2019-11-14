@@ -217,7 +217,8 @@ export const parseClient = (str: string) => {
   }
   const [clientAddress, clientName, clientPhone] = str
     .split('，')
-    .map(c => c.trim());
+    .map(c => c.trim().replace(' ', ''));
+
   const errMsg =
     '以「地址，姓名，手机」这个格式填写地址，你可能填错了。如果不需要地址，填待定';
   if (!clientAddress) {
@@ -226,11 +227,16 @@ export const parseClient = (str: string) => {
     throw new BadRequestException('缺少客户姓名', errMsg);
   } else if (!clientPhone) {
     throw new BadRequestException('缺少手机号码', errMsg);
+  } else if (
+    clientPhone.trim().length < 7 &&
+    !clientPhone.trim().includes('待定')
+  ) {
+    throw new BadRequestException('电话号码有点短了', errMsg);
   }
   return {
-    clientAddress,
-    clientName,
-    clientPhone,
+    clientAddress: clientAddress.trim(),
+    clientName: clientName.trim(),
+    clientPhone: clientPhone.trim(),
   };
 };
 
