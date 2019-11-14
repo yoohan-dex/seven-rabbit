@@ -66,4 +66,22 @@ export class GenOrderController {
   async downloadSheet(@Query('url') url, @Res() res: Response) {
     res.download(url, '手机后4位.xlsx');
   }
+
+  @Get('price-sheet')
+  async GetPriceSheet(
+    @Query('time') time: string[],
+    @Query('jwt') jwt: string,
+  ) {
+    const { ORDER_GET_JWT } = process.env;
+
+    if (jwt !== ORDER_GET_JWT)
+      throw new UnauthorizedException('权限问题', '你没有访问的权限');
+    const url = await this.genOrderService.priceSheet(time);
+    return { url };
+  }
+
+  @Get('download-price-sheet')
+  async downloadPriceSheet(@Query('url') url, @Res() res: Response) {
+    res.download(url, '价格表.xlsx');
+  }
 }

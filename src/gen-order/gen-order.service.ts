@@ -487,4 +487,42 @@ export class GenOrderService {
       throw new BadRequestException('参数有问题', '时间选取不对');
     }
   }
+
+  async priceSheet(time: string[]) {
+    if (Array.isArray(time) && time.length === 2) {
+      const url = path.resolve(
+        process.cwd(),
+        'excel',
+        `output-price-${new Date().getTime()}.xlsx`,
+      );
+
+      const workbook = new excel.Workbook();
+      workbook.creator = 'yaofan';
+      const workSheet = workbook.addWorksheet(`${time[0]}-${time[1]}`);
+
+      workSheet.columns = [
+        { header: '单号', key: 'id', width: 30 },
+        { header: '售价', key: 'price', width: 12 },
+        { header: '客户来源', key: 'seller', width: 12 },
+      ];
+
+      const orders = await this.orderRepository.find({
+        where: {
+          createTime: Between(time[0], time[1]),
+        },
+      });
+      orders.forEach(o => {
+        workSheet.addRow({
+          id: o.transactionCode.trim(),
+          price: o.total,
+          seller: o.seller,
+        });
+      });
+
+      await workbook.xlsx.writeFile(url);
+      return url;
+    } else {
+      throw new BadRequestException('参数有问题', '时间选取不对');
+    }
+  }
 }
