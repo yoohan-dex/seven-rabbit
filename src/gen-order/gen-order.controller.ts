@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Res, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Res,
+  Query,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { GenOrderService } from './gen-order.service';
 import { Response } from 'express';
 import { GenOrderDto } from './gen-order.dto';
@@ -45,7 +53,9 @@ export class GenOrderController {
   }
 
   @Get('sheet')
-  async GetSheet(@Query('time') time: string[]) {
+  async GetSheet(@Query('time') time: string[], @Query('jwt') jwt: string) {
+    if (jwt !== 'i m yaofan, who r u')
+      throw new UnauthorizedException('权限问题', '你没有访问的权限');
     const url = await this.genOrderService.sheet(time);
     return { url };
   }
