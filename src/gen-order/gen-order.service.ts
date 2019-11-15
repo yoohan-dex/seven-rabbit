@@ -511,12 +511,22 @@ export class GenOrderService {
           createTime: Between(time[0], time[1]),
         },
       });
+      let allTotal = 0;
       orders.forEach(o => {
+        const seller = o.seller.includes('-')
+          ? o.seller.split('-')[0]
+          : o.seller;
+        allTotal += o.total;
         workSheet.addRow({
           id: o.transactionCode.trim(),
           price: o.total,
-          seller: o.seller,
+          seller: seller.trim(),
         });
+      });
+
+      workSheet.addRow({
+        id: '总计',
+        price: allTotal,
       });
 
       await workbook.xlsx.writeFile(url);
