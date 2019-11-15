@@ -517,12 +517,14 @@ export class GenOrderService {
       const pureOrder: OrderCommon[] = [];
       orders.forEach(order => {
         const o = pureOrder[pureOrder.length - 1];
+        if (!o) {
+          return pureOrder.push(order);
+        }
         const sameTotal = o.total === order.total;
         const sameCompany = o.clientCompany === order.clientCompany;
         const sameSeller = o.seller === order.seller;
-        if (sameTotal && sameCompany && sameSeller) {
-          pureOrder.push(order);
-        }
+        if (sameTotal && sameCompany && sameSeller) return;
+        pureOrder.push(order);
       });
 
       pureOrder.forEach(o => {
