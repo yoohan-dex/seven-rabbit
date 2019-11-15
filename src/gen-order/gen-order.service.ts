@@ -504,6 +504,7 @@ export class GenOrderService {
         { header: '单号', key: 'id', width: 30 },
         { header: '售价', key: 'price', width: 12 },
         { header: '客户来源', key: 'seller', width: 12 },
+        { header: '下单时间', key: 'time', width: 30 },
       ];
 
       const orders = await this.orderRepository.find({
@@ -512,7 +513,19 @@ export class GenOrderService {
         },
       });
       let allTotal = 0;
-      orders.forEach(o => {
+
+      const pureOrder: OrderCommon[] = [];
+      orders.forEach(order => {
+        const o = pureOrder[pureOrder.length - 1];
+        const sameTotal = o.total === order.total;
+        const sameCompany = o.clientCompany === order.clientCompany;
+        const sameSeller = o.seller === order.seller;
+        if (sameTotal && sameCompany && sameSeller) {
+          pureOrder.push(order);
+        }
+      });
+
+      pureOrder.forEach(o => {
         const seller = o.seller.includes('-')
           ? o.seller.split('-')[0]
           : o.seller;
@@ -521,6 +534,7 @@ export class GenOrderService {
           id: o.transactionCode.trim(),
           price: o.total,
           seller: seller.trim(),
+          time: o.createTime.toLocaleString().split(',')[0],
         });
       });
 
