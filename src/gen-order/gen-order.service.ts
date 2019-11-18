@@ -503,6 +503,8 @@ export class GenOrderService {
       workSheet.columns = [
         { header: '单号', key: 'id', width: 30 },
         { header: '售价', key: 'price', width: 12 },
+        { header: '单价', key: 'single', width: 10 },
+        { header: '件数', key: 'count', width: 8 },
         { header: '客户来源', key: 'seller', width: 12 },
         { header: '下单时间', key: 'time', width: 30 },
       ];
@@ -536,6 +538,8 @@ export class GenOrderService {
           id: o.transactionCode.trim(),
           price: o.total,
           seller: seller.trim(),
+          single: o.price,
+          count: o.totalNum,
           time: o.createTime.toLocaleString().split(',')[0],
         });
       });
