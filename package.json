@@ -34,7 +34,7 @@
     "@types/ramda": "^0.25.35",
     "@types/uuid": "^7.0.0",
     "angular-expressions": "^1.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "case": "^1.5.5",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.5",
