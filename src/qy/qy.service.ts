@@ -10,6 +10,9 @@ import {
   QyTagApi,
   QyExContact,
   QyWeChat,
+  QyJsTicketApi,
+  QyJsApiType,
+  JsApiType,
 } from 'tnwx';
 
 @Injectable()
@@ -22,14 +25,22 @@ export class QyService {
   async getSignature(url: string) {
     let appId = process.env.QY_AGENT_ID;
     console.log('jsaijdfijasidjf-----------', appId);
-    const timestamp = `${new Date().getTime() / 1000}`;
-    let nonceStr = 'jdisjaflsjvjk';
-    const signature = await QyWeChat.jssdkSignature(nonceStr, timestamp, url);
+    const timestamp = `${Math.floor(new Date().getTime() / 1000)}`;
+    let nonceStr = 'Wm3WZYTPz0wzccnW';
+    const ticket = await QyJsTicketApi.getTicket(QyJsApiType.CORP);
+    const signature = await QyWeChat.jssdkSignature(
+      nonceStr,
+      timestamp,
+      url,
+      QyJsApiType.CORP,
+      ticket.getTicket,
+    );
     return {
       appId: appId,
       timestamp: timestamp,
       nonceStr: nonceStr,
       signature: signature,
+      ticket: ticket.getTicket,
     };
   }
 
