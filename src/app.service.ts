@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { QyWeChat } from 'tnwx';
+// import { QyWeChat } from 'tnwx';
 
 @Injectable()
 export class AppService {
