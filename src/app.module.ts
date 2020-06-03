@@ -15,7 +15,7 @@ import { DatumModule } from './datum/datum.module';
 import { WxModule } from './wx/wx.module';
 import { TopicModule } from './topic/topic.module';
 import { GenOrderModule } from './gen-order/gen-order.module';
-import { QyModule } from './qy/qy.module';
+// import { QyModule } from './qy/qy.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { QyModule } from './qy/qy.module';
     WxModule,
     TopicModule,
     GenOrderModule,
-    QyModule,
+    // QyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
