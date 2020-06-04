@@ -5,9 +5,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('back-admin')
-  @Render('bundle')
-  root() {}
+  // @Get('back-admin')
+  // @Render('bundle')
+  // root() {}
 
   @Get('super-word-generator')
   @Render('bundle')
