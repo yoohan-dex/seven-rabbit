@@ -178,6 +178,7 @@ export const formatCategory = (categories: ReadonlyArray<Category>) => {
       ...obj,
       [type[idx]]: item.content,
     };
+    console.log('after format:', obj);
   });
   return obj as {
     readonly transactionCode: string;
