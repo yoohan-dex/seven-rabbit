@@ -54,10 +54,14 @@ export class GenOrderController {
 
   @Get('sheet')
   async GetSheet(@Query('time') time: string[], @Query('jwt') jwt: string) {
-    const { ORDER_GET_JWT } = process.env;
+    const { ORDER_GET_JWT, ORDER_GET_JWT_2 } = process.env;
 
     if (jwt !== ORDER_GET_JWT)
       throw new UnauthorizedException('权限问题', '你没有访问的权限');
+    if (jwt !== ORDER_GET_JWT_2) {
+      const url = await this.genOrderService.sheet();
+      return { url };
+    }
     const url = await this.genOrderService.sheet(time);
     return { url };
   }
@@ -76,6 +80,7 @@ export class GenOrderController {
 
     if (jwt !== ORDER_GET_JWT)
       throw new UnauthorizedException('权限问题', '你没有访问的权限');
+
     const url = await this.genOrderService.priceSheet(time);
     return { url };
   }

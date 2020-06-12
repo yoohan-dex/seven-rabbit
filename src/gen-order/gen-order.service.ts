@@ -446,14 +446,13 @@ export class GenOrderService {
     return `<w:p><w:r><w:t>${str}</w:t></w:r></w:p>`;
   }
 
-  async sheet(time: string[]) {
-    if (Array.isArray(time) && time.length === 2) {
-      const url = path.resolve(
-        process.cwd(),
-        'excel',
-        `output-phone4number-${new Date().getTime()}.xlsx`,
-      );
-
+  async sheet(time?: string[]) {
+    const url = path.resolve(
+      process.cwd(),
+      'excel',
+      `output-phone4number-${new Date().getTime()}.xlsx`,
+    );
+    if (time && Array.isArray(time) && time.length === 2) {
       const workbook = new excel.Workbook();
       workbook.creator = 'yaofan';
       const workSheet = workbook.addWorksheet(`${time[0]}-${time[1]}`);
@@ -481,7 +480,34 @@ export class GenOrderService {
       await workbook.xlsx.writeFile(url);
       return url;
     } else {
-      throw new BadRequestException('参数有问题', '时间选取不对');
+      const d = new Date();
+      const t0 = `${d.getFullYear()}-${d.getMonth() - 2}-${d.getDay()}`;
+      const t1 = `${d.getFullYear()}-${d.getMonth() - 1}-${d.getDay()}`;
+      const workbook = new excel.Workbook();
+      workbook.creator = 'yaofan';
+      const workSheet = workbook.addWorksheet(`${t0}-${t1}`);
+
+      workSheet.columns = [
+        { header: '单号', key: 'id', width: 30 },
+        { header: '手机号', key: 'phone', width: 12 },
+        { header: '收货地址', key: 'address', width: 12 },
+      ];
+
+      const orders = await this.orderRepository.find({
+        where: {
+          createTime: Between(t0, t1),
+        },
+      });
+      orders.forEach(o => {
+        workSheet.addRow({
+          id: o.transactionCode.trim(),
+          phone: o.clientPhone && o.clientPhone.trim(),
+          address: o.clientAddress,
+        });
+      });
+
+      await workbook.xlsx.writeFile(url);
+      return url;
     }
   }
 
