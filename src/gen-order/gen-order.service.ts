@@ -343,7 +343,9 @@ export class GenOrderService {
       ...sizeType,
       neckTagUrl,
     };
-    wordObj.clientPhone = wordObj.clientPhone.trim();
+    wordObj.clientPhone = wordObj.clientPhone.trim()
+      ? wordObj.clientPhone.trim().slice(0, 4)
+      : '***';
     // hide phone number message
     previewUrls.forEach((url, i) => {
       wordObj[`previewUrl${i}`] = url;
@@ -481,8 +483,8 @@ export class GenOrderService {
       return url;
     } else {
       const d = new Date();
-      const t0 = `${d.getFullYear()}-${d.getMonth()}-${d.getDay()}`;
-      const t1 = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDay()}`;
+      const t0 = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      const t1 = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
       const workbook = new excel.Workbook();
       workbook.creator = 'yaofan';
       const workSheet = workbook.addWorksheet(`${t0}-${t1}`);

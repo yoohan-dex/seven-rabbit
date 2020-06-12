@@ -68,7 +68,7 @@ export class GenOrderController {
 
   @Get('download-sheet')
   async downloadSheet(@Query('url') url, @Res() res: Response) {
-    res.download(url, '手机后4位.xlsx');
+    res.download(url, '号码表.xlsx');
   }
 
   @Get('price-sheet')
