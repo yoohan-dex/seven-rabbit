@@ -343,10 +343,7 @@ export class GenOrderService {
       ...sizeType,
       neckTagUrl,
     };
-    wordObj.clientPhone =
-      wordObj.clientPhone.trim().length === 11
-        ? wordObj.clientPhone.slice(0, 7) + '****'
-        : wordObj.clientPhone;
+    wordObj.clientPhone = wordObj.clientPhone.trim();
     // hide phone number message
     previewUrls.forEach((url, i) => {
       wordObj[`previewUrl${i}`] = url;
