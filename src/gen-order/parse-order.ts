@@ -137,6 +137,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
         .replace(regS, 'S')
         .replace(regL, 'L')
         .replace(regM, 'M')
+        .replace(regM, 'Ｍ')
         .replace(regX, 'X');
       total += parseInt(count, 10);
       const s = {
