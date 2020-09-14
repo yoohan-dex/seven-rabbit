@@ -220,6 +220,11 @@ export const parseClient = (str: string) => {
   const [clientAddress, clientName, clientPhone] = str
     .split('，')
     .map(c => c.trim().replace(' ', ''));
+  console.log('奇怪', {
+    clientAddress: clientAddress.trim(),
+    clientName: clientName.trim(),
+    clientPhone: clientPhone.trim(),
+  });
 
   const errMsg =
     '以「地址，姓名，手机」这个格式填写地址，你可能填错了。如果不需要地址，填待定';
@@ -235,11 +240,7 @@ export const parseClient = (str: string) => {
   ) {
     throw new BadRequestException('电话号码有点短了', errMsg);
   }
-  console.log('***************************************', {
-    clientAddress: clientAddress.trim(),
-    clientName: clientName.trim(),
-    clientPhone: clientPhone.trim(),
-  });
+
   return {
     clientAddress: clientAddress.trim(),
     clientName: clientName.trim(),
