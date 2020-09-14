@@ -223,7 +223,7 @@ export const parseClient = (str: string) => {
   console.log('奇怪', {
     clientAddress: clientAddress.trim(),
     clientName: clientName.trim(),
-    clientPhone: clientPhone.trim().,
+    clientPhone: clientPhone.trim().replace('\n', ''),
   });
 
   const errMsg =
