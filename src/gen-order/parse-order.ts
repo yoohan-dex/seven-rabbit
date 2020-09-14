@@ -235,6 +235,11 @@ export const parseClient = (str: string) => {
   ) {
     throw new BadRequestException('电话号码有点短了', errMsg);
   }
+  console.log('***************************************', {
+    clientAddress: clientAddress.trim(),
+    clientName: clientName.trim(),
+    clientPhone: clientPhone.trim(),
+  });
   return {
     clientAddress: clientAddress.trim(),
     clientName: clientName.trim(),
