@@ -69,7 +69,6 @@ export class GenOrderService {
     });
     return { count, total };
   }
-
   async getInfo(
     material: string[],
     pattern: string[],
@@ -579,5 +578,21 @@ export class GenOrderService {
     } else {
       throw new BadRequestException('参数有问题', '时间选取不对');
     }
+  }
+
+  async calcPattern() {
+    const orders = await this.orderRepository.find();
+
+    const data = orders.reduce((pre, curr) => {
+      const pattern = curr.pattern.split('，')[0];
+      if (pre[pattern]) {
+        pre[pattern] = +1;
+        return pre;
+      }
+      pre[pattern] = 1;
+      return pre;
+    }, {});
+
+    return data;
   }
 }

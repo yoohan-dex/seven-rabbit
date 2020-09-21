@@ -89,4 +89,9 @@ export class GenOrderController {
   async downloadPriceSheet(@Query('url') url, @Res() res: Response) {
     res.download(url, '价格表.xlsx');
   }
+
+  @Get('calc')
+  calc() {
+    return this.genOrderService.calcPattern();
+  }
 }
