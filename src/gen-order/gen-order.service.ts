@@ -586,7 +586,7 @@ export class GenOrderService {
     const data = orders.reduce((pre, curr) => {
       const pattern = curr.pattern.split('，')[0];
       if (pre[pattern]) {
-        pre[pattern] = +1;
+        pre[pattern] += 1;
         return pre;
       }
       pre[pattern] = 1;
