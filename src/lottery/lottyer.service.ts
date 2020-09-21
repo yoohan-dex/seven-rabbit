@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Image } from 'common/common.entity';
+import { Image } from '../common/common.entity';
 import { Repository } from 'typeorm';
 import { WxUser } from '../auth/auth.entity';
 import { LotteryDto, updateLotteryDto } from './lottery.dto';

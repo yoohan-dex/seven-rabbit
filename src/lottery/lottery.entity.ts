@@ -1,4 +1,4 @@
-import { WxUser } from 'auth/auth.entity';
+import { WxUser } from '../auth/auth.entity';
 import {
   Column,
   Entity,
