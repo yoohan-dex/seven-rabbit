@@ -55,6 +55,7 @@ export class WxController {
     return 'success';
   }
   async testSendFiles(openId: string) {
+    console.log('yes, i ve send');
     return await this.wxService.sendCustomMedia(openId);
   }
 
