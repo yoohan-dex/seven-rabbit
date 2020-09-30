@@ -15,7 +15,7 @@ import { DatumModule } from './datum/datum.module';
 import { WxModule } from './wx/wx.module';
 import { TopicModule } from './topic/topic.module';
 import { GenOrderModule } from './gen-order/gen-order.module';
-import { LotteryModule } from 'lottery/lottery.module';
+import { LotteryModule } from './lottery/lottery.module';
 // import { QyModule } from './qy/qy.module';
 
 @Module({

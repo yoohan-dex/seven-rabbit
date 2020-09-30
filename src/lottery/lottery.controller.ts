@@ -8,8 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { WxUser } from 'auth/auth.entity';
-import { User } from 'shared/decorators/user';
+import { WxUser } from '../auth/auth.entity';
+import { User } from '../shared/decorators/user';
 import { LotteryDto } from './lottery.dto';
 import { LotteryService } from './lottery.service';
 
