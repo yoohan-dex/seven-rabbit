@@ -1,10 +1,11 @@
-export class LotteryDto {
+export interface LotteryDto {
   name: string;
   message: string;
-  startTime: number;
-  stopTime: number;
+  startTime: string;
+  stopTime: string;
   rate: number;
   maxPerUser: number;
+  headAvatar: any;
 
   prize: {
     id?: number;
@@ -16,6 +17,6 @@ export class LotteryDto {
   }[];
 }
 
-export class updateLotteryDto extends LotteryDto {
+export interface updateLotteryDto extends LotteryDto {
   id: number;
 }

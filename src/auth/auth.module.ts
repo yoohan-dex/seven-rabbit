@@ -32,6 +32,16 @@ export class AuthModule implements NestModule {
       'datum/user',
       // topic/
       'topic/*',
+      // lottery/
+      // 'lottery/',
+      'lottery/check-chance',
+      'lottery/test-code',
+      'lottery/bind-code',
+      'lottery/code',
+      'lottery/start',
+      'lottery/my-prize',
+      'lottery/prize-code',
+      'lottery/check-prize',
     );
     consumer.apply();
   }

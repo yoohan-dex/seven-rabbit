@@ -584,7 +584,7 @@ export class GenOrderService {
     const orders = await this.orderRepository.find();
 
     const data = orders.reduce((pre, curr) => {
-      const pattern = curr.pattern.split('，')[0];
+      const pattern = curr.pattern;
       if (pre[pattern]) {
         pre[pattern] += 1;
         return pre;
@@ -592,6 +592,12 @@ export class GenOrderService {
       pre[pattern] = 1;
       return pre;
     }, {});
+    const afterFormat = Object.keys(data).map(key => ({
+      name: key,
+      count: data[key],
+    }));
+
+    const afterSort = afterFormat.sort((aa, bb) => bb.count - aa.count);
 
     return data;
   }

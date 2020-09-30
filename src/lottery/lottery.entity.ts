@@ -1,12 +1,14 @@
 import { WxUser } from '../auth/auth.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Image } from '../common/common.entity';
 
@@ -37,15 +39,20 @@ export class Lottery {
 
   @Column() message: string;
 
-  @Column() startTime: number;
+  @Column() startTime: string;
 
-  @Column() stopTime: number;
+  @Column() stopTime: string;
+
+  @OneToOne(type => Image, { eager: true })
+  @JoinColumn()
+  headAvatar: Image;
 
   @Column() rate: number;
 
-  @Column() maxPerUser: number;
+  @Column({ nullable: true })
+  maxPerUser: number;
 
-  @OneToMany(_ => LotteryPrize, p => p.game)
+  @OneToMany(_ => LotteryPrize, p => p.game, { eager: true })
   prize: LotteryPrize[];
 }
 
@@ -53,10 +60,11 @@ export class Lottery {
 export class LotteryPrize {
   @PrimaryGeneratedColumn() id: number;
 
-  @ManyToOne(_ => Lottery, l => l.prize, { eager: true })
+  @ManyToOne(_ => Lottery, l => l.prize)
   game: Lottery;
 
-  @Column() gameId: number;
+  @Column({ nullable: true })
+  gameId: number;
 
   @Column() name: string;
 
@@ -69,7 +77,11 @@ export class LotteryPrize {
 
   @Column() count: number;
 
-  @Column() trueRate: boolean;
+  @Column({ default: 0 })
+  usedCount: number;
+
+  @Column({ default: true })
+  trueRate: boolean;
 }
 
 /**
@@ -86,25 +98,43 @@ export class LotteryPrize {
 export class LotteryCode {
   @PrimaryGeneratedColumn() id: number;
 
-  @ManyToOne(_ => WxUser, { nullable: true })
-  creator: WxUser;
+  // @ManyToOne(_ => WxUser, { nullable: true })
+  // creator: WxUser;
 
-  @Column() creatorId: number;
+  @Column({ nullable: true })
+  creatorId: number;
 
-  @ManyToOne(_ => Lottery, { eager: true })
-  game: Lottery;
+  @Column({ nullable: true })
+  gameId: number;
 
-  @Column() gameId: number;
-
-  @ManyToOne(_ => LotteryPrize, { nullable: true })
+  @ManyToOne(_ => LotteryPrize, { nullable: true, eager: true })
   prize: LotteryPrize;
 
-  @Column() prizeId: number;
+  @Column({ nullable: true })
+  prizeId: number;
 
-  @ManyToOne(_ => WxUser, { nullable: true })
-  user: WxUser;
+  // @ManyToOne(_ => WxUser, { nullable: true })
+  // user: WxUser;
 
-  @Column() userId: number;
+  @Column({ nullable: true })
+  prizerId: number;
 
-  @Column() used: boolean;
+  @Column({ nullable: true })
+  userId: number;
+
+  @Column({ default: false, nullable: true })
+  used: boolean;
+
+  @Column({ default: false, nullable: true })
+  checked: boolean;
+
+  @Column({ nullable: true })
+  checkerId: number;
+  // 获奖时间
+  @Column('date', { nullable: true })
+  getDate: Date;
+
+  @CreateDateColumn() createDate: Date;
+
+  @UpdateDateColumn() updateDate: Date;
 }

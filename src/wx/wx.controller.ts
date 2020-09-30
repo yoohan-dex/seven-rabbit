@@ -26,17 +26,25 @@ export class WxController {
     @Query() query: any,
     @Body()
     msg: {
-      MsgType: 'text' | 'image';
+      MsgType: 'text' | 'image' | 'event';
       Content: string;
       FromUserName: string;
+      Event: string;
     },
   ) {
     const { signature, timestamp, nonce } = query;
     if (!this.checkSignatureFunction(signature, timestamp, nonce))
       return 'ERR_WHEN_CHECK_SIGNATURE';
 
-    const { MsgType, Content, FromUserName } = msg;
+    const { MsgType, Content, FromUserName, Event } = msg;
     console.log('msg', msg);
+    if (
+      MsgType === 'event' &&
+      Event === 'user_enter_tempsession' &&
+      FromUserName
+    ) {
+      this.testSendFiles(FromUserName);
+    }
     if (MsgType === 'text') {
       const content = Content;
       if (content === '2' && FromUserName) {

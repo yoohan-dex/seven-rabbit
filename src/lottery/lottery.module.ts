@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Lottery, LotteryCode, LotteryPrize } from './lottery.entity';
 import { WxUser } from '../auth/auth.entity';
-import { LotteryService } from './lottyer.service';
+import { LotteryService } from './lottery.service';
 import { LotteryController } from './lottery.controller';
 import { Image } from '../common/common.entity';
 
