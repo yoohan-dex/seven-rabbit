@@ -94,4 +94,9 @@ export class GenOrderController {
   calc() {
     return this.genOrderService.calcPattern();
   }
+
+  @Get('simple-data-anal')
+  async simpleDataAnal(@Query('pattern-name') patternName: string) {
+    return this.genOrderService.simpleDataSheet({ patternName });
+  }
 }

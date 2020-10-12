@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, RelationQueryBuilder, Between } from 'typeorm';
+import { Repository, In, RelationQueryBuilder, Between, Like } from 'typeorm';
 import { parseCommon } from './parse-order';
 import Axios from 'axios';
 import * as jszip from 'jszip';
@@ -577,6 +577,39 @@ export class GenOrderService {
       return url;
     } else {
       throw new BadRequestException('参数有问题', '时间选取不对');
+    }
+  }
+
+  async simpleDataSheet(data: { patternName: string }) {
+    if (data.patternName) {
+      const order = await this.orderRepository.find({
+        where: {
+          pattern: Like(`%${data.patternName}%`),
+        },
+      });
+      const willData = {};
+      order.forEach(o => {
+        o.clothesMsg.forEach(c => {
+          c.rules.forEach(r => {
+            if (willData[r.size]) {
+              willData[r.size] += r.count;
+            } else {
+              willData[r.size] = r.count;
+            }
+          });
+        });
+      });
+
+      const text = Object.keys(willData).reduce((pre, curr) => {
+        console.log('pre', pre);
+        if (!pre) {
+          return `${curr}:  ${willData[curr]}`;
+        }
+        return `${pre}<br />
+${curr}:  ${willData[curr]}`;
+      }, '');
+
+      return text;
     }
   }
 

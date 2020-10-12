@@ -113,6 +113,9 @@ export class LotteryCode {
   @Column({ nullable: true })
   prizeId: number;
 
+  @Column({ default: false })
+  isCtrl: boolean;
+
   // @ManyToOne(_ => WxUser, { nullable: true })
   // user: WxUser;
 

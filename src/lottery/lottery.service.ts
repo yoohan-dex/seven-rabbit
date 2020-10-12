@@ -105,6 +105,7 @@ export class LotteryService {
           await this.lotteryPrizeRepo.save(prize);
           code.prize = prize;
           code.prizerId = user.id;
+          code.isCtrl = true;
         }
       }
       return await this.lotteryCodeRepo.save(code);

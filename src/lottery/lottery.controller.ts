@@ -24,7 +24,6 @@ export class LotteryController {
 
   @Post()
   createGame(@Body() data: LotteryDto) {
-    console.log('data', data);
     return this.lotteryService.createOne(data);
   }
 
