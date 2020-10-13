@@ -270,10 +270,10 @@ export class GenOrderService {
       if (!exist) {
         order.clothesMsg.push({
           color: k.color,
-          count: ('' as unknown) as number,
+          count: 0,
           rules: k.rules.map(r => ({
             size: r.size,
-            count: ('' as unknown) as number,
+            count: 0,
           })),
         });
       }
@@ -293,25 +293,34 @@ export class GenOrderService {
 
       if (kk) {
         colorAndCount.total = this.parseCount2XML(
-          `${msg.count}`,
+          `${msg.count === 0 ? '' : msg.count}`,
           `+${kk.count}`,
         );
       } else {
-        colorAndCount.total = this.parseCount2XML(`${msg.count}`);
+        colorAndCount.total = this.parseCount2XML(
+          `${msg.count === 0 ? '' : msg.count}`,
+        );
       }
       msg.rules.forEach(rule => {
         if (order.keep && kk) {
           kk.rules.forEach(rr => {
             if (rr.size === rule.size) {
-              const c = this.parseCount2XML(`${rule.count}`, `+${rr.count}`);
+              const c = this.parseCount2XML(
+                `${rule.count === 0 ? '' : rule.count}`,
+                `+${rr.count}`,
+              );
               colorAndCount[rule.size] = c;
               // tslint:disable-next-line:no-construct
             } else if (new String(colorAndCount[rule.size]).length < 10) {
-              colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
+              colorAndCount[rule.size] = this.parseCount2XML(
+                `${rule.count === 0 ? '' : rule.count}`,
+              );
             }
           });
         } else if (!colorAndCount[rule.size]) {
-          colorAndCount[rule.size] = this.parseCount2XML(`${rule.count}`);
+          colorAndCount[rule.size] = this.parseCount2XML(
+            `${rule.count === 0 ? '' : rule.count}`,
+          );
         } else {
         }
       });
