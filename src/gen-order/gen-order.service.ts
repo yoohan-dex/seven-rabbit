@@ -360,9 +360,8 @@ export class GenOrderService {
       createTime: `${order.createTime.getMonth() +
         1}月${order.createTime.getDate()}日`,
       clothesMsg,
-      totalNum: this.parseCount2XML(
-        `${order.totalNum === 0 ? '' : order.totalNum}`,
-        `${
+      totalNum: `${order.totalNum === 0 ? '' : order.totalNum}
+        ${
           order.keep
             ? '+' +
               order.keep.reduce((pre, curr) => {
@@ -370,7 +369,7 @@ export class GenOrderService {
               }, 0)
             : ''
         }`,
-      ),
+
       keep,
       childType: order.scaleType === 0 || order.scaleType === 2,
       adultType: order.scaleType === 1 || order.scaleType === 2,
