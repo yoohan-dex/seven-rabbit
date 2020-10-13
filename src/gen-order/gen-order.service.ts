@@ -364,7 +364,8 @@ export class GenOrderService {
         `${order.totalNum === 0 ? '' : order.totalNum}`,
         `${
           order.keep
-            ? order.keep.reduce((pre, curr) => {
+            ? '+' +
+              order.keep.reduce((pre, curr) => {
                 return pre + curr.count;
               }, 0)
             : ''
