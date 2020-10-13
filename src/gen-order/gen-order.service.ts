@@ -270,8 +270,11 @@ export class GenOrderService {
       if (!exist) {
         order.clothesMsg.push({
           color: k.color,
-          count: '',
-          rules: k.rules.map(r => ({ size: r.size, count: '' })),
+          count: ('' as unknown) as number,
+          rules: k.rules.map(r => ({
+            size: r.size,
+            count: ('' as unknown) as number,
+          })),
         });
       }
     });
