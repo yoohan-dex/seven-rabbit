@@ -265,19 +265,21 @@ export class GenOrderService {
     });
 
     // 如果留版有的而客户订单没有的颜色 就会一起进来了
-    order.keep.forEach(k => {
-      const exist = order.clothesMsg.find(c => c.color === k.color);
-      if (!exist) {
-        order.clothesMsg.push({
-          color: k.color,
-          count: 0,
-          rules: k.rules.map(r => ({
-            size: r.size,
+    if (order.keep && Array.isArray(order.keep)) {
+      order.keep.forEach(k => {
+        const exist = order.clothesMsg.find(c => c.color === k.color);
+        if (!exist) {
+          order.clothesMsg.push({
+            color: k.color,
             count: 0,
-          })),
-        });
-      }
-    });
+            rules: k.rules.map(r => ({
+              size: r.size,
+              count: 0,
+            })),
+          });
+        }
+      });
+    }
 
     const clothesMsg = order.clothesMsg.map((msg, ii) => {
       msg.rules.forEach(rule => {
