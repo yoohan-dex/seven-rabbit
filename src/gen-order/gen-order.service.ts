@@ -326,6 +326,15 @@ export class GenOrderService {
         } else {
         }
       });
+      if (order.keep && kk) {
+        kk.rules.forEach(rr => {
+          msg.rules.forEach(rule => {
+            if (rr.size !== rule.size) {
+              colorAndCount[rr.size] = this.parseCount2XML('', `+${rr.count}`);
+            }
+          });
+        });
+      }
       return colorAndCount;
     });
     const keep =
