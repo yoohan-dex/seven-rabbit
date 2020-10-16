@@ -316,6 +316,7 @@ export class GenOrderService {
             } else if (new String(colorAndCount[rule.size]).length < 10) {
               colorAndCount[rule.size] = this.parseCount2XML(
                 `${rule.count === 0 ? '' : rule.count}`,
+                `+${rr.count}`,
               );
             }
           });
