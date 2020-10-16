@@ -280,7 +280,11 @@ export class GenOrderService {
         }
       });
     }
-
+    order.keep.forEach(kk => {
+      kk.rules.forEach(rr => {
+        sizeType[rr.size] = true;
+      });
+    });
     const clothesMsg = order.clothesMsg.map((msg, ii) => {
       msg.rules.forEach(rule => {
         sizeType[rule.size] = true;
