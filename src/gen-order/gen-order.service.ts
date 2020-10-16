@@ -280,11 +280,13 @@ export class GenOrderService {
         }
       });
     }
-    order.keep.forEach(kk => {
-      kk.rules.forEach(rr => {
-        sizeType[rr.size] = true;
+    if (order.keep) {
+      order.keep.forEach(kk => {
+        kk.rules.forEach(rr => {
+          sizeType[rr.size] = true;
+        });
       });
-    });
+    }
     const clothesMsg = order.clothesMsg.map((msg, ii) => {
       msg.rules.forEach(rule => {
         sizeType[rule.size] = true;
@@ -330,13 +332,11 @@ export class GenOrderService {
         } else {
         }
       });
-      if (order.keep && kk) {
+      if (kk) {
         kk.rules.forEach(rr => {
-          msg.rules.forEach(rule => {
-            if (rr.size !== rule.size) {
-              colorAndCount[rr.size] = this.parseCount2XML('', `+${rr.count}`);
-            }
-          });
+          if (!msg.rules.find(r => r.size === rr.size)) {
+            colorAndCount[rr.size] = this.parseCount2XML('', `+${rr.count}`);
+          }
         });
       }
       return colorAndCount;
