@@ -313,10 +313,12 @@ export class GenOrderService {
               );
               colorAndCount[rule.size] = c;
               // tslint:disable-next-line:no-construct
+            } else if (rr.size !== rule.size) {
+              const c = this.parseCount2XML('', `+${rr.count}`);
+              colorAndCount[rule.size] = c;
             } else if (new String(colorAndCount[rule.size]).length < 10) {
               colorAndCount[rule.size] = this.parseCount2XML(
                 `${rule.count === 0 ? '' : rule.count}`,
-                `+${rr.count}`,
               );
             }
           });
