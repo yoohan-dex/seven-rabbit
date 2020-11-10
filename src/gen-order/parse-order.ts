@@ -129,6 +129,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
         .replace(/＝/g, '=')
         .split('=')
         .map(s => s.trim());
+      const regSpecialM = /Ｍ/g;
       const regM = /m/g;
       const regS = /s/g;
       const regL = /l/g;
@@ -137,7 +138,7 @@ export const parseSizeAndCount = (str: string, totalCount?: number) => {
         .replace(regS, 'S')
         .replace(regL, 'L')
         .replace(regM, 'M')
-        .replace(regM, 'Ｍ')
+        .replace(regSpecialM, 'M')
         .replace(regX, 'X');
       total += parseInt(count, 10);
       const s = {
